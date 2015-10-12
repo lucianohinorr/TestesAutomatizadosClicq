@@ -1,0 +1,141 @@
+package TST_025_Cadastrar_Cartao;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.CartaoUsuarioRegular;
+
+public class TST_025_28_EditarCartaoUsuarioRegularParaVisitante {
+ 
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private CartaoUsuarioRegular cartao;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+	
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.cartao = new CartaoUsuarioRegular();
+		this.login = new MetodosAuxiliares();    
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+	
+
+	@Test
+	public void editarCartaoUsuarioRegularParaVisitanteVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuCards_tmi0-title")).click();
+			driver.findElement(By.linkText("Cartão")).click();
+       
+			//Recuperar o id no banco referente ao nome do Tipo de Cartão recem editada
+			String s_idCartao = "" + cartao.encontraIdCartao(cartao.getNumero());
+						
+			//Altera para a última página dos cartões cadastrados, pois é onde o cartão a ser apagado se encontra
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/jmesa/lastPage.gif')]")).click();
+				    
+			//Marca o Cartão para ser editado
+			driver.findElement(By.id(s_idCartao)).click();
+     		
+		    //Abrindo a tela para edição
+			//driver.findElement(By.xpath("//*[ contains(@title, 'Editar')]")).click();
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//limpando o campo Numero do Cartao para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'number')]")).clear();
+			
+			//Inserindo o novo número do cartão
+			driver.findElement(By.xpath("//*[ contains(@name, 'number')]")).sendKeys(cartao.getNumeroParaEdicao());
+					
+			//Alterando para cartão do tipo Visitante
+			driver.findElement(By.xpath("//*[ contains(@value, 'V')]")).click();
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'type')]"))).selectByVisibleText(cartao.getTipoEscolhaParaEdicao());		
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'locality')]"))).selectByVisibleText(cartao.getLocalidadeParaEdicao());	
+			
+			//Botão Salvar do cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+				
+			//Retorna o número do cartão com os devidos pontos inseridos, conforme msg de validação
+			String numeroCartaoComPontos = cartao.retornaNumeroComVirgulas(cartao.getNumeroParaEdicao());
+		
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Cartão [" + numeroCartaoComPontos + "] editado com sucesso!";
+		
+			
+			try{
+				
+				assertEquals(msgEsperada, msgRetornadaInterface);
+    			loggerTestResult.testResult("Aprovado");
+        
+			 		
+    		}catch (AssertionError erroValidaMensagemEdicaoDeCartao){
+    		
+    			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemEdicaoDeCartao);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemEdicaoDeCartao;
+    		
+    		}finally{
+			
+ 				//fechar a tela de edição de Cartão
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				//espera de 5 segundo, assim dá tempo de debugar a mensagem
+				Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista dos Cartões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+		 
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+		
+    		}
+			
+		}catch (Exception erroConsultaIdRegiao){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroConsultaIdRegiao);
+			loggerTestResult.testResult("Reprovado");
+			
+		}
+    
+	}
+  
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+
+ }

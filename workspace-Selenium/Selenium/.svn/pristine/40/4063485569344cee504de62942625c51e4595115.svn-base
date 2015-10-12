@@ -1,0 +1,148 @@
+package TST_083_Configurar_Expurgo_De_Eventos;
+
+
+import java.util.List;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.ExpurgoEventos;
+
+
+public class TST_083_28_HabilitarExpurgoDeEventos {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private ExpurgoEventos expurgoEventos;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.expurgoEventos = new ExpurgoEventos();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+	
+	}
+
+	
+	@Test
+	public void habilitarExpurgoDeAuditoriaVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami1-header")).click();			
+			driver.findElement(By.id("menuConfigSystem_tmi0-title")).click();
+			driver.findElement(By.id("menuDataPurge_tmi0-title")).click();
+			driver.findElement(By.linkText("Eventos e Visitantes")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+			
+			new Select(driver.findElement(By.name("localityId"))).selectByVisibleText(expurgoEventos.getLocalidade());
+		
+			if (driver.findElement(By.name("purgeEventsEnabled")).isSelected()){
+				
+				System.out.println("O Expurgo de Eventos já está habilitado");
+			}
+			else{
+				
+				//Habilitando o expurgo
+				driver.findElement(By.name("purgeEventsEnabled")).click();
+			}
+			
+			driver.findElement(By.id("daysLimitEvent")).clear();
+			driver.findElement(By.id("daysLimitEvent")).sendKeys(expurgoEventos.getManterUltimos());
+		
+			//seleciona horário de execução (hora e minutos)
+			new Select(driver.findElement(By.name("purgeHourEvent"))).selectByVisibleText(expurgoEventos.getHora());
+			new Select(driver.findElement(By.name("purgeMinuteEvent"))).selectByVisibleText(expurgoEventos.getMinutos());
+			
+			//preenche execução baseada em (configuração no dia do Mês)
+			List<WebElement> execucaoBaseadaEm = driver.findElements(By.name("flExecutionType"));
+		 	for (int i = 0; i < execucaoBaseadaEm.size(); i++) {
+				
+			    if ( execucaoBaseadaEm.get(i).getAttribute("value").equals("MONTH") ){			    			    	
+	
+			    	execucaoBaseadaEm.get(i).click();	    	
+			    }
+				    
+			}
+		 	
+			new Select(driver.findElement(By.name("monthEvent"))).selectByVisibleText(expurgoEventos.getMes());
+			new Select(driver.findElement(By.name("monthDayEvent"))).selectByVisibleText(expurgoEventos.getDiaDoMes());
+				
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+		
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			String msgEsperada = "Configuração de Expurgo salva com sucesso!";
+		
+			try{				
+				
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemConfigExpurgoEventos){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemConfigExpurgoEventos);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemConfigExpurgoEventos;
+    	
+    		}finally{
+    			
+    			driver.manage().window().maximize();
+    
+    			//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");	
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

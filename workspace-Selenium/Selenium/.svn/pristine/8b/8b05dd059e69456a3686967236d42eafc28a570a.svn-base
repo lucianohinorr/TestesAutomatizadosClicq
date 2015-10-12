@@ -1,0 +1,60 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoDeHierarquia extends Grupo {
+
+
+	public GrupoDeHierarquia() {
+		
+		super(  "Banco Siamez",
+				"Banco Siamez Total",
+				"Banco Siamez Exceto Restritos",
+				"Exceto Restritos",
+				new MYSQLConnection().getConnection()
+		);
+		
+	}
+	
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT HIGR_PK_ID FROM VA_HIGR_HIERARCHY_GROUP WHERE HIGR_NM_NAME = 'Banco Martins';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT HIGR_PK_ID ");
+		sql.append("FROM   VA_HIGR_HIERARCHY_GROUP ");
+		sql.append("WHERE  HIGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+}

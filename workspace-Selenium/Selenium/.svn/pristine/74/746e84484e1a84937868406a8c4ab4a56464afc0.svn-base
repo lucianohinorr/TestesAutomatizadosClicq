@@ -1,0 +1,127 @@
+package TST_016_Cadastrar_Regiao;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Regiao;
+
+
+public class ApagarRegiao{
+ 
+	private  WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Regiao regiao;
+	private MetodosAuxiliares login;
+	
+
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.regiao = new Regiao();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void apagaRegiaoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a exclusão de Região");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+
+    		driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Região")).click();
+       	   
+			//Recuperar o id no banco referente ao nome da região recem editada
+			String s_idRegiao = "" + regiao.encontraIdRegiao(regiao.getNomeParaEdicao());
+    
+			//Marca Região para deletar.
+			driver.findElement(By.id(s_idRegiao)).click();
+      
+			//Excluir a Região
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+    
+			
+    		//**** Tratando o Alerta
+   
+    		//Obtem o alerta aberto.
+			Alert alert = driver.switchTo().alert();
+    
+			//Obtem o texto do alerta. 
+			alert.getText();
+    
+			//Posso validar a mensagem do alerta
+			//assertTrue(driver.switchTo().alert().getText().equals("Deseja realmente executar esta operação?"));
+    
+			//Equivalente ao click em OK no alerta.
+			alert.accept();
+    
+			//****
+    
+			//Capturando a mensagem de validação após Região se deletada
+			String msgValidacaoDeletarRegiao = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+    		
+    		try{
+    			
+    			//validando a mensagem de validação
+    			assertEquals("Região [" + regiao.getNomeParaEdicao() + "] removida com sucesso!", msgValidacaoDeletarRegiao);
+    			
+    			System.out.println("Caso de Teste Apagar Região executado com sucesso!");
+        		
+    		}catch (AssertionError erroValidaMensagemExclusaoRegiao){
+    		
+    			System.out.println("Erro ao executar o Caso de Teste Apagar Região!");
+    			
+    			throw erroValidaMensagemExclusaoRegiao;
+    			
+    		}finally{
+    			
+    			//Fechar a tela com a lista de Regiões.
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			//Tambem funciona: driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+    				
+    			//Sleep. Para Debug.
+    			Long end = System.currentTimeMillis() + 3000;
+    			while (System.currentTimeMillis() < end) {}  
+        			    
+    			
+    			//Selecionando o botão Sair da Aplicação.
+    			driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    		}	
+		    
+		}catch (Exception erroConsultaIdRegiao){
+			
+			System.out.println(erroConsultaIdRegiao);
+			
+			throw  erroConsultaIdRegiao;
+		
+		}
+ 	}
+  
+  
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

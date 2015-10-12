@@ -1,0 +1,125 @@
+package TST_028_Cadastrar_Empresa;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Empresa;
+
+public class ApagarEmpresa {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Empresa empresa;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.empresa = new Empresa();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void apagarEmpresa() throws Exception {
+		
+		System.out.println("Iniciando o teste Apagar Empresa");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCompany_tmi0-title")).click();
+			driver.findElement(By.linkText("Empresas")).click();
+			
+			
+			
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idEmpreda = "" + empresa.encontraIdEmpresa(empresa.getRazaoSocialParaEdicao());
+			
+			//Marca a Empresa para ser deletada.
+			driver.findElement(By.id(s_idEmpreda)).click();
+				
+			//Excluir o Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+			
+			//**** Tratando o Alerta
+			   
+    		//Obtem o alerta aberto.
+			Alert alert = driver.switchTo().alert();
+			
+			//Obtem o texto do alerta. 
+			alert.getText();
+    
+			//Posso validar a mensagem do alerta
+			//assertTrue(driver.switchTo().alert().getText().equals("Deseja realmente executar esta operação?"));
+    
+			//Equivalente ao click em OK no alerta.
+			alert.accept();
+    
+			//****
+    
+			//Capturando a mensagem de validação após o Tipo de Cartão ser deletado
+			String msgValidacaoDeletarEmpresa = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+    
+    		try{
+				
+				//validando a mensagem de validação
+				assertEquals("Empresa [" + empresa.getNomeFantasiaParaEdicao() + "] removida com sucesso!", msgValidacaoDeletarEmpresa);
+	    
+				System.out.println("Caso de Teste Edicao de Empresa executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemDeletarEmpresa){
+				
+				System.out.println(msgValidacaoDeletarEmpresa);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Deletar Empresa!");
+				
+				throw erroValidaMensagemDeletarEmpresa;
+    	
+    		}finally{
+    
+    			//Fechar a tela com a lista de Empresas.
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    				
+    			//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+		
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Deletar  de Empresa' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,33 @@
+package br.com.specto.entidades;
+
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+
+public class GrupoEnvioDeSmsAcessosDoUsuario extends GrupoEnvioDeSms {
+	
+
+	public GrupoEnvioDeSmsAcessosDoUsuario() {
+		
+		super(  "Permissão de Acesso",                           //nome
+				"Eventos de Permissão de Acesso",                //descricao
+				"Permissão e Negação de Acesso",                 //nomeParaEdicao
+				"Eventos de Permissão e Nehgação de Acesso",     //descricaoParaEdicado
+				new MYSQLConnection().getConnection(),           //connection
+				"Zenvia - admin",                                //servidorEnvioDeSMS
+				"Acessos do Usuário",                            //tipoEnvioDeSMS
+				"Permissão de acesso", //tipoCondicoesDeEventos
+				"",                    //motivoNegacaoCondicoesDeEventos
+				"Laguna",              //regiaoLocalDeAcesso
+				"Banco Siamez",        //localidadeLocalDeAcesso
+				"1 Andar",             //grupoDeAmbienteLocalDeAcesso
+				"Recepção",            //ambienteLocalDeAcesso
+				"Balcao"              //pontoDeAcessoLocalDeAcesso
+				
+		);
+		
+	}
+
+
+}

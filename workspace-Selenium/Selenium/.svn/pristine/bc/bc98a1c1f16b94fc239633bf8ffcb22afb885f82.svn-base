@@ -1,0 +1,402 @@
+/**
+ * 
+ */
+package br.com.specto.entidades;
+
+/**
+ * @author luciano.silva
+ *
+ */
+public class UsuarioRegular {
+	
+	private String nome;
+	private String login;
+	private String senha;
+	private String confirmarSenha;
+	private String telefone;
+	private String telefoneSms;
+	private String ramal;
+	private String cpf;
+	private String rg;
+	private String email;
+	private String matricula;
+	private String status;
+	
+	private String cep;
+	private String rua;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cidade;
+	private String unidadeFederativa;
+	
+	private String cartãoPermanente;
+	private String cartãoTemporario;
+	
+	private String grupoUsuariosServer;
+	private String grupoUsuariosCheckIn;
+	private String grupoUsuariosRegular;
+	private String grupoConcessaoAcesso;
+	private String grupoAprovacaoVisita;
+	private String grupoSmsTodosAcessos;
+	private String grupoSmsAcessosUsuário;
+	
+	
+	private String hierarquia;
+	
+	private String imagem;
+	
+	private String biometria;
+	
+	
+	public UsuarioRegular() {
+		
+		this.nome = "Luciano_Teste";
+		this.login = "luciano_teste";
+		this.senha = "111111";
+		this.confirmarSenha = "111111";
+		this.telefone = "";
+		this.telefoneSms = "";
+		this.ramal = "5698";
+		this.cpf = "";
+		this.rg = "56456478";
+		this.email = "Luciano_teste@specto.com.br";
+		this.matricula = "65894";
+		this.status = "ativo";
+		
+		this.cep = "";
+		this.rua = "";
+		this.complemento = "";
+		this.bairro = "";
+		this.cidade = "";
+		this.unidadeFederativa = "";
+		
+		this.cartãoPermanente = "";
+		this.cartãoTemporario = "";
+		
+		this.grupoUsuariosServer = "";
+		this.grupoUsuariosCheckIn = "";
+		this.grupoUsuariosRegular = "";
+		this.grupoConcessaoAcesso = "";
+		this.grupoAprovacaoVisita = "";
+		this.grupoSmsTodosAcessos = "";
+		this.grupoSmsAcessosUsuário = "";	
+		
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	public String getLogin() {
+		return login;
+	}
+
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+
+	public String getSenha() {
+		return senha;
+	}
+
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+
+	public String getConfirmarSenha() {
+		return confirmarSenha;
+	}
+
+
+	public void setConfirmarSenha(String confirmarSenha) {
+		this.confirmarSenha = confirmarSenha;
+	}
+
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+
+	public String getTelefoneSms() {
+		return telefoneSms;
+	}
+
+
+	public void setTelefoneSms(String telefoneSms) {
+		this.telefoneSms = telefoneSms;
+	}
+
+
+	public String getRamal() {
+		return ramal;
+	}
+
+
+	public void setRamal(String ramal) {
+		this.ramal = ramal;
+	}
+
+
+	public String getCpf() {
+		return cpf;
+	}
+
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+
+	public String getRg() {
+		return rg;
+	}
+
+
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public String getCep() {
+		return cep;
+	}
+
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+
+	public String getRua() {
+		return rua;
+	}
+
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+
+	public String getBairro() {
+		return bairro;
+	}
+
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+
+	public String getCidade() {
+		return cidade;
+	}
+
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+
+	public String getUnidadeFederativa() {
+		return unidadeFederativa;
+	}
+
+
+	public void setUnidadeFederativa(String unidadeFederativa) {
+		this.unidadeFederativa = unidadeFederativa;
+	}
+
+
+	public String getCartãoPermanente() {
+		return cartãoPermanente;
+	}
+
+
+	public void setCartãoPermanente(String cartãoPermanente) {
+		this.cartãoPermanente = cartãoPermanente;
+	}
+
+
+	public String getCartãoTemporario() {
+		return cartãoTemporario;
+	}
+
+
+	public void setCartãoTemporario(String cartãoTemporario) {
+		this.cartãoTemporario = cartãoTemporario;
+	}
+
+
+	public String getGrupoUsuariosServer() {
+		return grupoUsuariosServer;
+	}
+
+
+	public void setGrupoUsuariosServer(String grupoUsuariosServer) {
+		this.grupoUsuariosServer = grupoUsuariosServer;
+	}
+
+
+	public String getGrupoUsuariosCheckIn() {
+		return grupoUsuariosCheckIn;
+	}
+
+
+	public void setGrupoUsuariosCheckIn(String grupoUsuariosCheckIn) {
+		this.grupoUsuariosCheckIn = grupoUsuariosCheckIn;
+	}
+
+
+	public String getGrupoUsuariosRegular() {
+		return grupoUsuariosRegular;
+	}
+
+
+	public void setGrupoUsuariosRegular(String grupoUsuariosRegular) {
+		this.grupoUsuariosRegular = grupoUsuariosRegular;
+	}
+
+
+	public String getGrupoConcessaoAcesso() {
+		return grupoConcessaoAcesso;
+	}
+
+
+	public void setGrupoConcessaoAcesso(String grupoConcessaoAcesso) {
+		this.grupoConcessaoAcesso = grupoConcessaoAcesso;
+	}
+
+
+	public String getGrupoAprovacaoVisita() {
+		return grupoAprovacaoVisita;
+	}
+
+
+	public void setGrupoAprovacaoVisita(String grupoAprovacaoVisita) {
+		this.grupoAprovacaoVisita = grupoAprovacaoVisita;
+	}
+
+
+	public String getGrupoSmsTodosAcessos() {
+		return grupoSmsTodosAcessos;
+	}
+
+
+	public void setGrupoSmsTodosAcessos(String grupoSmsTodosAcessos) {
+		this.grupoSmsTodosAcessos = grupoSmsTodosAcessos;
+	}
+
+
+	public String getGrupoSmsAcessosUsuário() {
+		return grupoSmsAcessosUsuário;
+	}
+
+
+	public void setGrupoSmsAcessosUsuário(String grupoSmsAcessosUsuário) {
+		this.grupoSmsAcessosUsuário = grupoSmsAcessosUsuário;
+	}
+
+
+	public String getHierarquia() {
+		return hierarquia;
+	}
+
+
+	public void setHierarquia(String hierarquia) {
+		this.hierarquia = hierarquia;
+	}
+
+
+	public String getImagem() {
+		return imagem;
+	}
+
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
+
+
+	public String getBiometria() {
+		return biometria;
+	}
+
+
+	public void setBiometria(String biometria) {
+		this.biometria = biometria;
+	}
+	
+	
+	
+	
+	
+
+}

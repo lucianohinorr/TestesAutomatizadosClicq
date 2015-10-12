@@ -1,0 +1,184 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class Ambiente {
+	
+	private String nome;
+	private String pavimento;
+	private String descricao;
+	private String identificacao;
+	private String localidade;
+	private String grupoAmbiente;
+	
+	private boolean intertravamento;
+	private boolean permitirMultiplasEntradasSemSaidasCorrespondentes;
+	private boolean possuiDispositivosControleAcessoTodasEntradasSaidas;
+	
+	private String nomeParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	public Ambiente() {
+		
+		this.nome = "Serviços";
+		this.pavimento = "1 Andar";
+		this.descricao = "001-Serviços";
+		this.identificacao = "16542";
+		this.localidade = "Banco Siamez";
+		this.grupoAmbiente = "1 Andar";
+		this.intertravamento = true;
+		this.permitirMultiplasEntradasSemSaidasCorrespondentes = true;
+		this.possuiDispositivosControleAcessoTodasEntradasSaidas = true;
+		
+		this.nomeParaEdicao = "Serviços_Terceirizados";
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+	
+	public String getNome() {
+		return nome;
+	}
+
+	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	
+	public String getPavimento() {
+		return pavimento;
+	}
+
+
+	public void setPavimento(String pavimento) {
+		this.pavimento = pavimento;
+	}
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+	public String getIdentificacao() {
+		return identificacao;
+	}
+
+
+	public void setIdentificacao(String identificacao) {
+		this.identificacao = identificacao;
+	}
+
+
+	public String getLocalidade() {
+		return localidade;
+	}
+
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+
+	public String getGrupoAmbiente() {
+		return grupoAmbiente;
+	}
+
+
+	public void setGrupoAmbiente(String grupoAmbiente) {
+		this.grupoAmbiente = grupoAmbiente;
+	}
+
+
+	public boolean isIntertravamento() {
+		return intertravamento;
+	}
+
+
+	public void setIntertravamento(boolean intertravamento) {
+		this.intertravamento = intertravamento;
+	}
+
+
+	public boolean isPermitirMultiplasEntradasSemSaidasCorrespondentes() {
+		return permitirMultiplasEntradasSemSaidasCorrespondentes;
+	}
+
+
+	public void setPermitirMultiplasEntradasSemSaidasCorrespondentes(
+			boolean permitirMultiplasEntradasSemSaidasCorrespondentes) {
+		this.permitirMultiplasEntradasSemSaidasCorrespondentes = permitirMultiplasEntradasSemSaidasCorrespondentes;
+	}
+
+
+	public boolean isPossuiDispositivosControleAcessoTodasEntradasSaidas() {
+		return possuiDispositivosControleAcessoTodasEntradasSaidas;
+	}
+
+
+	public void setPossuiDispositivosControleAcessoTodasEntradasSaidas(
+			boolean possuiDispositivosControleAcessoTodasEntradasSaidas) {
+		this.possuiDispositivosControleAcessoTodasEntradasSaidas = possuiDispositivosControleAcessoTodasEntradasSaidas;
+	}
+	
+	
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+	/*
+	 * Recupera o Id do Ambiente.
+	 * select no banco exemplo:  SELECT ENVI_PK_ID FROM VA_ENVI_ENVIRONMENT WHERE ENVI_NM_NAME = 'Serviços';
+	 */
+	public int encontraIdAmbiente(String nomeAmbiente) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT ENVI_PK_ID ");
+		sql.append("FROM  VA_ENVI_ENVIRONMENT ");
+		sql.append("WHERE  ENVI_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeAmbiente);
+		ResultSet rs = ps.executeQuery();
+		int idAmbiente = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idAmbiente = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Ambiente " + nomeAmbiente + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idAmbiente;
+	}	
+
+}

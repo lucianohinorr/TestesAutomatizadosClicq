@@ -1,0 +1,150 @@
+package TST_026_Cadastrar_Usuario_Regular;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.controladorPrincipal.ControladorPrincipal;
+import br.com.specto.entidades.UsuarioRegular;
+
+public class TST_026_03_ApagarUsuarioRegular {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private UsuarioRegular usuarioRegular;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+		
+		this.usuarioRegular = new UsuarioRegular();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+	
+	}
+	
+
+	@Test
+	public void cadastrarUsuarioRegularVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+	
+		try{
+			
+			driver = login.executaLoginManual();
+			
+			//seleciona opção Cadastro no menu
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			//esse tempo foi inserido pois tinha momentos que a opção aberta era grade de horário
+			Long end2 = System.currentTimeMillis() + 2000;
+			while (System.currentTimeMillis() < end2) {}
+			
+			//seleciona opção Usuários do menu
+			driver.findElement(By.id("menuUser_tmi0-img")).click();
+		
+			//seleciona a opção Usuário Regular
+			driver.findElement(By.linkText("Usuário Regular")).click();
+		
+			//O Registro do Usuário Cadastrado sempre estará na última página. Sendo assim eu mudo para a última página.
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/jmesa/lastPage.gif')]")).click();
+			
+			//Recuperar o id do banco referente ao nome da Usuário Regular cadastrada atualmente no banco
+			String s_idUsuarioRegular = "" + usuarioRegular.encontraIdUsuarioRegular(usuarioRegular.getNomeParaEdicao());
+			
+			//Marca o registro do Usuário Regular para exclusão.
+			driver.findElement(By.id(s_idUsuarioRegular)).click();
+			
+			//Excluir a Região
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+    		
+    		//Tratando o Alerta
+			Alert alert = driver.switchTo().alert();//Obtem o alerta aberto.
+    		alert.getText();//Obtem o texto do alerta.
+    		alert.accept();//Equivalente ao click em OK no alerta.
+    
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Usuário [Luciano_Editado] removido com sucesso!";
+				
+			try{
+					
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				
+				//Altera no EA o status do caso de teste
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular", "Pass", "Luciano.silva", "Mensagem foi validade - Testes gerado de forma automática");
+				
+				loggerTestResult.testResult("Aprovado");
+					
+			}catch (AssertionError erroValidaMensagemApagarUsuarioRegular){
+				
+				/*
+				 * run(String banco, String testCase, String operation, String runBy, String results)
+				 * Uso: Pass, Pass - Improvemen, Not Runt, Fail, Deferred"
+				 * No runBy teria que criar um usuário do tipo "Usuário Automatizado"
+				 */
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular ", "Fail", "GRUPOSPECTO\\luciano.silva", "Mensagem não foi validade - Testes gerado de forma automática");
+				
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemApagarUsuarioRegular);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemApagarUsuarioRegular;
+							
+			}finally {
+				
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				loggerDebug.debug("Teste Finalizado");
+				
+			}
+		
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");	
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+			
+		}
+		
+	}
+		
+	
+	@After
+	public void tearDownTest() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+						
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+		
+	}
+	
+	
+	public void run(String banco, String testCase, String operation, String runBy, String results){
+			
+		(new ControladorPrincipal()).run(banco, testCase, operation, runBy, results);
+
+	}
+	
+
+}

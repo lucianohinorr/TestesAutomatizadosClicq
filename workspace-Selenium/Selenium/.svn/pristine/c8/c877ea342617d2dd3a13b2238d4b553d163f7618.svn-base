@@ -1,0 +1,149 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+
+public class CadastrarPontoDeAcessoDispJaCadastrado {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	/*
+	 * Um Ponto de Acesso pode ser cadastrado com o mesmo Nome.
+	 * Porém não pode ser cadastrado com o mesmo dispositivo: Ip e Id iguais	 * 
+	 */
+	
+	@Test
+	public void cadastrarPontoDeAcessoJaCadastradoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Ponto de Aceso Com Dispositivo Já Cadastrado");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(pontoDeAcesso.getNomePontoAcesso());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(pontoDeAcesso.getDescricao());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'locality')]"))).selectByVisibleText(pontoDeAcesso.getLocalidade());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentEntrance')]"))).selectByVisibleText(pontoDeAcesso.getAmbiente1());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentExit')]"))).selectByVisibleText(pontoDeAcesso.getAmbiente2());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceName')]")).sendKeys(pontoDeAcesso.getNomeDispositivo1());
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceAddress')]")).sendKeys(pontoDeAcesso.getIpDispositivo1());
+			
+			
+			
+			//driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceId')]")).sendKeys(pontoDeAcesso.getIdDispositivo1());
+			
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[1]/td[5]/input")).sendKeys(pontoDeAcesso.getIdDispositivo1());
+			
+										
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceType')]"))).selectByVisibleText(pontoDeAcesso.getTipoDispositivo1());
+			
+			
+			
+			//seleciona o campo Acesso								
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[3]/td/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input[1]")).click();
+					
+			//Neste cenário não justifica ter as regras para escolha de Sensor de devolução/Permitir cartão visitante/Solicita Dupla Custódia/Autoriza Dupla Custódia			
+				
+					
+			//seleção do botão +
+			driver.findElement(By.xpath("//*[ contains(@name, 'btAddItem')]")).click();
+			
+			driver.manage().window().maximize();
+			
+			//capturando a mensagem de validação após salvar a Um Ponto de Acesso com Dispositivo ja cadastrado no sistema
+			String msgValidacaoCadPontoDeAcessoDispJaCadas = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/div/div[1]")).getText();
+				
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Já existe um dispositivo com o IP e ID especificados na localidade. Ponto de acesso [" + pontoDeAcesso.getNomePontoAcesso() + "]", msgValidacaoCadPontoDeAcessoDispJaCadas);
+	    
+				System.out.println("Caso de Teste Cadastrar Ponto de Acesso com Dispositivo Já Cadastrado executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroPontoDeAcessoComDispoJaCad){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Ponto de Acesso com Dispositivo Já Cadastrado!");
+    			
+				throw erroValidaMensagemCadastroPontoDeAcessoComDispoJaCad;
+    	
+    		}finally{
+    			
+    			    
+				//fechar a tela de cadastro da Ponto de Acesso
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//espera de 3 segundo, assim dá tempo de debugar a mensagem
+				Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista dos Pontos de Acessos. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Ponto de Acesso com Dispositivo já Cadastrado' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

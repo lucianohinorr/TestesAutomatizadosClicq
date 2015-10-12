@@ -1,0 +1,100 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoUsuariosCheckIn extends Grupo {
+
+	
+	
+	protected String nomeAdmin;
+	protected String descricaoAdmin;
+	protected boolean administrador;
+
+	protected String nomeAdminParaEdicao;
+	protected String descricaoAdminParaEdicao;
+	
+	private Connection connection;//conexão com banco	
+	
+
+	public GrupoUsuariosCheckIn() {
+		
+		super(  "Check In Total",
+				"Acesso Completo Check In - Menos Admin",
+				"Grupo Specto Check In Total ",
+				"Acesso Completo Check In - Menos Admin",
+				new MYSQLConnection().getConnection()
+		);
+	
+		this.administrador = true;
+		this.nomeAdmin = "Administrador Specto";
+		this.descricaoAdmin = "Acesso Completo";
+		this.nomeAdminParaEdicao = "Completo Check In Admin";
+		this.descricaoAdminParaEdicao = "Completo Specto Check In Admin";
+		
+	}
+
+
+	public String getNomeAdmin() {
+		return nomeAdmin;
+	}
+
+
+	public void setNomeAdmin(String nomeAdmin) {
+		this.nomeAdmin = nomeAdmin;
+	}
+
+
+	public String getDescricaoAdmin() {
+		return descricaoAdmin;
+	}
+
+
+	public void setDescricaoAdmin(String descricaoAdmin) {
+		this.descricaoAdmin = descricaoAdmin;
+	}
+
+
+	public boolean isAdministrador() {
+		return administrador;
+	}
+
+
+	public void setAdministrador(boolean administrador) {
+		this.administrador = administrador;
+	}
+
+
+	public String getNomeAdminParaEdicao() {
+		return nomeAdminParaEdicao;
+	}
+
+
+	public void setNomeAdminParaEdicao(String nomeAdminParaEdicao) {
+		this.nomeAdminParaEdicao = nomeAdminParaEdicao;
+	}
+
+
+	public String getDescricaoAdminParaEdicao() {
+		return descricaoAdminParaEdicao;
+	}
+
+
+	public void setDescricaoAdminParaEdicao(String descricaoAdminEdicao) {
+		this.descricaoAdminParaEdicao = descricaoAdminEdicao;
+	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+	
+	
+	
+}

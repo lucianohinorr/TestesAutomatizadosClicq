@@ -1,0 +1,179 @@
+package TST_028_Cadastrar_Empresa;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Empresa;
+
+public class EditarEmpresa {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Empresa empresa;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.empresa = new Empresa();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void editarEmpresa() throws Exception {
+		
+		System.out.println("Iniciando o teste Edição de Empresa");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCompany_tmi0-title")).click();
+			driver.findElement(By.linkText("Empresas")).click();
+			
+			
+			
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idEmpreda = "" + empresa.encontraIdEmpresa(empresa.getRazaoSocial());
+			
+			//Marca a Empresa para edição.
+			driver.findElement(By.id(s_idEmpreda)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			driver.manage().window().maximize();
+			
+			
+		
+			driver.findElement(By.xpath("//*[ contains(@name, 'tradeName')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'tradeName')]")).sendKeys(empresa.getNomeFantasiaParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'companyName')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'companyName')]")).sendKeys(empresa.getRazaoSocialParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'stateRegistration')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'stateRegistration')]")).sendKeys(empresa.getInscricaoEstadualParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'cityRegistration')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'cityRegistration')]")).sendKeys(empresa.getInscricaoMunicipal());
+			
+			//*********
+			
+			//**Não é possível alterar o cnpj de um cadastro. Para alterar, tem que se selecionado (assim apaga) e depois salvar o cadastro. Em seguida inserir novo valor 
+			
+			//Selecionando o campo CNPJ
+			//driver.findElement(By.xpath("//*[ contains(@name, 'companyRegistrationIsRequired')]")).click();		
+			//driver.findElement(By.xpath("//*[ contains(@name, 'companyRegistrationIsRequired')]")).click();	
+			
+			//depois de selecionar o check box vou inserir o valo, por algum motivo não se achou o componente, linha abaixo comentada. uitlizado o caminho xpath
+			//driver.findElement(By.xpath("//*[ contains(@name, 'companyRegistration')]")).sendKeys(empresa.getCnpj());
+			//driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[3]/form/div[2]/div[5]/fieldset/table/tbody/tr/td[2]/input")).sendKeys(empresa.getCnpjParaEdicao());
+			
+			//*************
+			
+			
+			
+			//muda para a aba Endereco
+			driver.findElement(By.linkText("Endereço")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.CEP')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.CEP')]")).sendKeys(empresa.getCepParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.street')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.street')]")).sendKeys(empresa.getRuaParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.number')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.number')]")).sendKeys(empresa.getNumeroParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.complement')]")).clear();;
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.complement')]")).sendKeys(empresa.getComplementoParaEdicao());
+
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.district')]")).clear();			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.district')]")).sendKeys(empresa.getBairroParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.city')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.city')]")).sendKeys(empresa.getCidadeParaEdicao());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'address.location.state')]"))).selectByVisibleText(empresa.getUnidadeFederativaParaEdicao());
+    
+						
+			//Botão Salvar Edição de Empresa
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			Long end = System.currentTimeMillis() + 3000;
+			while (System.currentTimeMillis() < end) {}    
+    
+									   
+			//capturando a mensagem de validação após editar a Empresa
+			String msgValidacaoEdicaoEmpresa = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Empresa [" + empresa.getNomeFantasiaParaEdicao() + "] editada com sucesso!", msgValidacaoEdicaoEmpresa);
+	    
+				System.out.println("Caso de Teste Edicao de Empresa executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemEdicaoEmpresa){
+				
+				System.out.println(msgValidacaoEdicaoEmpresa);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Edicao de Empresa!");
+				
+				throw erroValidaMensagemEdicaoEmpresa;
+    	
+    		}finally{
+    
+				//fechar a tela de Edicao de Empresa    			
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechando a janela da lista de Empresa 
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+										
+								
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Edicao  de Empresa' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

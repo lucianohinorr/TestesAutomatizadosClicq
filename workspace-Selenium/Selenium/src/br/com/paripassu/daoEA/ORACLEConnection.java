@@ -1,0 +1,214 @@
+package br.com.paripassu.daoEA;
+//package dbintegrator.connection;
+
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
+/**
+ *
+ * @author jean.hauck
+ */
+public class ORACLEConnection extends Connection{
+
+
+    /**
+     * Método construtor genérico
+     */
+    public ORACLEConnection(String appName) {
+    	
+        super(appName);
+        
+    }
+
+    @Override
+    protected void loadProperties() {
+    	
+        PropertiesController properties = PropertiesController.getInstance();
+        
+        serverName = properties.getProperty("ORACLE_"+appName+"_ServerName");
+        database = properties.getProperty("ORACLE_"+appName+"_database");
+        port = properties.getProperty("ORACLE_"+appName+"_port");
+        username = properties.getProperty("ORACLE_"+appName+"_username");
+        password = properties.getProperty("ORACLE_"+appName+"_password");
+        driverName = "oracle.jdbc.driver.OracleDriver"; // ORACLE JDBC driver
+        url = "jdbc:oracle:thin:@"+serverName + ":"+port+":" + database;
+
+        String[] params = {driverName,url, username, password};
+
+        this.setParams(params);
+    }
+
+    /**
+     * Método para realizar a conexão com o banco de dados
+     * @return  <code>true</code> caso a conexão tenha ocorrido com sucesso ou
+     * <code>false</code> caso tenha ocorrido algum erro
+     */
+
+    public boolean connect() {
+    	
+        if (connection == null) {
+        	
+            try {
+                Class.forName(connectionParams[0]);
+                connection = DriverManager.getConnection(connectionParams[1], connectionParams[2], connectionParams[3]);
+                return true;
+            } catch (ClassNotFoundException e) {
+                System.out.println("Driver expecificado nao foi encontrado.");
+                System.out.println(e.getMessage());
+                return false;
+            } catch (SQLException e) {
+                System.out.println("Nao foi possivel conectar ao Banco de Dados");
+                System.out.println(e.getMessage());
+                return false;
+            }
+        }else{
+            try{
+                if(connection.isClosed()){
+                    connection = null;
+                    connect();
+                }
+            }catch(SQLException e){
+                System.out.println("!!!!!!! Erro ao conectar ao banco de dados: " + e.getMessage());
+                return false;
+            }
+            return true;
+        }
+    }
+    
+    /**
+     * Método para finalizar a conexão já estabelecida
+     * @return <code>true</code> caso a conexão seja encerrada com sucesso ou
+     * <code>false</code> caso tenha ocorrido algum erro
+     */
+    public boolean disConnect() {
+        try {
+            if (connection != null) connection.close();
+            connection = null;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro ao encerrar conexao: ");
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    
+/*******************************************************************************
+ * 
+ * OBS: métodos a seguir foram criados / modificados para padronizar as consutas
+ * a banco
+ * 
+ ******************************************************************************/
+   
+    
+    /**
+     * Método para setar os parâmetros da conexão
+     * @param params - Vetor com parâmetros da conexão.
+     */
+    public void setParams(String[] params) {
+        connectionParams = params;
+    }
+  
+    
+    /**
+     * Método para iniciar uma transação. Se não houver conexão, inicia uma e 
+     * seta autocommit para false.
+     * @throws java.sql.SQLException
+     */
+    public void beginTransaction() throws SQLException{
+        if(connection == null){connect();}
+        connection.setAutoCommit(false);
+}
+    
+    /**
+     * Método para submeter a transação e setar o autocommit para true 
+     * @throws java.sql.SQLException
+     */
+    public void endTransaction() throws SQLException{
+        if (connection != null){
+            if (!connection.getAutoCommit()) connection.commit();
+            connection.setAutoCommit(true);
+        }
+    }
+    
+    /**
+     * Mètodo para cancelar uma transação e setar autocommit para true
+     * @throws java.sql.SQLException
+     */
+    public void rollbackTransaction() throws SQLException{
+        connection.rollback();
+        connection.setAutoCommit(true);
+    }
+    
+    /**
+     * Método para executar uma consulta de inserção / modificação preparada 
+     * <code>PreparedStatement</code> e retorna a chave gerada automaticamente
+     * <code>AUTOINCREMENT</CODE> por exemplo
+     * @param pstmt Consulta preparada <code>PreparedStatement</code>
+     * @return Chave gerada automaticamente pela banco de dados
+     * @throws java.sql.SQLException
+     */
+    public int executeUpdateWithKey(PreparedStatement pstmt) throws SQLException{
+        pstmt.executeUpdate();
+        ResultSet rs = pstmt.getGeneratedKeys();
+        int id = 0;
+        if(rs.next()){
+            id = rs.getInt(1);
+        }
+        return id;
+    }
+    
+    /**
+     * Método para executar uma consulta de inserção / modificação sem retornar
+     * a chave gerada pelo banco
+     * @param pstmt Consulta preparada <code>PreparedStatement</code>
+     * @throws java.sql.SQLException
+     */
+    public void executeUpdate(PreparedStatement pstmt) throws SQLException{
+        pstmt.executeUpdate();
+    }
+    
+    /**
+     * Método para executar uma consulta de seleção
+     * @param pstmt Consulta preparada <code>PreparedStatement</code>
+     * @return  Conjunto de resultados <code>ResultSet</code>
+     * @throws java.sql.SQLException
+     */
+    public ResultSet executeQuery(PreparedStatement pstmt) throws SQLException{
+        return pstmt.executeQuery();
+    }
+    
+    /**
+     * Método para retornar um <code>PreparedStatement</code> para consultas
+     * de inserção que retornarão a chave gerada pelo banco de dados
+     * @param stmt  Consulta de inserção preparada
+     * @return  <code>PreparedStatement</code> com o parametro para retornar
+     * a chave gerada setado.
+     * @throws java.sql.SQLException
+     */
+    public PreparedStatement prepareStatement(String stmt) throws SQLException{
+        PreparedStatement pstmt = connection.prepareStatement(stmt, Statement.RETURN_GENERATED_KEYS);       
+        return pstmt;
+    }
+    
+    /**
+     * Método para retornar um <code>PreparedStatement</code> para consultas de
+     * inserção sem retornar a chave gerada, consultas de modificação ou seleção. 
+     * @param stmt  Consulta preparada
+     * @return <code>PreparedStatement</code> sem o parametro para retornar
+     * a chave gerada pelo banco
+     * @throws java.sql.SQLException
+     */
+    public PreparedStatement prepareStatementNoAutocount(String stmt) throws SQLException{
+        PreparedStatement pstmt = connection.prepareStatement(stmt);       
+        return pstmt;
+    }
+    
+    public boolean isConnected(){
+    	return this.connection != null;
+    }
+}
+   
+

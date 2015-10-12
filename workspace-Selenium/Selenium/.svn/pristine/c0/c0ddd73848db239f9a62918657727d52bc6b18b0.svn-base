@@ -1,0 +1,26 @@
+package br.com.specto.entidades;
+
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class CartaoVeiculo extends Cartao{
+	
+	
+	public CartaoVeiculo() {	
+		
+		
+		super(  "1111114444",
+			    "1111114500",
+			  	"RFID",
+				"Veículo",
+				"Veicular",
+				"Ativo",
+				"1111115555",
+				"Usuário Regular",
+				"Residente",
+				"Ativo", 
+				new MYSQLConnection().getConnection());
+	}
+		
+
+}

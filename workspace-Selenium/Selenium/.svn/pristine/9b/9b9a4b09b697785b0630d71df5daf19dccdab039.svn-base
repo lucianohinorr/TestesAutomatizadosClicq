@@ -1,0 +1,137 @@
+package TST_019_Cadastrar_Ambiente;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Ambiente;
+
+
+public class TST_019_03_CadastrarAmbiente {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Ambiente ambiente;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.ambiente = new Ambiente();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void cadastrarAmbienteVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ambiente")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de ambiente
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(ambiente.getNome());
+			driver.findElement(By.xpath("//*[ contains(@name, 'pavement')]")).sendKeys(ambiente.getPavimento());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(ambiente.getDescricao());
+			driver.findElement(By.xpath("//*[ contains(@name, 'tokenIdentification')]")).sendKeys(ambiente.getIdentificacao());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'locality')]"))).selectByVisibleText(ambiente.getLocalidade());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentGroup')]"))).selectByVisibleText(ambiente.getGrupoAmbiente());
+			
+			if (ambiente.isIntertravamento()){
+				
+				driver.findElement(By.xpath("//*[ contains(@name, 'interlock')]")).click();
+			}
+			
+			//está com o valor true em sua classe e como por default o cadastro de ambiente vem com a flag marcada inseri um !not para deixar marcado
+			if (!ambiente.isPermitirMultiplasEntradasSemSaidasCorrespondentes()){
+			
+				driver.findElement(By.xpath("//*[ contains(@name, 'multipleEntries')]")).click();
+			}
+			
+			if (ambiente.isPossuiDispositivosControleAcessoTodasEntradasSaidas()){
+				
+				driver.findElement(By.xpath("//*[ contains(@name, 'hasAccessControlAllEntries')]")).click();
+			}
+						    
+			//Botão Salvar do cadastro de ambiente
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+				
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Ambiente [" + ambiente.getNome() + "] salvo com sucesso!";
+	  
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemCadastroAmbiente){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroAmbiente);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroAmbiente;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro do ambiente
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");			
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

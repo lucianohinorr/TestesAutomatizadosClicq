@@ -1,0 +1,1773 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import br.com.specto.auxiliar.Permissoes;
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoUsuariosServer extends Grupo {
+	
+	
+	protected boolean administrador;	
+	protected String nomeAdmin;
+	protected String descricaoAdmin;
+	
+	
+	//Restrições
+	
+	//*Relatórios
+	
+	public Permissoes relatorioDeAcesso;
+	private Permissoes relatorioDeAuditoria;
+	private Permissoes relatorioDePermissoesDeAcesso;
+	private Permissoes relatorioDeVisita;
+	private Permissoes relatorioStatusDeDispotos;
+	private Permissoes relatorioDePonto;
+	private Permissoes relatorioDeEventos;
+	
+	//*Monitoramento
+	
+	private Permissoes monitoramentoDeHierarquia;
+	private Permissoes monitoramentoDePontoDeAcesso;
+	private Permissoes monitoramentoDeAcesso;
+	
+	//*Cadastro
+	
+	//**Visitas
+	
+	private Permissoes visita;
+	
+	//**Grades De Horários
+	
+	private Permissoes gradeDeHorario;
+	
+	//**Hierarquia
+	
+	private Permissoes grupoDeAmbiente;
+	private Permissoes ambiente;
+	private Permissoes localidade;
+	private Permissoes regiao;
+	private Permissoes pontoDeAcesso;
+	private Permissoes dispositivo;
+	private Permissoes ramal;
+	
+	//**Usuarios
+	
+	private Permissoes visitantes;
+	private Permissoes usuariosRemovidos;
+	
+	//***Ususuário Regular
+	
+	private Permissoes abaCartoes;
+	private Permissoes abaDadosPessoais;
+	private Permissoes abaBiometria;
+	private Permissoes abaEndereco;
+	private Permissoes abaDocumentos;
+	private Permissoes abaGrupoDeHierarquia;
+	private Permissoes abaGrupos;
+	
+		
+	//**Cartoes
+	
+	private Permissoes cartao;
+	private Permissoes tiposDeCartao;
+	
+	//**Empresas
+	
+	private Permissoes empresas;
+	
+	//**Grupos
+	
+	private Permissoes grupoDeHierarquia;
+	private Permissoes grupoDeAprovacaoDeVisita;
+	private Permissoes grupoDeUsuariosRegulares;
+	private Permissoes grupoDeDuplaCustodia;
+	private Permissoes grupoDeUsuariosVisitantes;
+	private Permissoes grupoDeUsuariosCheckIn;
+	private Permissoes grupoDeConcessaoDeAcesso;
+	private Permissoes grupoDeUsuariosServer;
+	private Permissoes grupoenvioDeSMS;
+	
+	//*Configuracao
+	
+	//**Sistema
+	
+	//***Expurgo
+	
+	private Permissoes expurgoDeAuditoria;
+	private Permissoes expurgoDeEventosEVisitante;
+	
+	//**Envio de SMS
+	
+	private Permissoes envioDeSMS;
+	
+	//**cartao
+	
+	private Permissoes cartaoVisitante;
+	private Permissoes grupoTemporario;
+	
+	
+	//**Biometria
+	
+	private Permissoes cadastroBiometrico;
+	
+	
+	//Exibir Lista de Usuarios
+	
+	private Permissoes exibirListaDeUsuarios;
+	
+	//Resetar Dispositivo(s)
+	
+	private Permissoes resetarDispositivos;
+	
+	//Acionamento de Emergência
+	
+	private Permissoes acionamentoDeEmergencia;
+	
+	//Bloquear Dispositivo(s)
+	
+	private Permissoes bloquearDispositivos;
+		
+	//Acionar Dispositivo(s)
+	
+	private Permissoes acionarDispositivo;
+	
+	
+	
+	
+	//Atributos para Edicao
+	
+	
+	private String nomeParaEdicao;
+	private String descricaoParaEdicao;
+	private boolean administradorParaEdicao;
+	
+	private String nomeAdminParaEdicao;
+	private String descricaoAdminParaEdicao;
+	
+	
+	
+	//Restrições
+	
+	
+	//Restrições
+	
+		//*Relatórios
+		
+		private Permissoes relatorioDeAcessoParaEdicao;
+		private Permissoes relatorioDeAuditoriaParaEdicao;
+		private Permissoes relatorioDePermissoesDeAcessoParaEdicao;
+		private Permissoes relatorioDeVisitaParaEdicao;
+		private Permissoes relatorioStatusDeDispotosParaEdicao;
+		private Permissoes relatorioDePontoParaEdicao;
+		private Permissoes relatorioDeEventosParaEdicao;
+		
+		//*Monitoramento
+		
+		private Permissoes monitoramentoDeHierarquiaParaEdicao;
+		private Permissoes monitoramentoDePontoDeAcessoParaEdicao;
+		private Permissoes monitoramentoDeAcessoParaEdicao;
+		
+		//*Cadastro
+		
+		//**Visitas
+		
+		private Permissoes visitaParaEdicao;
+		
+		//**Grades De Horários
+		
+		private Permissoes gradeDeHorarioParaEdicao;
+		
+		//**Hierarquia
+		
+		private Permissoes grupoDeAmbienteParaEdicao;
+		private Permissoes ambienteParaEdicao;
+		private Permissoes localidadeParaEdicao;
+		private Permissoes regiaoParaEdicao;
+		private Permissoes pontoDeAcessoParaEdicao;
+		private Permissoes dispositivoParaEdicao;
+		private Permissoes ramalParaEdicao;
+		
+		//**Usuarios
+		
+		private Permissoes visitantesParaEdicao;
+		private Permissoes usuariosRemovidosParaEdicao;
+		
+		//***Ususuário Regular
+		
+		private Permissoes abaCartoesParaEdicao;
+		private Permissoes abaDadosPessoaisParaEdicao;
+		private Permissoes abaBiometriaParaEdicao;
+		private Permissoes abaEnderecoParaEdicao;
+		private Permissoes abaDocumentosParaEdicao;
+		private Permissoes abaGrupoDeHierarquiaParaEdicao;
+		private Permissoes abaGruposParaEdicao;
+		
+			
+		//**Cartoes
+		
+		private Permissoes cartaoParaEdicao;
+		private Permissoes tiposDeCartaoParaEdicao;
+		
+		//**Empresas
+		
+		private Permissoes empresasParaEdicao;
+		
+		//**Grupos
+		
+		private Permissoes grupoDeHierarquiaParaEdicao;
+		private Permissoes grupoDeAprovacaoDeVisitaParaEdicao;
+		private Permissoes grupoDeUsuariosRegularesParaEdicao;
+		private Permissoes grupoDeDuplaCustodiaParaEdicao;
+		private Permissoes grupoDeUsuariosVisitantesParaEdicao;
+		private Permissoes grupoDeUsuariosCheckInParaEdicao;
+		private Permissoes grupoDeConcessaoDeAcessoParaEdicao;
+		private Permissoes grupoDeUsuariosServerParaEdicao;
+		private Permissoes grupoenvioDeSMSParaEdicao;
+		
+		//*Configuracao
+		
+		//**Sistema
+		
+		//***Expurgo
+		
+		private Permissoes expurgoDeAuditoriaParaEdicao;
+		private Permissoes expurgoDeEventosEVisitanteParaEdicao;
+		
+		//**Envio de SMS
+		
+		private Permissoes envioDeSMSParaEdicao;
+		
+		//**cartao
+		
+		private Permissoes cartaoVisitanteParaEdicao;
+		private Permissoes grupoTemporarioParaEdicao;
+		
+		
+		//**Biometria
+		
+		private Permissoes cadastroBiometricoParaEdicao;
+		
+		
+		//Exibir Lista de Usuarios
+		
+		private Permissoes exibirListaDeUsuariosParaEdicao;
+		
+		//Resetar Dispositivo(s)
+		
+		private Permissoes resetarDispositivosParaEdicao;
+		
+		//Acionamento de Emergência
+		
+		private Permissoes acionamentoDeEmergenciaParaEdicao;
+		
+		//Bloquear Dispositivo(s)
+		
+		private Permissoes bloquearDispositivosParaEdicao;
+			
+		//Acionar Dispositivo(s)
+		
+		private Permissoes acionarDispositivoParaEdicao;
+		
+	
+	
+	//EDICAO(1), VER(2), SEM_ACESSO(3);
+	
+	private Connection connection;//conexão com banco
+	
+	
+	
+
+	public GrupoUsuariosServer() {
+		
+		super(  "Specto Total",
+				"Acesso Completo - Menos Admin",
+				"Grupo Specto Total ",
+				"Acesso Completo Specto - Menos Admin",
+				new MYSQLConnection().getConnection());
+	
+		this.administrador = false;
+		this.nomeAdmin = "Administrador Specto";
+		this.descricaoAdmin = "Acesso Completo";		
+
+				
+		this.relatorioDeAcesso = Permissoes.SEM_ACESSO;		
+		this.relatorioDeAuditoria = Permissoes.EDICAO;
+		this.relatorioDePermissoesDeAcesso = Permissoes.EDICAO;
+		this.relatorioDeVisita = Permissoes.EDICAO;
+		this.relatorioStatusDeDispotos = Permissoes.EDICAO;
+		this.relatorioDePonto = Permissoes.EDICAO;
+		this.relatorioDeEventos = Permissoes.EDICAO;
+		
+		this.monitoramentoDeHierarquia = Permissoes.EDICAO;
+		this.monitoramentoDePontoDeAcesso = Permissoes.EDICAO;
+		this.monitoramentoDeAcesso = Permissoes.EDICAO;
+		this.visita = Permissoes.EDICAO;
+		this.gradeDeHorario = Permissoes.EDICAO;
+		this.grupoDeAmbiente = Permissoes.EDICAO;
+		this.ambiente = Permissoes.EDICAO;
+		this.localidade = Permissoes.EDICAO;
+		this.regiao = Permissoes.EDICAO;
+		this.pontoDeAcesso = Permissoes.EDICAO;
+		this.dispositivo = Permissoes.EDICAO;
+		this.ramal = Permissoes.EDICAO;
+		this.visitantes = Permissoes.EDICAO;
+		this.usuariosRemovidos = Permissoes.EDICAO;
+		this.abaCartoes = Permissoes.EDICAO;
+		this.abaDadosPessoais = Permissoes.EDICAO;
+		this.abaBiometria = Permissoes.EDICAO;
+		this.abaEndereco = Permissoes.EDICAO;
+		this.abaDocumentos = Permissoes.EDICAO;
+		this.abaGrupoDeHierarquia = Permissoes.EDICAO;
+		this.abaGrupos = Permissoes.EDICAO;
+		this.cartao = Permissoes.EDICAO;
+		this.tiposDeCartao = Permissoes.EDICAO;
+		this.empresas = Permissoes.EDICAO;
+		this.grupoDeHierarquia = Permissoes.EDICAO;
+		this.grupoDeAprovacaoDeVisita = Permissoes.EDICAO;
+		this.grupoDeUsuariosRegulares = Permissoes.EDICAO;
+		this.grupoDeDuplaCustodia = Permissoes.EDICAO;
+		this.grupoDeUsuariosVisitantes = Permissoes.EDICAO;
+		this.grupoDeUsuariosCheckIn = Permissoes.EDICAO;
+		this.grupoDeConcessaoDeAcesso = Permissoes.EDICAO;
+		this.grupoDeUsuariosServer = Permissoes.EDICAO;
+		this.grupoenvioDeSMS = Permissoes.EDICAO;
+		this.expurgoDeAuditoria = Permissoes.EDICAO;
+		this.expurgoDeEventosEVisitante = Permissoes.EDICAO;
+		this.envioDeSMS = Permissoes.EDICAO;
+		this.cartaoVisitante = Permissoes.EDICAO;
+		this.grupoTemporario = Permissoes.EDICAO;
+		this.cadastroBiometrico = Permissoes.EDICAO;
+		this.exibirListaDeUsuarios = Permissoes.EDICAO;
+		this.resetarDispositivos = Permissoes.EDICAO;
+		this.acionamentoDeEmergencia = Permissoes.EDICAO;
+		this.bloquearDispositivos = Permissoes.EDICAO;
+		this.acionarDispositivo = Permissoes.EDICAO;
+		
+			
+		//this.nomeParaEdicao = "Specto Total Administrador";
+		//this.descricaoParaEdicao = "Acesso Completo - Administrador";
+		this.administradorParaEdicao = true;
+		
+		this.nomeAdminParaEdicao = "Admin Specto";
+		this.descricaoAdminParaEdicao = "Acesso Completo Specto";
+		
+		
+		this.relatorioDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioDeAuditoriaParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioDePermissoesDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioDeVisitaParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioStatusDeDispotosParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioDePontoParaEdicao = Permissoes.SEM_ACESSO;
+		this.relatorioDeEventosParaEdicao = Permissoes.SEM_ACESSO;
+		this.monitoramentoDeHierarquiaParaEdicao = Permissoes.SEM_ACESSO;
+		this.monitoramentoDePontoDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.monitoramentoDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.visitaParaEdicao = Permissoes.SEM_ACESSO;
+		this.gradeDeHorarioParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeAmbienteParaEdicao = Permissoes.SEM_ACESSO;
+		this.ambienteParaEdicao = Permissoes.SEM_ACESSO;
+		this.localidadeParaEdicao = Permissoes.SEM_ACESSO;
+		this.regiaoParaEdicao = Permissoes.SEM_ACESSO;
+		this.pontoDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.dispositivoParaEdicao = Permissoes.SEM_ACESSO;
+		this.ramalParaEdicao = Permissoes.SEM_ACESSO;
+		this.visitantesParaEdicao = Permissoes.SEM_ACESSO;
+		this.usuariosRemovidosParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaCartoesParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaDadosPessoaisParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaBiometriaParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaEnderecoParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaDocumentosParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaGrupoDeHierarquiaParaEdicao = Permissoes.SEM_ACESSO;
+		this.abaGruposParaEdicao = Permissoes.SEM_ACESSO;
+		this.cartaoParaEdicao = Permissoes.SEM_ACESSO;
+		this.tiposDeCartaoParaEdicao = Permissoes.SEM_ACESSO;
+		this.empresasParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeHierarquiaParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeAprovacaoDeVisitaParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeUsuariosRegularesParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeDuplaCustodiaParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeUsuariosVisitantesParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeUsuariosCheckInParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeConcessaoDeAcessoParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoDeUsuariosServerParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoenvioDeSMSParaEdicao = Permissoes.SEM_ACESSO;
+		this.expurgoDeAuditoriaParaEdicao = Permissoes.SEM_ACESSO;
+		this.expurgoDeEventosEVisitanteParaEdicao = Permissoes.SEM_ACESSO;
+		this.envioDeSMSParaEdicao = Permissoes.SEM_ACESSO;
+		this.cartaoVisitanteParaEdicao = Permissoes.SEM_ACESSO;
+		this.grupoTemporarioParaEdicao = Permissoes.SEM_ACESSO;
+		this.cadastroBiometricoParaEdicao = Permissoes.SEM_ACESSO;
+		this.exibirListaDeUsuariosParaEdicao = Permissoes.SEM_ACESSO;
+		this.resetarDispositivosParaEdicao = Permissoes.SEM_ACESSO;
+		this.acionamentoDeEmergenciaParaEdicao = Permissoes.SEM_ACESSO;
+		this.bloquearDispositivosParaEdicao = Permissoes.SEM_ACESSO;
+		this.acionarDispositivoParaEdicao = Permissoes.SEM_ACESSO;
+		
+	}
+	
+	
+
+	public boolean isAdministrador() {
+		return administrador;
+	}
+
+
+
+	public void setAdministrador(boolean administrador) {
+		this.administrador = administrador;
+	}
+
+
+
+	public String getNomeAdmin() {
+		return nomeAdmin;
+	}
+
+
+
+	public void setNomeAdmin(String nomeAdmin) {
+		this.nomeAdmin = nomeAdmin;
+	}
+
+
+
+	public String getDescricaoAdmin() {
+		return descricaoAdmin;
+	}
+
+
+
+	public void setDescricaoAdmin(String descricaoAdmin) {
+		this.descricaoAdmin = descricaoAdmin;
+	}
+
+
+
+	public Permissoes getRelatorioDeAcesso() {
+		return relatorioDeAcesso;
+	}
+
+
+
+	public void setRelatorioDeAcesso(Permissoes relatorioDeAcesso) {
+		this.relatorioDeAcesso = relatorioDeAcesso;
+	}
+
+
+
+	public Permissoes getRelatorioDeAuditoria() {
+		return relatorioDeAuditoria;
+	}
+
+
+
+	public void setRelatorioDeAuditoria(Permissoes relatorioDeAuditoria) {
+		this.relatorioDeAuditoria = relatorioDeAuditoria;
+	}
+
+
+
+	public Permissoes getRelatorioDePermissoesDeAcesso() {
+		return relatorioDePermissoesDeAcesso;
+	}
+
+
+
+	public void setRelatorioDePermissoesDeAcesso(
+			Permissoes relatorioDePermissoesDeAcesso) {
+		this.relatorioDePermissoesDeAcesso = relatorioDePermissoesDeAcesso;
+	}
+
+
+
+	public Permissoes getRelatorioDeVisita() {
+		return relatorioDeVisita;
+	}
+
+
+
+	public void setRelatorioDeVisita(Permissoes relatorioDeVisita) {
+		this.relatorioDeVisita = relatorioDeVisita;
+	}
+
+
+
+	public Permissoes getRelatorioStatusDeDispotos() {
+		return relatorioStatusDeDispotos;
+	}
+
+
+
+	public void setRelatorioStatusDeDispotos(Permissoes relatorioStatusDeDispotos) {
+		this.relatorioStatusDeDispotos = relatorioStatusDeDispotos;
+	}
+
+
+
+	public Permissoes getRelatorioDePonto() {
+		return relatorioDePonto;
+	}
+
+
+
+	public void setRelatorioDePonto(Permissoes relatorioDePonto) {
+		this.relatorioDePonto = relatorioDePonto;
+	}
+
+
+
+	public Permissoes getRelatorioDeEventos() {
+		return relatorioDeEventos;
+	}
+
+
+
+	public void setRelatorioDeEventos(Permissoes relatorioDeEventos) {
+		this.relatorioDeEventos = relatorioDeEventos;
+	}
+
+
+
+	public Permissoes getMonitoramentoDeHierarquia() {
+		return monitoramentoDeHierarquia;
+	}
+
+
+
+	public void setMonitoramentoDeHierarquia(Permissoes monitoramentoDeHierarquia) {
+		this.monitoramentoDeHierarquia = monitoramentoDeHierarquia;
+	}
+
+
+
+	public Permissoes getMonitoramentoDePontoDeAcesso() {
+		return monitoramentoDePontoDeAcesso;
+	}
+
+
+
+	public void setMonitoramentoDePontoDeAcesso(
+			Permissoes monitoramentoDePontoDeAcesso) {
+		this.monitoramentoDePontoDeAcesso = monitoramentoDePontoDeAcesso;
+	}
+
+
+
+	public Permissoes getMonitoramentoDeAcesso() {
+		return monitoramentoDeAcesso;
+	}
+
+
+
+	public void setMonitoramentoDeAcesso(Permissoes monitoramentoDeAcesso) {
+		this.monitoramentoDeAcesso = monitoramentoDeAcesso;
+	}
+
+
+
+	public Permissoes getVisita() {
+		return visita;
+	}
+
+
+
+	public void setVisita(Permissoes visita) {
+		this.visita = visita;
+	}
+
+
+
+	public Permissoes getGradeDeHorario() {
+		return gradeDeHorario;
+	}
+
+
+
+	public void setGradeDeHorario(Permissoes gradeDeHorario) {
+		this.gradeDeHorario = gradeDeHorario;
+	}
+
+
+
+	public Permissoes getGrupoDeAmbiente() {
+		return grupoDeAmbiente;
+	}
+
+
+
+	public void setGrupoDeAmbiente(Permissoes grupoDeAmbiente) {
+		this.grupoDeAmbiente = grupoDeAmbiente;
+	}
+
+
+
+	public Permissoes getAmbiente() {
+		return ambiente;
+	}
+
+
+
+	public void setAmbiente(Permissoes ambiente) {
+		this.ambiente = ambiente;
+	}
+
+
+
+	public Permissoes getLocalidade() {
+		return localidade;
+	}
+
+
+
+	public void setLocalidade(Permissoes localidade) {
+		this.localidade = localidade;
+	}
+
+
+
+	public Permissoes getRegiao() {
+		return regiao;
+	}
+
+
+
+	public void setRegiao(Permissoes regiao) {
+		this.regiao = regiao;
+	}
+
+
+
+	public Permissoes getPontoDeAcesso() {
+		return pontoDeAcesso;
+	}
+
+
+
+	public void setPontoDeAcesso(Permissoes pontoDeAcesso) {
+		this.pontoDeAcesso = pontoDeAcesso;
+	}
+
+
+
+	public Permissoes getDispositivo() {
+		return dispositivo;
+	}
+
+
+
+	public void setDispositivo(Permissoes dispositivo) {
+		this.dispositivo = dispositivo;
+	}
+
+
+
+	public Permissoes getRamal() {
+		return ramal;
+	}
+
+
+
+	public void setRamal(Permissoes ramal) {
+		this.ramal = ramal;
+	}
+
+
+
+	public Permissoes getVisitantes() {
+		return visitantes;
+	}
+
+
+
+	public void setVisitantes(Permissoes visitantes) {
+		this.visitantes = visitantes;
+	}
+
+
+
+	public Permissoes getUsuariosRemovidos() {
+		return usuariosRemovidos;
+	}
+
+
+
+	public void setUsuariosRemovidos(Permissoes usuariosRemovidos) {
+		this.usuariosRemovidos = usuariosRemovidos;
+	}
+
+
+
+	public Permissoes getAbaCartoes() {
+		return abaCartoes;
+	}
+
+
+
+	public void setAbaCartoes(Permissoes abaCartoes) {
+		this.abaCartoes = abaCartoes;
+	}
+
+
+
+	public Permissoes getAbaDadosPessoais() {
+		return abaDadosPessoais;
+	}
+
+
+
+	public void setAbaDadosPessoais(Permissoes abaDadosPessoais) {
+		this.abaDadosPessoais = abaDadosPessoais;
+	}
+
+
+
+	public Permissoes getAbaBiometria() {
+		return abaBiometria;
+	}
+
+
+
+	public void setAbaBiometria(Permissoes abaBiometria) {
+		this.abaBiometria = abaBiometria;
+	}
+
+
+
+	public Permissoes getAbaEndereco() {
+		return abaEndereco;
+	}
+
+
+
+	public void setAbaEndereco(Permissoes abaEndereco) {
+		this.abaEndereco = abaEndereco;
+	}
+
+
+
+	public Permissoes getAbaDocumentos() {
+		return abaDocumentos;
+	}
+
+
+
+	public void setAbaDocumentos(Permissoes abaDocumentos) {
+		this.abaDocumentos = abaDocumentos;
+	}
+
+
+
+	public Permissoes getAbaGrupoDeHierarquia() {
+		return abaGrupoDeHierarquia;
+	}
+
+
+
+	public void setAbaGrupoDeHierarquia(Permissoes abaGrupoDeHierarquia) {
+		this.abaGrupoDeHierarquia = abaGrupoDeHierarquia;
+	}
+
+
+
+	public Permissoes getAbaGrupos() {
+		return abaGrupos;
+	}
+
+
+
+	public void setAbaGrupos(Permissoes abaGrupos) {
+		this.abaGrupos = abaGrupos;
+	}
+
+
+
+	public Permissoes getCartao() {
+		return cartao;
+	}
+
+
+
+	public void setCartao(Permissoes cartao) {
+		this.cartao = cartao;
+	}
+
+
+
+	public Permissoes getTiposDeCartao() {
+		return tiposDeCartao;
+	}
+
+
+
+	public void setTiposDeCartao(Permissoes tiposDeCartao) {
+		this.tiposDeCartao = tiposDeCartao;
+	}
+
+
+
+	public Permissoes getEmpresas() {
+		return empresas;
+	}
+
+
+
+	public void setEmpresas(Permissoes empresas) {
+		this.empresas = empresas;
+	}
+
+
+
+	public Permissoes getGrupoDeHierarquia() {
+		return grupoDeHierarquia;
+	}
+
+
+
+	public void setGrupoDeHierarquia(Permissoes grupoDeHierarquia) {
+		this.grupoDeHierarquia = grupoDeHierarquia;
+	}
+
+
+
+	public Permissoes getGrupoDeAprovacaoDeVisita() {
+		return grupoDeAprovacaoDeVisita;
+	}
+
+
+
+	public void setGrupoDeAprovacaoDeVisita(Permissoes grupoDeAprovacaoDeVisita) {
+		this.grupoDeAprovacaoDeVisita = grupoDeAprovacaoDeVisita;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosRegulares() {
+		return grupoDeUsuariosRegulares;
+	}
+
+
+
+	public void setGrupoDeUsuariosRegulares(Permissoes grupoDeUsuariosRegulares) {
+		this.grupoDeUsuariosRegulares = grupoDeUsuariosRegulares;
+	}
+
+
+
+	public Permissoes getGrupoDeDuplaCustodia() {
+		return grupoDeDuplaCustodia;
+	}
+
+
+
+	public void setGrupoDeDuplaCustodia(Permissoes grupoDeDuplaCustodia) {
+		this.grupoDeDuplaCustodia = grupoDeDuplaCustodia;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosVisitantes() {
+		return grupoDeUsuariosVisitantes;
+	}
+
+
+
+	public void setGrupoDeUsuariosVisitantes(Permissoes grupoDeUsuariosVisitantes) {
+		this.grupoDeUsuariosVisitantes = grupoDeUsuariosVisitantes;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosCheckIn() {
+		return grupoDeUsuariosCheckIn;
+	}
+
+
+
+	public void setGrupoDeUsuariosCheckIn(Permissoes grupoDeUsuariosCheckIn) {
+		this.grupoDeUsuariosCheckIn = grupoDeUsuariosCheckIn;
+	}
+
+
+
+	public Permissoes getGrupoDeConcessaoDeAcesso() {
+		return grupoDeConcessaoDeAcesso;
+	}
+
+
+
+	public void setGrupoDeConcessaoDeAcesso(Permissoes grupoDeConcessaoDeAcesso) {
+		this.grupoDeConcessaoDeAcesso = grupoDeConcessaoDeAcesso;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosServer() {
+		return grupoDeUsuariosServer;
+	}
+
+
+
+	public void setGrupoDeUsuariosServer(Permissoes grupoDeUsuariosServer) {
+		this.grupoDeUsuariosServer = grupoDeUsuariosServer;
+	}
+
+
+
+	public Permissoes getGrupoenvioDeSMS() {
+		return grupoenvioDeSMS;
+	}
+
+
+
+	public void setGrupoenvioDeSMS(Permissoes grupoenvioDeSMS) {
+		this.grupoenvioDeSMS = grupoenvioDeSMS;
+	}
+
+
+
+	public Permissoes getExpurgoDeAuditoria() {
+		return expurgoDeAuditoria;
+	}
+
+
+
+	public void setExpurgoDeAuditoria(Permissoes expurgoDeAuditoria) {
+		this.expurgoDeAuditoria = expurgoDeAuditoria;
+	}
+
+
+
+	public Permissoes getExpurgoDeEventosEVisitante() {
+		return expurgoDeEventosEVisitante;
+	}
+
+
+
+	public void setExpurgoDeEventosEVisitante(Permissoes expurgoDeEventosEVisitante) {
+		this.expurgoDeEventosEVisitante = expurgoDeEventosEVisitante;
+	}
+
+
+
+	public Permissoes getEnvioDeSMS() {
+		return envioDeSMS;
+	}
+
+
+
+	public void setEnvioDeSMS(Permissoes envioDeSMS) {
+		this.envioDeSMS = envioDeSMS;
+	}
+
+
+
+	public Permissoes getCartaoVisitante() {
+		return cartaoVisitante;
+	}
+
+
+
+	public void setCartaoVisitante(Permissoes cartaoVisitante) {
+		this.cartaoVisitante = cartaoVisitante;
+	}
+
+
+
+	public Permissoes getGrupoTemporario() {
+		return grupoTemporario;
+	}
+
+
+
+	public void setGrupoTemporario(Permissoes grupoTemporario) {
+		this.grupoTemporario = grupoTemporario;
+	}
+
+
+
+	public Permissoes getCadastroBiometrico() {
+		return cadastroBiometrico;
+	}
+
+
+
+	public void setCadastroBiometrico(Permissoes cadastroBiometrico) {
+		this.cadastroBiometrico = cadastroBiometrico;
+	}
+
+
+
+	public Permissoes getExibirListaDeUsuarios() {
+		return exibirListaDeUsuarios;
+	}
+
+
+
+	public void setExibirListaDeUsuarios(Permissoes exibirListaDeUsuarios) {
+		this.exibirListaDeUsuarios = exibirListaDeUsuarios;
+	}
+
+
+
+	public Permissoes getResetarDispositivos() {
+		return resetarDispositivos;
+	}
+
+
+
+	public void setResetarDispositivos(Permissoes resetarDispositivos) {
+		this.resetarDispositivos = resetarDispositivos;
+	}
+
+
+
+	public Permissoes getAcionamentoDeEmergencia() {
+		return acionamentoDeEmergencia;
+	}
+
+
+
+	public void setAcionamentoDeEmergencia(Permissoes acionamentoDeEmergencia) {
+		this.acionamentoDeEmergencia = acionamentoDeEmergencia;
+	}
+
+
+
+	public Permissoes getBloquearDispositivos() {
+		return bloquearDispositivos;
+	}
+
+
+
+	public void setBloquearDispositivos(Permissoes bloquearDispositivos) {
+		this.bloquearDispositivos = bloquearDispositivos;
+	}
+
+
+
+	public Permissoes getAcionarDispositivo() {
+		return acionarDispositivo;
+	}
+
+
+
+	public void setAcionarDispositivo(Permissoes acionarDispositivo) {
+		this.acionarDispositivo = acionarDispositivo;
+	}
+
+
+
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+
+	public String getDescricaoParaEdicao() {
+		return descricaoParaEdicao;
+	}
+
+
+
+	public void setDescricaoParaEdicao(String descricaoParaEdicao) {
+		this.descricaoParaEdicao = descricaoParaEdicao;
+	}
+
+
+
+	public boolean isAdministradorParaEdicao() {
+		return administradorParaEdicao;
+	}
+
+
+
+	public void setAdministradorParaEdicao(boolean administradorParaEdicao) {
+		this.administradorParaEdicao = administradorParaEdicao;
+	}
+
+
+
+	public String getNomeAdminParaEdicao() {
+		return nomeAdminParaEdicao;
+	}
+
+
+
+	public void setNomeAdminParaEdicao(String nomeAdminParaEdicao) {
+		this.nomeAdminParaEdicao = nomeAdminParaEdicao;
+	}
+
+
+
+	public String getDescricaoAdminParaEdicao() {
+		return descricaoAdminParaEdicao;
+	}
+
+
+
+	public void setDescricaoAdminParaEdicao(String descricaoAdminParaEdicao) {
+		this.descricaoAdminParaEdicao = descricaoAdminParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDeAcessoParaEdicao() {
+		return relatorioDeAcessoParaEdicao;
+	}
+
+
+
+	public void setRelatorioDeAcessoParaEdicao(
+			Permissoes relatorioDeAcessoParaEdicao) {
+		this.relatorioDeAcessoParaEdicao = relatorioDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDeAuditoriaParaEdicao() {
+		return relatorioDeAuditoriaParaEdicao;
+	}
+
+
+
+	public void setRelatorioDeAuditoriaParaEdicao(
+			Permissoes relatorioDeAuditoriaParaEdicao) {
+		this.relatorioDeAuditoriaParaEdicao = relatorioDeAuditoriaParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDePermissoesDeAcessoParaEdicao() {
+		return relatorioDePermissoesDeAcessoParaEdicao;
+	}
+
+
+
+	public void setRelatorioDePermissoesDeAcessoParaEdicao(
+			Permissoes relatorioDePermissoesDeAcessoParaEdicao) {
+		this.relatorioDePermissoesDeAcessoParaEdicao = relatorioDePermissoesDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDeVisitaParaEdicao() {
+		return relatorioDeVisitaParaEdicao;
+	}
+
+
+
+	public void setRelatorioDeVisitaParaEdicao(
+			Permissoes relatorioDeVisitaParaEdicao) {
+		this.relatorioDeVisitaParaEdicao = relatorioDeVisitaParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioStatusDeDispotosParaEdicao() {
+		return relatorioStatusDeDispotosParaEdicao;
+	}
+
+
+
+	public void setRelatorioStatusDeDispotosParaEdicao(
+			Permissoes relatorioStatusDeDispotosParaEdicao) {
+		this.relatorioStatusDeDispotosParaEdicao = relatorioStatusDeDispotosParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDePontoParaEdicao() {
+		return relatorioDePontoParaEdicao;
+	}
+
+
+
+	public void setRelatorioDePontoParaEdicao(Permissoes relatorioDePontoParaEdicao) {
+		this.relatorioDePontoParaEdicao = relatorioDePontoParaEdicao;
+	}
+
+
+
+	public Permissoes getRelatorioDeEventosParaEdicao() {
+		return relatorioDeEventosParaEdicao;
+	}
+
+
+
+	public void setRelatorioDeEventosParaEdicao(
+			Permissoes relatorioDeEventosParaEdicao) {
+		this.relatorioDeEventosParaEdicao = relatorioDeEventosParaEdicao;
+	}
+
+
+
+	public Permissoes getMonitoramentoDeHierarquiaParaEdicao() {
+		return monitoramentoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public void setMonitoramentoDeHierarquiaParaEdicao(
+			Permissoes monitoramentoDeHierarquiaParaEdicao) {
+		this.monitoramentoDeHierarquiaParaEdicao = monitoramentoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public Permissoes getMonitoramentoDePontoDeAcessoParaEdicao() {
+		return monitoramentoDePontoDeAcessoParaEdicao;
+	}
+
+
+
+	public void setMonitoramentoDePontoDeAcessoParaEdicao(
+			Permissoes monitoramentoDePontoDeAcessoParaEdicao) {
+		this.monitoramentoDePontoDeAcessoParaEdicao = monitoramentoDePontoDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getMonitoramentoDeAcessoParaEdicao() {
+		return monitoramentoDeAcessoParaEdicao;
+	}
+
+
+
+	public void setMonitoramentoDeAcessoParaEdicao(
+			Permissoes monitoramentoDeAcessoParaEdicao) {
+		this.monitoramentoDeAcessoParaEdicao = monitoramentoDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getVisitaParaEdicao() {
+		return visitaParaEdicao;
+	}
+
+
+
+	public void setVisitaParaEdicao(Permissoes visitaParaEdicao) {
+		this.visitaParaEdicao = visitaParaEdicao;
+	}
+
+
+
+	public Permissoes getGradeDeHorarioParaEdicao() {
+		return gradeDeHorarioParaEdicao;
+	}
+
+
+
+	public void setGradeDeHorarioParaEdicao(Permissoes gradeDeHorarioParaEdicao) {
+		this.gradeDeHorarioParaEdicao = gradeDeHorarioParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeAmbienteParaEdicao() {
+		return grupoDeAmbienteParaEdicao;
+	}
+
+
+
+	public void setGrupoDeAmbienteParaEdicao(Permissoes grupoDeAmbienteParaEdicao) {
+		this.grupoDeAmbienteParaEdicao = grupoDeAmbienteParaEdicao;
+	}
+
+
+
+	public Permissoes getAmbienteParaEdicao() {
+		return ambienteParaEdicao;
+	}
+
+
+
+	public void setAmbienteParaEdicao(Permissoes ambienteParaEdicao) {
+		this.ambienteParaEdicao = ambienteParaEdicao;
+	}
+
+
+
+	public Permissoes getLocalidadeParaEdicao() {
+		return localidadeParaEdicao;
+	}
+
+
+
+	public void setLocalidadeParaEdicao(Permissoes localidadeParaEdicao) {
+		this.localidadeParaEdicao = localidadeParaEdicao;
+	}
+
+
+
+	public Permissoes getRegiaoParaEdicao() {
+		return regiaoParaEdicao;
+	}
+
+
+
+	public void setRegiaoParaEdicao(Permissoes regiaoParaEdicao) {
+		this.regiaoParaEdicao = regiaoParaEdicao;
+	}
+
+
+
+	public Permissoes getPontoDeAcessoParaEdicao() {
+		return pontoDeAcessoParaEdicao;
+	}
+
+
+
+	public void setPontoDeAcessoParaEdicao(Permissoes pontoDeAcessoParaEdicao) {
+		this.pontoDeAcessoParaEdicao = pontoDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getDispositivoParaEdicao() {
+		return dispositivoParaEdicao;
+	}
+
+
+
+	public void setDispositivoParaEdicao(Permissoes dispositivoParaEdicao) {
+		this.dispositivoParaEdicao = dispositivoParaEdicao;
+	}
+
+
+
+	public Permissoes getRamalParaEdicao() {
+		return ramalParaEdicao;
+	}
+
+
+
+	public void setRamalParaEdicao(Permissoes ramalParaEdicao) {
+		this.ramalParaEdicao = ramalParaEdicao;
+	}
+
+
+
+	public Permissoes getVisitantesParaEdicao() {
+		return visitantesParaEdicao;
+	}
+
+
+
+	public void setVisitantesParaEdicao(Permissoes visitantesParaEdicao) {
+		this.visitantesParaEdicao = visitantesParaEdicao;
+	}
+
+
+
+	public Permissoes getUsuariosRemovidosParaEdicao() {
+		return usuariosRemovidosParaEdicao;
+	}
+
+
+
+	public void setUsuariosRemovidosParaEdicao(
+			Permissoes usuariosRemovidosParaEdicao) {
+		this.usuariosRemovidosParaEdicao = usuariosRemovidosParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaCartoesParaEdicao() {
+		return abaCartoesParaEdicao;
+	}
+
+
+
+	public void setAbaCartoesParaEdicao(Permissoes abaCartoesParaEdicao) {
+		this.abaCartoesParaEdicao = abaCartoesParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaDadosPessoaisParaEdicao() {
+		return abaDadosPessoaisParaEdicao;
+	}
+
+
+
+	public void setAbaDadosPessoaisParaEdicao(Permissoes abaDadosPessoaisParaEdicao) {
+		this.abaDadosPessoaisParaEdicao = abaDadosPessoaisParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaBiometriaParaEdicao() {
+		return abaBiometriaParaEdicao;
+	}
+
+
+
+	public void setAbaBiometriaParaEdicao(Permissoes abaBiometriaParaEdicao) {
+		this.abaBiometriaParaEdicao = abaBiometriaParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaEnderecoParaEdicao() {
+		return abaEnderecoParaEdicao;
+	}
+
+
+
+	public void setAbaEnderecoParaEdicao(Permissoes abaEnderecoParaEdicao) {
+		this.abaEnderecoParaEdicao = abaEnderecoParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaDocumentosParaEdicao() {
+		return abaDocumentosParaEdicao;
+	}
+
+
+
+	public void setAbaDocumentosParaEdicao(Permissoes abaDocumentosParaEdicao) {
+		this.abaDocumentosParaEdicao = abaDocumentosParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaGrupoDeHierarquiaParaEdicao() {
+		return abaGrupoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public void setAbaGrupoDeHierarquiaParaEdicao(
+			Permissoes abaGrupoDeHierarquiaParaEdicao) {
+		this.abaGrupoDeHierarquiaParaEdicao = abaGrupoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public Permissoes getAbaGruposParaEdicao() {
+		return abaGruposParaEdicao;
+	}
+
+
+
+	public void setAbaGruposParaEdicao(Permissoes abaGruposParaEdicao) {
+		this.abaGruposParaEdicao = abaGruposParaEdicao;
+	}
+
+
+
+	public Permissoes getCartaoParaEdicao() {
+		return cartaoParaEdicao;
+	}
+
+
+
+	public void setCartaoParaEdicao(Permissoes cartaoParaEdicao) {
+		this.cartaoParaEdicao = cartaoParaEdicao;
+	}
+
+
+
+	public Permissoes getTiposDeCartaoParaEdicao() {
+		return tiposDeCartaoParaEdicao;
+	}
+
+
+
+	public void setTiposDeCartaoParaEdicao(Permissoes tiposDeCartaoParaEdicao) {
+		this.tiposDeCartaoParaEdicao = tiposDeCartaoParaEdicao;
+	}
+
+
+
+	public Permissoes getEmpresasParaEdicao() {
+		return empresasParaEdicao;
+	}
+
+
+
+	public void setEmpresasParaEdicao(Permissoes empresasParaEdicao) {
+		this.empresasParaEdicao = empresasParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeHierarquiaParaEdicao() {
+		return grupoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public void setGrupoDeHierarquiaParaEdicao(
+			Permissoes grupoDeHierarquiaParaEdicao) {
+		this.grupoDeHierarquiaParaEdicao = grupoDeHierarquiaParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeAprovacaoDeVisitaParaEdicao() {
+		return grupoDeAprovacaoDeVisitaParaEdicao;
+	}
+
+
+
+	public void setGrupoDeAprovacaoDeVisitaParaEdicao(
+			Permissoes grupoDeAprovacaoDeVisitaParaEdicao) {
+		this.grupoDeAprovacaoDeVisitaParaEdicao = grupoDeAprovacaoDeVisitaParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosRegularesParaEdicao() {
+		return grupoDeUsuariosRegularesParaEdicao;
+	}
+
+
+
+	public void setGrupoDeUsuariosRegularesParaEdicao(
+			Permissoes grupoDeUsuariosRegularesParaEdicao) {
+		this.grupoDeUsuariosRegularesParaEdicao = grupoDeUsuariosRegularesParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeDuplaCustodiaParaEdicao() {
+		return grupoDeDuplaCustodiaParaEdicao;
+	}
+
+
+
+	public void setGrupoDeDuplaCustodiaParaEdicao(
+			Permissoes grupoDeDuplaCustodiaParaEdicao) {
+		this.grupoDeDuplaCustodiaParaEdicao = grupoDeDuplaCustodiaParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosVisitantesParaEdicao() {
+		return grupoDeUsuariosVisitantesParaEdicao;
+	}
+
+
+
+	public void setGrupoDeUsuariosVisitantesParaEdicao(
+			Permissoes grupoDeUsuariosVisitantesParaEdicao) {
+		this.grupoDeUsuariosVisitantesParaEdicao = grupoDeUsuariosVisitantesParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosCheckInParaEdicao() {
+		return grupoDeUsuariosCheckInParaEdicao;
+	}
+
+
+
+	public void setGrupoDeUsuariosCheckInParaEdicao(
+			Permissoes grupoDeUsuariosCheckInParaEdicao) {
+		this.grupoDeUsuariosCheckInParaEdicao = grupoDeUsuariosCheckInParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeConcessaoDeAcessoParaEdicao() {
+		return grupoDeConcessaoDeAcessoParaEdicao;
+	}
+
+
+
+	public void setGrupoDeConcessaoDeAcessoParaEdicao(
+			Permissoes grupoDeConcessaoDeAcessoParaEdicao) {
+		this.grupoDeConcessaoDeAcessoParaEdicao = grupoDeConcessaoDeAcessoParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoDeUsuariosServerParaEdicao() {
+		return grupoDeUsuariosServerParaEdicao;
+	}
+
+
+
+	public void setGrupoDeUsuariosServerParaEdicao(
+			Permissoes grupoDeUsuariosServerParaEdicao) {
+		this.grupoDeUsuariosServerParaEdicao = grupoDeUsuariosServerParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoenvioDeSMSParaEdicao() {
+		return grupoenvioDeSMSParaEdicao;
+	}
+
+
+
+	public void setGrupoenvioDeSMSParaEdicao(Permissoes grupoenvioDeSMSParaEdicao) {
+		this.grupoenvioDeSMSParaEdicao = grupoenvioDeSMSParaEdicao;
+	}
+
+
+
+	public Permissoes getExpurgoDeAuditoriaParaEdicao() {
+		return expurgoDeAuditoriaParaEdicao;
+	}
+
+
+
+	public void setExpurgoDeAuditoriaParaEdicao(
+			Permissoes expurgoDeAuditoriaParaEdicao) {
+		this.expurgoDeAuditoriaParaEdicao = expurgoDeAuditoriaParaEdicao;
+	}
+
+
+
+	public Permissoes getExpurgoDeEventosEVisitanteParaEdicao() {
+		return expurgoDeEventosEVisitanteParaEdicao;
+	}
+
+
+
+	public void setExpurgoDeEventosEVisitanteParaEdicao(
+			Permissoes expurgoDeEventosEVisitanteParaEdicao) {
+		this.expurgoDeEventosEVisitanteParaEdicao = expurgoDeEventosEVisitanteParaEdicao;
+	}
+
+
+
+	public Permissoes getEnvioDeSMSParaEdicao() {
+		return envioDeSMSParaEdicao;
+	}
+
+
+
+	public void setEnvioDeSMSParaEdicao(Permissoes envioDeSMSParaEdicao) {
+		this.envioDeSMSParaEdicao = envioDeSMSParaEdicao;
+	}
+
+
+
+	public Permissoes getCartaoVisitanteParaEdicao() {
+		return cartaoVisitanteParaEdicao;
+	}
+
+
+
+	public void setCartaoVisitanteParaEdicao(Permissoes cartaoVisitanteParaEdicao) {
+		this.cartaoVisitanteParaEdicao = cartaoVisitanteParaEdicao;
+	}
+
+
+
+	public Permissoes getGrupoTemporarioParaEdicao() {
+		return grupoTemporarioParaEdicao;
+	}
+
+
+
+	public void setGrupoTemporarioParaEdicao(Permissoes grupoTemporarioParaEdicao) {
+		this.grupoTemporarioParaEdicao = grupoTemporarioParaEdicao;
+	}
+
+
+
+	public Permissoes getCadastroBiometricoParaEdicao() {
+		return cadastroBiometricoParaEdicao;
+	}
+
+
+
+	public void setCadastroBiometricoParaEdicao(
+			Permissoes cadastroBiometricoParaEdicao) {
+		this.cadastroBiometricoParaEdicao = cadastroBiometricoParaEdicao;
+	}
+
+
+
+	public Permissoes getExibirListaDeUsuariosParaEdicao() {
+		return exibirListaDeUsuariosParaEdicao;
+	}
+
+
+
+	public void setExibirListaDeUsuariosParaEdicao(
+			Permissoes exibirListaDeUsuariosParaEdicao) {
+		this.exibirListaDeUsuariosParaEdicao = exibirListaDeUsuariosParaEdicao;
+	}
+
+
+
+	public Permissoes getResetarDispositivosParaEdicao() {
+		return resetarDispositivosParaEdicao;
+	}
+
+
+
+	public void setResetarDispositivosParaEdicao(
+			Permissoes resetarDispositivosParaEdicao) {
+		this.resetarDispositivosParaEdicao = resetarDispositivosParaEdicao;
+	}
+
+
+
+	public Permissoes getAcionamentoDeEmergenciaParaEdicao() {
+		return acionamentoDeEmergenciaParaEdicao;
+	}
+
+
+
+	public void setAcionamentoDeEmergenciaParaEdicao(
+			Permissoes acionamentoDeEmergenciaParaEdicao) {
+		this.acionamentoDeEmergenciaParaEdicao = acionamentoDeEmergenciaParaEdicao;
+	}
+
+
+
+	public Permissoes getBloquearDispositivosParaEdicao() {
+		return bloquearDispositivosParaEdicao;
+	}
+
+
+
+	public void setBloquearDispositivosParaEdicao(
+			Permissoes bloquearDispositivosParaEdicao) {
+		this.bloquearDispositivosParaEdicao = bloquearDispositivosParaEdicao;
+	}
+
+
+
+	public Permissoes getAcionarDispositivoParaEdicao() {
+		return acionarDispositivoParaEdicao;
+	}
+
+
+
+	public void setAcionarDispositivoParaEdicao(
+			Permissoes acionarDispositivoParaEdicao) {
+		this.acionarDispositivoParaEdicao = acionarDispositivoParaEdicao;
+	}
+
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	
+	
+}

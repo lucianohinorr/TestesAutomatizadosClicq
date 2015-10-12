@@ -1,0 +1,210 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+import java.util.List;
+
+import org.jboss.netty.handler.codec.frame.CorruptedFrameException;
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+
+import com.gargoylesoftware.htmlunit.javascript.host.geo.Coordinates;
+import com.steadystate.css.parser.Locatable;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+import br.com.specto.entidades.Regiao;
+
+
+public class ApagarPontoDeAcesso{
+ 
+	private  WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	
+
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void apagaRegiaoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a exclusão de Região");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+			
+			//Maximiza a tela com a lista de Ponto de Acesso. Caso contrário, como o Ponto de Acesso não está visível, ele de alguma forma utiliza o scroll para encontrá-lo
+			//isso altera as dimensões da tela, ao final dos testes o botão Sair da aplicação não está disponível, gerando erro.
+			//Como solução eu maximizo a janela antes da lista de Ponto de Acesso, fazendo com que o registro do Ponto de Acesso esteja disponível
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/max.gif')]")).click();
+				
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idPontoDeAcesso = "" + pontoDeAcesso.encontraIdPontoDeAcesso(pontoDeAcesso.getNomePontoAcesso());
+			
+			//Marca o Ponto de Acesso para editar.
+			driver.findElement(By.id(s_idPontoDeAcesso)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//Recuperar o id do banco referente ao nome do Dispositivo do Ponto de Acesso cadastrada atualmente no banco
+			String s_idDispositivoDoPontoDeAcesso = "" + pontoDeAcesso.encontraIdDispositiboDoPontoDeAcesso(pontoDeAcesso.getNomeDispositivo1());
+						
+		
+			
+			//testar com o AND abaixo:
+			
+			//viewerHelper_.getWebDriver().findElement(By.xpath("//div[@id='alertLabel'] and .//text()='Save to server successful']"));
+			
+			
+			driver.manage().window().maximize();
+			
+		
+			
+			System.out.println("Aqui 1");
+			
+			
+			//Sleep. Para Debug.
+			Long end = System.currentTimeMillis() + 9000;
+			while (System.currentTimeMillis() < end) {}  
+			
+			
+			System.out.println("Aqui 2");
+			
+			WebElement elemento = driver.findElement(By.id(s_idDispositivoDoPontoDeAcesso));
+			
+			//Coordinates coordinate = (Coordinates) ((Locatable)elemento).getClass()
+			driver.findElement(By.id(s_idDispositivoDoPontoDeAcesso));
+			
+			System.out.println("Aqui ---");
+			
+			
+			//JavascriptExecutor JSExecute = (JavascriptExecutor)driver.findElement(By.id(s_idDispositivoDoPontoDeAcesso));
+			JavascriptExecutor JSExecute = (JavascriptExecutor)elemento;
+			JSExecute.executeScript("window.scrollBy(0,50)", "");
+							
+			System.out.println("Aqui 3");
+			
+			//Sleep. Para Debug.
+			end = System.currentTimeMillis() + 9000;
+			while (System.currentTimeMillis() < end) {} 
+			
+			//****
+			
+			//Actions clicker = new Actions(driver);
+			//System.out.println("Aqui 1");
+		    //clicker.sendKeys(Keys.PAGE_DOWN);
+		    //Thread.sleep(1000);
+		   	
+		    //****
+		    
+		    //WebElement scroll = driver.findElement(By.id("brand"));
+		    //scroll.sendKeys(Keys.PAGE_DOWN);
+		    
+		    
+		    //***
+		    
+			//System.out.println("Aqui 2");
+		    //JavascriptExecutor js = (JavascriptExecutor) driver;
+		    
+		  //System.out.println("Aqui 2");
+		    //js.executeScript("window.scrollTo(0, 250);");
+		    
+		  System.out.println("Aqui 3");
+		    
+		    //***
+		    
+		    
+		    
+		    
+		    System.out.println("Aqui 2");
+		    
+		    
+		    
+		    
+		    
+		    //clicker.click(button).perform();     
+		    //Thread.sleep(1000);
+			
+			
+			
+			//Sleep. Para Debug.
+			end = System.currentTimeMillis() + 9000;
+			while (System.currentTimeMillis() < end) {}  
+			
+			
+			
+			
+			
+			
+			
+			
+			
+    		try{
+    			
+    			//validando a mensagem de validação
+    			//assertEquals("Região [" + regiao.getNomeParaEdicao() + "] removida com sucesso!", msgValidacaoDeletarRegiao);
+    			
+    			System.out.println("Caso de Teste Apagar Região executado com sucesso!");
+        		
+    		}catch (AssertionError erroValidaMensagemExclusaoRegiao){
+    		
+    			System.out.println("Erro ao executar o Caso de Teste Apagar Região!");
+    			
+    			throw erroValidaMensagemExclusaoRegiao;
+    			
+    		}finally{
+    			
+    			//Fechar a tela com a lista de Regiões.
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			//Tambem funciona: driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+    				
+    			//Sleep. Para Debug.
+    			 end = System.currentTimeMillis() + 3000;
+    			while (System.currentTimeMillis() < end) {}  
+        			    
+    			
+    			//Selecionando o botão Sair da Aplicação.
+    			driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    		}	
+		    
+		}catch (Exception erroConsultaIdRegiao){
+			
+			System.out.println(erroConsultaIdRegiao);
+			
+			throw  erroConsultaIdRegiao;
+		
+		}
+ 	}
+  
+  
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

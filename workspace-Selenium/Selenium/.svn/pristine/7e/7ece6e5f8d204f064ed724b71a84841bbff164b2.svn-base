@@ -1,0 +1,130 @@
+package TST_085_Cadastrar_Grupo_de_Hierarquia;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoDeHierarquia;
+
+
+
+
+public class TST_085_03_EditarGrupoDeHierarquiaNome_E_Descricao {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoDeHierarquia grupoDeHierarquia;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoDeHierarquia = new GrupoDeHierarquia();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void editarGrupoUsuariosServerVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Hierarquia")).click();
+				
+			//Recuperar o id do banco referente ao nome do Grupo
+			String s_idGrupo = "" + grupoDeHierarquia.encontraIdGrupo(grupoDeHierarquia.getNomeJaCadastrado_3());	
+						
+			//Marca o Grupo para Edição
+			driver.findElement(By.id(s_idGrupo)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+		
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			
+			driver.findElement(By.name("name")).clear();			
+			driver.findElement(By.name("name")).sendKeys(grupoDeHierarquia.getNomeEdicao_1());
+			
+			driver.findElement(By.name("description")).clear();
+			driver.findElement(By.name("description")).sendKeys(grupoDeHierarquia.getDescricaoEdicao_1());
+		
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de Hierarquia [" + grupoDeHierarquia.getNomeEdicao_1() + "] editado com sucesso!";
+		
+			try{
+				
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemEdicaoGrupoUsuariosCheckIn){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemEdicaoGrupoUsuariosCheckIn);
+    			loggerTestResult.testResult("Reprovado");
+    		
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemEdicaoGrupoUsuariosCheckIn;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

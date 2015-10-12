@@ -1,0 +1,108 @@
+package TST_018_Cadastrar_Grupo_de_Ambiente;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoDeAmbiente;
+
+
+public class CadastrarGrupoDeAmbiente {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoDeAmbiente grupoDeAmbiente;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoDeAmbiente = new GrupoDeAmbiente();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarAmbienteVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Grupo de Ambiente");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Grupo de Ambientes")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(grupoDeAmbiente.getNomeGrupoAmbiente());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(grupoDeAmbiente.getDescricao());
+			driver.findElement(By.xpath("//*[ contains(@name, 'abbreviature')]")).sendKeys(grupoDeAmbiente.getSigla());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'locality')]"))).selectByVisibleText(grupoDeAmbiente.getLocalidade());
+			
+				
+			    
+			//Botão Salvar do cadastro de Grupo de Ambiente
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar a localidade
+			String msgValidacaoCadAmbiente = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+  
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Grupo Ambiente [" + grupoDeAmbiente.getNomeGrupoAmbiente() + "] salvo com sucesso!", msgValidacaoCadAmbiente);
+	    
+				System.out.println("Caso de Teste Cadastrar Grupo de Ambiente executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoDeAmbiente){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Grupo de Ambiente!");
+    			
+				throw erroValidaMensagemCadastroGrupoDeAmbiente;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo de Ambiente
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Grupo de Ambiente: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

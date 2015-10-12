@@ -1,0 +1,202 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Expurgo {
+	
+	protected boolean habilitarExpurgo;
+	protected boolean desabilitarExpurgo;
+	protected String manterUltimos;
+	protected String horarioExecucao;
+	
+	protected String manterUltimosParaEdicao;
+	protected String horarioExecucaoParaEdicao;
+	
+	protected Connection connection;//conexão com banco		
+		
+	
+	
+	
+	public Expurgo(boolean habilitarExpurgo, boolean desabilitarExpurgo,
+			String manterUltimos, String horarioExecucao,
+			String manterUltimosParaEdicao, String horarioExecucaoParaEdicao,
+			Connection connection) {
+		
+		this.habilitarExpurgo = habilitarExpurgo;
+		this.desabilitarExpurgo = desabilitarExpurgo;
+		this.manterUltimos = manterUltimos;
+		this.horarioExecucao = horarioExecucao;
+		this.manterUltimosParaEdicao = manterUltimosParaEdicao;
+		this.horarioExecucaoParaEdicao = horarioExecucaoParaEdicao;
+		this.connection = connection;
+	}
+	
+	
+
+	public boolean isHabilitarExpurgo() {
+		return habilitarExpurgo;
+	}
+
+
+
+	public void setHabilitarExpurgo(boolean habilitarExpurgo) {
+		this.habilitarExpurgo = habilitarExpurgo;
+	}
+
+
+
+	public boolean isDesabilitarExpurgo() {
+		return desabilitarExpurgo;
+	}
+
+
+
+	public void setDesabilitarExpurgo(boolean desabilitarExpurgo) {
+		this.desabilitarExpurgo = desabilitarExpurgo;
+	}
+
+
+
+	public String getManterUltimos() {
+		return manterUltimos;
+	}
+
+
+
+	public void setManterUltimos(String manterUltimos) {
+		this.manterUltimos = manterUltimos;
+	}
+
+
+
+	public String getHorarioExecucao() {
+		return horarioExecucao;
+	}
+
+
+
+	public void setHorarioExecucao(String horarioExecucao) {
+		this.horarioExecucao = horarioExecucao;
+	}
+
+
+
+	public String getManterUltimosParaEdicao() {
+		return manterUltimosParaEdicao;
+	}
+
+
+
+	public void setManterUltimosParaEdicao(String manterUltimosParaEdicao) {
+		this.manterUltimosParaEdicao = manterUltimosParaEdicao;
+	}
+
+
+
+	public String getHorarioExecucaoParaEdicao() {
+		return horarioExecucaoParaEdicao;
+	}
+
+
+
+	public void setHorarioExecucaoParaEdicao(String horarioExecucaoParaEdicao) {
+		this.horarioExecucaoParaEdicao = horarioExecucaoParaEdicao;
+	}
+
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+
+	/*
+	 * Recupera o Id do Grupo de Usuários Regulares/Usuarios Server
+	 * select no banco exemplo:  SELECT PLOS_PK_ID FROM VA_PLOS_PURGE_LOCALITY_SCHEDULER WHERE PLOS_FK_LOCALITY_ID = 3 
+	 */
+	public int encontraIdExpurgoEventos(String idLocalidade) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+		
+		//String tipoDeGrupo = tipo;
+				
+		
+		sql.append("SELECT PLOS_PK_ID ");
+		sql.append("FROM   VA_PLOS_PURGE_LOCALITY_SCHEDULER ");
+		sql.append("WHERE  PLOS_FK_LOCALITY_ID = ? ");
+				
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+		ps.setString(1, idLocalidade);
+		ResultSet rs = ps.executeQuery();
+		int idExpurgoEventos = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idExpurgoEventos = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Expurgo de Eventos com o id " + idLocalidade + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idExpurgoEventos;
+	}		
+	
+	
+	/*
+	 * Recupera o Id do Grupo de Usuários Regulares/Usuarios Server
+	 * select no banco exemplo:  SELECT PLOS_PK_ID FROM VA_PLOS_PURGE_LOCALITY_SCHEDULER WHERE PLOS_FK_LOCALITY_ID = 3 
+	 */
+	public int encontraIdExpurgoVisitantes(String idLocalidade) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+		
+		//String tipoDeGrupo = tipo;
+				
+		
+		sql.append("SELECT PLOS_PK_ID ");
+		sql.append("FROM   VA_PLOS_PURGE_LOCALITY_SCHEDULER ");
+		sql.append("WHERE  PLOS_FK_LOCALITY_ID = ? ");
+				
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+		ps.setString(1, idLocalidade);
+		ResultSet rs = ps.executeQuery();
+		int idExpurgoEventos = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idExpurgoEventos = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Expurgo de Visitantes com o id " + idLocalidade + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idExpurgoEventos;
+	}		
+
+}

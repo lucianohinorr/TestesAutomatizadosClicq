@@ -1,0 +1,119 @@
+package TST_028_Cadastrar_Empresa;
+
+
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Empresa;
+
+public class CadastrarEmpresaJaCadastrada {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Empresa empresa;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.empresa = new Empresa();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarEmpresaJaCadastrada() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Empresa ja Cadastrada");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCompany_tmi0-title")).click();
+			driver.findElement(By.linkText("Empresas")).click();
+			
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+			
+			driver.manage().window().maximize();
+			
+
+			//Inserindo os dados para o cadastro de Tipo de Cartão
+			driver.findElement(By.xpath("//*[ contains(@name, 'tradeName')]")).sendKeys(empresa.getNomeFantasia());
+			driver.findElement(By.xpath("//*[ contains(@name, 'companyName')]")).sendKeys(empresa.getRazaoSocial());
+			
+						
+			//Botão Salvar do cadastro de Empresa
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			Long end = System.currentTimeMillis() + 3000;
+			while (System.currentTimeMillis() < end) {}    
+    
+									   
+			//capturando a mensagem de validação após salvar a Empresa
+			String msgValidacaoCadEmpresaJaCadastrada = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Já existe uma empresa com está razão social.", msgValidacaoCadEmpresaJaCadastrada);
+							  	    
+				System.out.println("Caso de Teste Cadastrar Empresa já Cadastrada executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroEmpresaJaCadastrada){
+				
+				System.out.println(msgValidacaoCadEmpresaJaCadastrada);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Empresa já Cadastrada!");
+				
+				throw erroValidaMensagemCadastroEmpresaJaCadastrada;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro de Empresa   			
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechando a janela da lista de Empresas 
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+										
+								
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Cadastrar  de Empresa já Cadastrada' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

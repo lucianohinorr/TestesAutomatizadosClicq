@@ -1,0 +1,152 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+
+import java.util.List;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+import br.com.specto.entidades.Regiao;
+
+public class EditarDispositivoDoPontoDeAcesso{
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarPontoDeAcessoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Edição de Dispositivo do Ponto de Aceso");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+			
+			//Maximiza a tela com a lista de Ponto de Acesso. Caso contrário, como o Ponto de Acesso não está visível, ele de alguma forma utiliza o scroll para encontrá-lo
+			//isso altera as dimensões da tela, ao final dos testes o botão Sair da aplicação não está disponível, gerando erro.
+			//Como solução eu maximizo a janela antes da lista de Ponto de Acesso, fazendo com que o registro do Ponto de Acesso esteja disponível
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/max.gif')]")).click();
+				
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idPontoDeAcesso = "" + pontoDeAcesso.encontraIdPontoDeAcesso(pontoDeAcesso.getNomePontoAcesso());
+			
+			//Marca o Ponto de Acesso para editar.
+			driver.findElement(By.id(s_idPontoDeAcesso)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//Recuperar o id do banco referente ao nome do Dispositivo do Ponto de Acesso cadastrada atualmente no banco
+			String s_idDispositivoDoPontoDeAcesso = "" + pontoDeAcesso.encontraIdDispositiboDoPontoDeAcesso(pontoDeAcesso.getNomeDispositivo1());
+						
+			//Marca o Ponto de Acesso para editar.
+			driver.findElement(By.id(s_idDispositivoDoPontoDeAcesso)).click();
+			
+			
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			Long end = System.currentTimeMillis() + 9000;
+			while (System.currentTimeMillis() < end) {}    
+    
+			
+			
+			
+			//limpando e inserindo o novo valot para o campo Nome do Ponto de Acesso 
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(pontoDeAcesso.getNomePontoAcessoParaEdicao());
+						
+			//limpando e inserindo o novo valot para o campo Nome do Ponto de Acesso 
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(pontoDeAcesso.getDescricaoParaEdicao());
+			
+			//Alterando o Ambiente 2
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentExit')]"))).selectByVisibleText(pontoDeAcesso.getAmbiente2ParaEdicao());
+			
+				
+			//Botão Salvar do cadastro de Pnto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após Editar o Ponto de Acesso
+			String msgValidacaoEdicaoPontoDeAcesso = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+  
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Ponto de acesso [" + pontoDeAcesso.getNomePontoAcessoParaEdicao() + "] editado com sucesso!", msgValidacaoEdicaoPontoDeAcesso);
+	    
+				System.out.println("Caso de Teste Editar Ponto de Acesso executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemEditarPontoDeAcesso){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Edição de Ponto de Acesso!");
+    			
+				throw erroValidaMensagemEditarPontoDeAcesso;
+    	
+    		}finally{
+    			
+    			    
+				//fechar a tela de Edição da Ponto de Acesso
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//espera de 3 segundo, assim dá tempo de debugar a mensagem
+				 end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista dos Pontos de Acessos. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Editar Ponto de Acesso' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,106 @@
+package TST_078_Cadastrar_Grupo_de_Usuarios_CheckIn;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoUsuariosCheckIn;
+
+
+public class CadastrarGrupoUsuariosCheckInAdminJaCadastrado {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoUsuariosCheckIn grupoUsuariosCheckIn;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoUsuariosCheckIn = new GrupoUsuariosCheckIn();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarGrupoUsuariosCheckInJaCadVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Grupo de Usuários Check In Admin já Cadastrado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Usuários Check In")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+					
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).sendKeys(grupoUsuariosCheckIn.getNomeAdmin());
+			driver.findElement(By.name("administrator")).click();	
+			
+
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Já existe um Grupo de Usuário do Checkin com o nome [" + grupoUsuariosCheckIn.getNomeAdmin() + "]!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Cadastrar Grupo de Usuários Check In Admin já Cadastrado executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoUsuariosRegulares){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Grupo de Usuários Check In Admin já Cadastrado!");
+    			
+				throw erroValidaMensagemCadastroGrupoUsuariosRegulares;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Grupo de Usuários Check In Admin já Cadastrado: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

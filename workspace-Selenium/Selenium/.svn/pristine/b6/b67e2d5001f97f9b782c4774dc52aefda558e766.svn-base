@@ -1,0 +1,157 @@
+package TST_032_Cadastrar_Grade_de_Horario;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GradeHorario;
+
+public class EditarGradeHorario {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GradeHorario gradeHorario;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.gradeHorario = new GradeHorario();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarTipoDeCartao() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Ediçao da Grade de Horário");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuSchedule_tmi0-title")).click();
+			driver.findElement(By.linkText("Grade de Horário")).click();
+			
+		
+			
+			
+			//Recuperar o id no banco referente ao nome da Grade de Horário criada
+			String s_idGradeHorario = "" + gradeHorario.encontraIdGradeHorario(gradeHorario.getNome());
+		    
+			//Marca a Grade de Horário para ser editada
+			driver.findElement(By.id(s_idGradeHorario)).click();
+     		
+		    //Abrindo a tela para edição
+			//driver.findElement(By.xpath("//*[ contains(@title, 'Editar')]")).click();
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//limpando o campo Nome da Grade de Horário para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).clear();
+			
+			//Inserindo o novo valor para o campo Nome da grade
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(gradeHorario.getNomeParaEdicao());	
+			
+			//Remove a grade de horário anterior
+			driver.findElement(By.xpath("//*[ contains(@value, 'Remover')]")).click();
+			
+			//Desmarca Domingo e Sábado
+			driver.findElement(By.id("weekday_1")).click();
+			driver.findElement(By.id("weekday_7")).click();
+			
+			//limpando o campo Hora Inicial e inserindo novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'initialHour')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'initialHour')]")).sendKeys(gradeHorario.getHoraInicialParaEdicao());
+			
+			//limpando o campo Hora Final e inserindo novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'finalHour')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'finalHour')]")).sendKeys(gradeHorario.getHoraFinalParaEdicao());
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+						
+			//Depois de escolhido a opção tipo de cartão, por algum motivo a tela é redimensionada escondendo alguns ícones 
+			//Desta forma maximizo a janela, fazendo com que os botões apareçam. Mas nem todos aparecem, como por exemplo o botão Sair da aplicação
+			//driver.manage().window().maximize();
+			
+			driver.findElement(By.xpath("//*[ contains(@value, 'Adicionar')]")).click();
+			
+			
+			//Botão Salvar do cadastro Grade de Horario
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			long  end = System.currentTimeMillis() + 3000;
+			while (System.currentTimeMillis() < end) {}    
+    
+									   
+			//capturando a mensagem de validação após salvar a região
+			String msgValidacaoCadGradeHorario = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Grade de horário [" + gradeHorario.getNomeParaEdicao() + "] editada com sucesso!", msgValidacaoCadGradeHorario);
+	    
+				System.out.println("Caso de Teste Editar Grade de Horário executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemEdicaoGradeHorario){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Editar Grade de Horario!");
+				
+				System.out.println(msgValidacaoCadGradeHorario);
+    			
+				throw erroValidaMensagemEdicaoGradeHorario;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro de Grade de Horário  			
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechando a janela da lista de Grade de Horário. 
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+										
+								
+				//Selecionando o botão Sair da Aplicação.
+				//Botão Sair está ficando escondido
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				//Desta forma utilizo o comando abaixo
+				driver.close();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Editar Grade de Horário' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

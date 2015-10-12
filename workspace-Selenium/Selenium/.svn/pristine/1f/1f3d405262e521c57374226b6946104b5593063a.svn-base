@@ -1,0 +1,417 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class Empresa {
+	
+	private String nomeFantasia;
+	private String razaoSocial;
+	private String inscricaoEstadual;
+	private String inscricaoMunicipal;
+	private String cnpj;
+	
+	private String cep;
+	private String rua;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cidade;
+	private String unidadeFederativa;
+	
+	private String nomeFantasiaParaEdicao;
+	private String razaoSocialParaEdicao;
+	private String inscricaoEstadualParaEdicao;
+	private String inscricaoMunicipalParaEdicao;
+	private String cnpjParaEdicao;
+	
+	private String cepParaEdicao;
+	private String ruaParaEdicao;
+	private String numeroParaEdicao;
+	private String complementoParaEdicao;
+	private String bairroParaEdicao;
+	private String cidadeParaEdicao;
+	private String unidadeFederativaParaEdicao;
+	
+	
+	
+	protected Connection connection;//conexão com banco	
+
+
+
+	public Empresa() {
+		
+		this.nomeFantasia = "Specto Tecnologia";
+		this.razaoSocial = "Specto LTDA";
+		this.inscricaoEstadual = "5645455454";
+		this.inscricaoMunicipal = "54554411212";
+		this.cnpj = "66440655000199";
+		
+		this.cep = "88555444";
+		this.rua = "Rua das Camélias";
+		this.numero = "55";
+		this.complemento = "Edificio Zanini";
+		this.bairro = "Sertão do Maruim";
+		this.cidade = "São José";		
+		this.unidadeFederativa = "Acre";
+		
+		this.nomeFantasiaParaEdicao = "Fazion Tecnologia";
+		this.razaoSocialParaEdicao = "Fazion LTDA";
+		this.inscricaoEstadualParaEdicao = "5555555";
+		this.inscricaoMunicipalParaEdicao = "598989898";
+		this.cnpjParaEdicao = "36139533000104";
+		
+		this.cepParaEdicao = "88555666";
+		this.ruaParaEdicao = "Rua da Perobas";
+		this.numeroParaEdicao = "55";
+		this.complementoParaEdicao = "Edifício Portal da Colina";
+		this.bairroParaEdicao = "Colonia Santana";
+		this.cidadeParaEdicao = "Palhoça";
+		this.unidadeFederativaParaEdicao = "Alagoas";
+		
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+
+
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
+	}
+
+
+
+	public String getRazaoSocial() {
+		return razaoSocial;
+	}
+
+
+
+	public void setRazaoSocial(String razaoSocial) {
+		this.razaoSocial = razaoSocial;
+	}
+
+
+
+	public String getInscricaoEstadual() {
+		return inscricaoEstadual;
+	}
+
+
+
+	public void setInscricaoEstadual(String inscricaoEstadual) {
+		this.inscricaoEstadual = inscricaoEstadual;
+	}
+
+
+
+	public String getInscricaoMunicipal() {
+		return inscricaoMunicipal;
+	}
+
+
+
+	public void setInscricaoMunicipal(String inscricaoMunicipal) {
+		this.inscricaoMunicipal = inscricaoMunicipal;
+	}
+
+
+
+	public String getCnpj() {
+		return cnpj;
+	}
+
+
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+
+
+	public String getCep() {
+		return cep;
+	}
+
+
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+
+
+	public String getRua() {
+		return rua;
+	}
+
+
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+
+
+	public String getBairro() {
+		return bairro;
+	}
+
+
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+
+
+	public String getCidade() {
+		return cidade;
+	}
+
+
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+
+
+	public String getUnidadeFederativa() {
+		return unidadeFederativa;
+	}
+
+
+
+	public void setUnidadeFederativa(String unidadeFederativa) {
+		this.unidadeFederativa = unidadeFederativa;
+	}
+
+
+
+	public String getNomeFantasiaParaEdicao() {
+		return nomeFantasiaParaEdicao;
+	}
+
+
+
+	public void setNomeFantasiaParaEdicao(String nomeFantasiaParaEdicao) {
+		this.nomeFantasiaParaEdicao = nomeFantasiaParaEdicao;
+	}
+
+
+
+	public String getRazaoSocialParaEdicao() {
+		return razaoSocialParaEdicao;
+	}
+
+
+
+	public void setRazaoSocialParaEdicao(String razaoSocialParaEdicao) {
+		this.razaoSocialParaEdicao = razaoSocialParaEdicao;
+	}
+
+
+
+	public String getInscricaoEstadualParaEdicao() {
+		return inscricaoEstadualParaEdicao;
+	}
+
+
+
+	public void setInscricaoEstadualParaEdicao(String inscricaoEstadualParaEdicao) {
+		this.inscricaoEstadualParaEdicao = inscricaoEstadualParaEdicao;
+	}
+
+
+
+	public String getInscricaoMunicipalParaEdicao() {
+		return inscricaoMunicipalParaEdicao;
+	}
+
+
+
+	public void setInscricaoMunicipalParaEdicao(String inscricaoMunicipalParaEdicao) {
+		this.inscricaoMunicipalParaEdicao = inscricaoMunicipalParaEdicao;
+	}
+
+
+
+	public String getCnpjParaEdicao() {
+		return cnpjParaEdicao;
+	}
+
+
+
+	public void setCnpjParaEdicao(String cnpjParaEdicao) {
+		this.cnpjParaEdicao = cnpjParaEdicao;
+	}
+
+
+
+	public String getCepParaEdicao() {
+		return cepParaEdicao;
+	}
+
+
+
+	public void setCepParaEdicao(String cepParaEdicao) {
+		this.cepParaEdicao = cepParaEdicao;
+	}
+
+
+
+	public String getRuaParaEdicao() {
+		return ruaParaEdicao;
+	}
+
+
+
+	public void setRuaParaEdicao(String ruaParaEdicao) {
+		this.ruaParaEdicao = ruaParaEdicao;
+	}
+
+
+
+	public String getNumeroParaEdicao() {
+		return numeroParaEdicao;
+	}
+
+
+
+	public void setNumeroParaEdicao(String numeroParaEdicao) {
+		this.numeroParaEdicao = numeroParaEdicao;
+	}
+
+
+
+	public String getComplementoParaEdicao() {
+		return complementoParaEdicao;
+	}
+
+
+
+	public void setComplementoParaEdicao(String complementoParaEdicao) {
+		this.complementoParaEdicao = complementoParaEdicao;
+	}
+
+
+
+	public String getBairroParaEdicao() {
+		return bairroParaEdicao;
+	}
+
+
+
+	public void setBairroParaEdicao(String bairroParaEdicao) {
+		this.bairroParaEdicao = bairroParaEdicao;
+	}
+
+
+
+	public String getCidadeParaEdicao() {
+		return cidadeParaEdicao;
+	}
+
+
+
+	public void setCidadeParaEdicao(String cidadeParaEdicao) {
+		this.cidadeParaEdicao = cidadeParaEdicao;
+	}
+
+
+
+	public String getUnidadeFederativaParaEdicao() {
+		return unidadeFederativaParaEdicao;
+	}
+
+
+
+	public void setUnidadeFederativaParaEdicao(String unidadeFederativaParaEdicao) {
+		this.unidadeFederativaParaEdicao = unidadeFederativaParaEdicao;
+	}
+
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+	
+		
+	//Recupera o Id da Empresa pela Razão Social que é única.
+	//select no banco SELECT COMP_PK_ID FROM VA_COMP_COMPANY WHERE COMP_NM_COMPANYNAME = 'Grupo Specto SA';
+	public int encontraIdEmpresa(String razaoSocial) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT COMP_PK_ID ");
+		sql.append("FROM   VA_COMP_COMPANY ");
+		sql.append("WHERE  COMP_NM_COMPANYNAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, razaoSocial);
+		ResultSet rs = ps.executeQuery();
+		int idEmpresa = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idEmpresa = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("A Empresa " + razaoSocial + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idEmpresa;
+	}
+	
+
+}

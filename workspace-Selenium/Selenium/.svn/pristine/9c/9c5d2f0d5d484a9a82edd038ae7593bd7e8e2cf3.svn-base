@@ -1,0 +1,84 @@
+package br.com.specto.entidades;
+
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class GrupoUsuariosRegulares extends Grupo{
+	
+	private String gradeDeHorario;
+	private boolean permitirAcessoEmFeriado;		
+	
+	
+	private String gradeHorarioParaEdicao;
+	private boolean permitirAcessoEmFeriadoParaEdicao;
+	
+		
+	
+public GrupoUsuariosRegulares() {
+	
+	super(  "Permanente Specto",
+			"Grupo Specto",
+			"Colaboradores",
+			"Colaboradores Grupo Specto",
+			new MYSQLConnection().getConnection());
+
+			
+		this.gradeDeHorario = "Comercial";		
+		this.permitirAcessoEmFeriado = true;	
+		this.gradeHorarioParaEdicao = "All Day";		
+		this.permitirAcessoEmFeriadoParaEdicao = true;
+		
+	}
+
+
+
+public String getGradeDeHorario() {
+	return gradeDeHorario;
+}
+
+
+
+public void setGradeDeHorario(String gradeDeHorario) {
+	this.gradeDeHorario = gradeDeHorario;
+}
+
+
+
+public boolean isPermitirAcessoEmFeriado() {
+	return permitirAcessoEmFeriado;
+}
+
+
+
+public void setPermitirAcessoEmFeriado(boolean permitirAcessoEmFeriado) {
+	this.permitirAcessoEmFeriado = permitirAcessoEmFeriado;
+}
+
+
+
+public String getGradeHorarioParaEdicao() {
+	return gradeHorarioParaEdicao;
+}
+
+
+
+public void setGradeHorarioParaEdicao(String gradeHorarioParaEdicao) {
+	this.gradeHorarioParaEdicao = gradeHorarioParaEdicao;
+}
+
+
+
+public boolean isPermitirAcessoEmFeriadoParaEdicao() {
+	return permitirAcessoEmFeriadoParaEdicao;
+}
+
+
+
+public void setPermitirAcessoEmFeriadoParaEdicao(
+		boolean permitirAcessoEmFeriadoParaEdicao) {
+	this.permitirAcessoEmFeriadoParaEdicao = permitirAcessoEmFeriadoParaEdicao;
+}
+
+
+	
+}

@@ -1,0 +1,60 @@
+package br.com.specto.entidades;
+
+/**
+ * @author luciano.silva
+ *
+ */
+
+public class Regiao {
+	
+	private String nome;
+	private String descricao;
+	private String subitemDe;
+	
+	
+	
+	public Regiao(){
+		
+		this.nome = "Luciano_Teste";
+		this.descricao = "Luciano_Teste";
+		this.subitemDe = "Hierarquia";
+		
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+
+	public String getSubitemDe() {
+		return subitemDe;
+	}
+
+
+
+	public void setSubitemDe(String subitemDe) {
+		this.subitemDe = subitemDe;
+	}	
+	
+
+}

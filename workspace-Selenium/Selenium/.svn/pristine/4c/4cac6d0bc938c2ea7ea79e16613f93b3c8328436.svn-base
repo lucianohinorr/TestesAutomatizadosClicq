@@ -1,0 +1,132 @@
+package TST_027_Cadastrar_Grupo_de_Usuarios_Regulares;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoUsuariosRegulares;
+
+
+public class ApagarGrupoUsuariosRegulares {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoUsuariosRegulares grupoUsuariosRegulares;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoUsuariosRegulares = new GrupoUsuariosRegulares();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void apagarGrupoUsuariosRegularesVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Exclusão do Grupo de Usuários Regulares");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Usuários Regulares")).click();
+			
+							
+			//Recuperar o id do banco referente ao nome do Grupo
+			String s_idGrupo = "" + grupoUsuariosRegulares.encontraIdGrupo(grupoUsuariosRegulares.getNomeParaEdicao(), "RegularUser");			
+			
+			//Marca o Ponto de Acesso para apagar.
+			driver.findElement(By.id(s_idGrupo)).click();
+      
+			//Excluir o Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+    
+			
+    		//**** Tratando o Alerta
+   
+    		//Obtem o alerta aberto.
+			Alert alert = driver.switchTo().alert();
+			
+			//Obtem o texto do alerta. 
+			alert.getText();
+    
+			//Equivalente ao click em OK no alerta.
+			alert.accept();
+    
+			//****
+			
+			//capturando a mensagem de validação após salvar o Grupo
+			//Não sei porque motivo não estava capturando a mensagem com o xpath abaixo. Imagino que algum problema de html na página
+			//String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			//Resolvi com o comando abaixo
+			String msgRetornadaInterface = driver.findElement(By.xpath("//td[2]")).getText();
+	
+			String msgEsperada = "Grupo de Usuários [" + grupoUsuariosRegulares.getNomeParaEdicao() + "] removido com sucesso!";
+ 			
+ 				try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Exclusão de Grupo de Usuários Regulares executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoUsuariosRegulares){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Exclusão de Grupo de Usuários Regulares!");
+    			
+				throw erroValidaMensagemCadastroGrupoUsuariosRegulares;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				//Nao deu certo, erro para encontrar o botão. Então fecho a aplicação com a lista dos grupos abertos
+				//driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				//driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				
+				//Selecionando o botão Sair da Aplicação.
+				//Não sei porque, mas não encontrou o botão Sair meesmo ele sendo exibido com o comando abaixo documentado, o mesmo utilizado nas demais classes
+				//Encontrado outro meio
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				driver.findElement(By.xpath("//*[ contains(@value, 'Sair')]")).click();
+				
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Excluir Grupo de Usuários Regulares: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

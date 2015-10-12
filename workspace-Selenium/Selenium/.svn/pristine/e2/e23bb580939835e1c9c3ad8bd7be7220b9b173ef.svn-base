@@ -1,0 +1,399 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class Localidade {
+	
+	private String nome;
+	private String descricao;
+	private String codigoArea;
+	private String telefone;
+	private String cep;
+	private String rua;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cidade;
+	private String unidadeFederativa;
+	private String regiao;
+	private String enderecoIP;
+	private String periodoTransmissaoMonitoramento;
+	private String modoTransmissaoEventosPeriodo;
+	private String modoTransmissaoEventosHorario;
+	private String nivelGeracaoLog;
+	private String tipoRede;
+	private String portaTCP;
+	private String habilitarEnvioOffline;
+	private boolean cartaoTemporarioBloqueiaPermanente;
+	private boolean cartaoVisitanteBloqueiaTodosCartoes;
+	
+	private String nomeParaEdicao;
+	private String enderecoIParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	
+	public Localidade() {
+		
+		this.nome = "Banco Oriental";
+		this.descricao = "001-Banco Oriental";
+		this.codigoArea = "48";
+		this.telefone = "33571888";
+		this.cep = "88107647";
+		this.rua = "Major Serra";
+		this.numero = "100";
+		this.complemento = "casa";
+		this.bairro = "Sertão do Maruim";
+		this.cidade = "São José";
+		this.unidadeFederativa = "Santa Catarina";
+		this.regiao = "Sertão do Maruim";
+		this.enderecoIP = "10.10.10.10";
+		this.periodoTransmissaoMonitoramento = "60";
+		this.modoTransmissaoEventosPeriodo = "1";
+		this.modoTransmissaoEventosHorario = "11:59";
+		this.nivelGeracaoLog = "4";
+		this.tipoRede = "Ethernet";
+		this.portaTCP = "9234";
+		this.habilitarEnvioOffline = "Sim";
+		this.cartaoTemporarioBloqueiaPermanente = true;
+		this.cartaoVisitanteBloqueiaTodosCartoes = true;
+		
+		this.nomeParaEdicao = "Banco Japones";
+		this.enderecoIParaEdicao = "254.254.254.254";
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+
+	public String getCodigoArea() {
+		return codigoArea;
+	}
+
+
+
+	public void setCodigoArea(String codigoArea) {
+		this.codigoArea = codigoArea;
+	}
+
+
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+
+
+	public String getCep() {
+		return cep;
+	}
+
+
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+
+
+	public String getRua() {
+		return rua;
+	}
+
+
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+
+
+	public String getBairro() {
+		return bairro;
+	}
+
+
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+
+
+	public String getCidade() {
+		return cidade;
+	}
+
+
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+
+
+	public String getUnidadeFederativa() {
+		return unidadeFederativa;
+	}
+
+
+
+	public void setUnidadeFederativa(String unidadeFederativa) {
+		this.unidadeFederativa = unidadeFederativa;
+	}
+
+
+
+	public String getRegiao() {
+		return regiao;
+	}
+
+
+
+	public void setRegiao(String regiao) {
+		this.regiao = regiao;
+	}
+
+
+
+	public String getEnderecoIP() {
+		return enderecoIP;
+	}
+
+
+
+	public void setEnderecoIP(String enderecoIP) {
+		this.enderecoIP = enderecoIP;
+	}
+
+
+
+	public String getPeriodoTransmissaoMonitoramento() {
+		return periodoTransmissaoMonitoramento;
+	}
+
+
+
+	public void setPeriodoTransmissaoMonitoramento(
+			String periodoTransmissaoMonitoramento) {
+		this.periodoTransmissaoMonitoramento = periodoTransmissaoMonitoramento;
+	}
+
+
+
+	public String getModoTransmissaoEventosPeriodo() {
+		return modoTransmissaoEventosPeriodo;
+	}
+
+
+
+	public void setModoTransmissaoEventosPeriodo(
+			String modoTransmissaoEventosPeriodo) {
+		this.modoTransmissaoEventosPeriodo = modoTransmissaoEventosPeriodo;
+	}
+
+
+
+	public String getModoTransmissaoEventosHorario() {
+		return modoTransmissaoEventosHorario;
+	}
+
+
+
+	public void setModoTransmissaoEventosHorario(
+			String modoTransmissaoEventosHorario) {
+		this.modoTransmissaoEventosHorario = modoTransmissaoEventosHorario;
+	}
+
+
+
+	public String getNivelGeracaoLog() {
+		return nivelGeracaoLog;
+	}
+
+
+
+	public void setNivelGeracaoLog(String nivelGeracaoLog) {
+		this.nivelGeracaoLog = nivelGeracaoLog;
+	}
+
+
+
+	public String getTipoRede() {
+		return tipoRede;
+	}
+
+
+
+	public void setTipoRede(String tipoRede) {
+		this.tipoRede = tipoRede;
+	}
+
+
+
+	public String getPortaTCP() {
+		return portaTCP;
+	}
+
+
+
+	public void setPortaTCP(String portaTCP) {
+		this.portaTCP = portaTCP;
+	}
+
+
+
+	public String getHabilitarEnvioOffline() {
+		return habilitarEnvioOffline;
+	}
+
+
+
+	public void setHabilitarEnvioOffline(String habilitarEnvioOffline) {
+		this.habilitarEnvioOffline = habilitarEnvioOffline;
+	}
+
+
+
+	public boolean isCartaoTemporarioBloqueiaPermanente() {
+		return cartaoTemporarioBloqueiaPermanente;
+	}
+
+
+
+	public void setCartaoTemporarioBloqueiaPermanente(
+			boolean cartaoTemporarioBloqueiaPermanente) {
+		this.cartaoTemporarioBloqueiaPermanente = cartaoTemporarioBloqueiaPermanente;
+	}
+
+
+
+	public boolean isCartaoVisitanteBloqueiaTodosCartoes() {
+		return cartaoVisitanteBloqueiaTodosCartoes;
+	}
+
+
+
+	public void setCartaoVisitanteBloqueiaTodosCartoes(
+			boolean cartaoVisitanteBloqueiaTodosCartoes) {
+		this.cartaoVisitanteBloqueiaTodosCartoes = cartaoVisitanteBloqueiaTodosCartoes;
+	}
+	
+	
+	
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+	
+
+	public String getEnderecoIParaEdicao() {
+		return enderecoIParaEdicao;
+	}
+
+
+	public void setEnderecoIParaEdicao(String enderecoIParaEdicao) {
+		this.enderecoIParaEdicao = enderecoIParaEdicao;
+	}
+
+
+	//Recupera o Id da Localidade.
+	//select no banco SELECT LOCY_PK_ID FROM VA_LOCY_LOCALITY WHERE LOCY_NM_NAME = 'Banco Oriental';
+	public int encontraIdLocalidade(String nomeLocalidade) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT LOCY_PK_ID ");
+		sql.append("FROM   VA_LOCY_LOCALITY ");
+		sql.append("WHERE  LOCY_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeLocalidade);
+		ResultSet rs = ps.executeQuery();
+		int idLocalidade = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idLocalidade = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("A Localidade " + nomeLocalidade + " nao esta cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idLocalidade;
+	}
+		
+}

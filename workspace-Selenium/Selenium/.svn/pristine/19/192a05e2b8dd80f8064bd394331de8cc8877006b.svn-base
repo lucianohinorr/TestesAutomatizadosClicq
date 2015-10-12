@@ -1,0 +1,88 @@
+package br.com.specto.entidades;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class ExpurgoAuditoria extends Expurgo {
+	
+	
+	protected String diaDaSemana;
+	protected String diaDaSemanaParaEdicao;
+	
+	protected String mes;
+	protected String mesParaEdicao;
+	
+
+	protected String diaDoMes;
+	protected String diaDoMesParaEdicao;
+	
+	public ExpurgoAuditoria() {
+		
+		super(  true, 
+				false, 
+				"2", 
+				"2300", 
+				"8", 
+				"2100", 
+				new MYSQLConnection().getConnection());
+	
+		this.diaDaSemana = "Domingo";
+		this.diaDaSemanaParaEdicao = "Sábado";
+		
+		this.mes= "Dezembro";
+		this.mesParaEdicao = "Novembro"; 
+		
+
+		this.diaDoMes = "21";
+		this.diaDoMesParaEdicao ="22";
+	}
+
+	public String getDiaDaSemana() {
+		return diaDaSemana;
+	}
+
+	public void setDiaDaSemana(String diaDaSemana) {
+		this.diaDaSemana = diaDaSemana;
+	}
+
+	public String getDiaDaSemanaParaEdicao() {
+		return diaDaSemanaParaEdicao;
+	}
+
+	public void setDiaDaSemanaParaEdicao(String diaDaSemanaParaEdicao) {
+		this.diaDaSemanaParaEdicao = diaDaSemanaParaEdicao;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getMesParaEdicao() {
+		return mesParaEdicao;
+	}
+
+	public void setMesParaEdicao(String mesParaEdicao) {
+		this.mesParaEdicao = mesParaEdicao;
+	}
+
+	public String getDiaDoMes() {
+		return diaDoMes;
+	}
+
+	public void setDiaDoMes(String diaDoMes) {
+		this.diaDoMes = diaDoMes;
+	}
+
+	public String getDiaDoMesParaEdicao() {
+		return diaDoMesParaEdicao;
+	}
+
+	public void setDiaDoMesParaEdicao(String diaDoMesParaEdicao) {
+		this.diaDoMesParaEdicao = diaDoMesParaEdicao;
+	}
+
+	
+}

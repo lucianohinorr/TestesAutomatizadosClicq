@@ -1,0 +1,122 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+/**
+ * @author luciano.silva
+ *
+ */
+
+public class Regiao {
+	
+	private String nome;
+	private String descricao;
+	private String subitemDe;
+	
+	private String nomeParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	
+	public Regiao(){
+		
+		this.nome = "Luciano_Teste";
+		this.descricao = "Luciano_Teste";
+		this.subitemDe = "Hierarquia";
+		
+		this.nomeParaEdicao = "Gabriel_Teste";
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+		
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+
+	public String getSubitemDe() {
+		return subitemDe;
+	}
+
+
+
+	public void setSubitemDe(String subitemDe) {
+		this.subitemDe = subitemDe;
+	}	
+	
+	
+	
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+	//Recupera o Id da Região.
+	//select no banco select REGI_PK_ID from VISACT.VA_REGI_REGION where REGI_NM_NAME LIKE 'teste';
+	public int encontraIdRegiao(String nomeRegiao) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT REGI_PK_ID ");
+		sql.append("FROM   VA_REGI_REGION ");
+		sql.append("WHERE  REGI_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeRegiao);
+		ResultSet rs = ps.executeQuery();
+		int idRegiao = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idRegiao = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("A Região " + nomeRegiao + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idRegiao;
+	}
+	
+	
+
+}

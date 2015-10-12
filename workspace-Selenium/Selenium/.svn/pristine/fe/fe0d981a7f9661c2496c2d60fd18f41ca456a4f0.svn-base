@@ -1,0 +1,40 @@
+package br.com.specto.daoMysql;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class MYSQLConnection {
+	
+	private Connection connection;
+	
+	
+	private void createConnection() {
+		String url = "jdbc:mysql://localhost:3306/visact_access_server_1_17_1_testes_automatizados";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(url, getConnectionProperties());
+		} catch (SQLException e) {
+			System.err.println("Erro ao criar conexão com "+url);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.err.println("Erro ao carregar o driver Mysql");
+			e.printStackTrace();
+		}
+	}
+	
+	private Properties getConnectionProperties(){
+		Properties properties = new Properties();
+		properties.put("user", "root");
+		properties.put("password", "root");
+		return properties;
+	}
+	
+	public Connection getConnection() {
+		if(connection == null){
+			createConnection();
+		}
+		return connection;
+	}
+}

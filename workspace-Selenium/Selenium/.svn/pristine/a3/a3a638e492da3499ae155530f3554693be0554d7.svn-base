@@ -1,0 +1,133 @@
+package TST_076_Cadastrar_Tipo_de_Cartao;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Regiao;
+import br.com.specto.entidades.TipodeCartao;
+
+public class CadastrarTipodeCartaoJaCadastrada {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();		
+	private TipodeCartao tipoDeCartao;	
+	private MetodosAuxiliares login;
+
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.tipoDeCartao = new TipodeCartao();
+		this.login = new MetodosAuxiliares();
+			
+	}
+
+	
+	@Test
+	public void cadastrarRegiaoJaCadastradaVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Tipo de Cartão já cadastrada");
+    		    
+		try{
+    
+			driver = login.executaLoginManual();
+	   		
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCards_tmi0-title")).click();
+			driver.findElement(By.linkText("Tipos de Cartões")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de Tipo de Cartão já cadastrado
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(tipoDeCartao.getNomeTipoCartao());			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'color')]"))).selectByVisibleText(tipoDeCartao.getCor());
+    
+			//para cartao do tipo Visitante
+			driver.findElement(By.xpath("//*[ contains(@value, 'V')]")).click();
+			
+			//para cartao do tipo Usuário Regular
+			//driver.findElement(By.xpath("//*[ contains(@value, 'V')]")).click();
+						
+			
+			//Depois de escolhido a opção tipo de cartão, por algum motivo a tela é redimensionada escondendo alguns ícones 
+			//Desta forma maximizo a janela, fazendo com que os botões apareçam. Mas nem todos aparecem, como por exemplo o botão Sair da aplicação
+			driver.manage().window().maximize();
+			
+						
+			//Botão Salvar do cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			long end = System.currentTimeMillis() + 3000;
+			while (System.currentTimeMillis() < end) {}    
+    
+									   
+			//capturando a mensagem de validação após salvar a região
+			String msgValidacaoCadTipoDeCartaoJaCad = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+					
+			System.out.println(msgValidacaoCadTipoDeCartaoJaCad);	
+  
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Já existe um tipo de cartão com o nome ["+ tipoDeCartao.getNomeTipoCartao() +"]!", msgValidacaoCadTipoDeCartaoJaCad);
+	    
+				System.out.println("Caso de Teste Cadastrar Tipo de Cartão Já cadastrada executado com sucesso!");
+								
+			}catch (AssertionError erroValidaMensagemCadastroRegiaoJaCadastrada){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Tipo de Cartão já Cadatrada!");
+    			
+				throw erroValidaMensagemCadastroRegiaoJaCadastrada;
+    	
+    		}finally{	
+			
+								
+				//fechar a tela de cadastro da região
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+	    		
+				//espera de 5 segundo, assim dá tempo de debugar a mensagem
+				end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}
+	    
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+						
+				//Selecionando o botão Sair da Aplicação.
+				//Botão Sair está ficando escondido
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				//Desta forma utilizo o comando abaixo
+				driver.close();
+								
+    		}
+			
+		}catch(Exception erro){
+		  
+			System.out.println("Erro no caso de Teste 'Salvar Tipo de Cartão já Cadastrado' : " + erro);
+		}
+		    
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

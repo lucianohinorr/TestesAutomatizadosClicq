@@ -1,0 +1,158 @@
+package TST_066_Cadastrar_Grupo_Envio_De_SMS;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoEnvioDeSmsAcessosDoUsuario;
+
+
+public class CadastrarGrupoEnvioDeSmsAcessosDoUsuario {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoEnvioDeSmsAcessosDoUsuario grupoEnvioDeSmsAcessosDoUsuario;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoEnvioDeSmsAcessosDoUsuario = new GrupoEnvioDeSmsAcessosDoUsuario();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarGrupoEnvioDeSMSAcessosDoUsuarioVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Grupo Envio de SMS Acessos do Usuário");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Envio de SMS")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+					
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).sendKeys(grupoEnvioDeSmsAcessosDoUsuario.getNome());
+			driver.findElement(By.name("description")).sendKeys(grupoEnvioDeSmsAcessosDoUsuario.getDescricao());
+			
+			//servidor Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupConfig"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getServidorEnvioDeSMS());
+			
+			//tipo Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupType"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getTipoEnvioDeSMS());
+
+			//tipoCondicoesDeEventos
+			new Select(driver.findElement(By.name("eventType"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getTipoCondicoesDeEventos());
+			
+			//Não tem motivo pois foi escolhido só Permissão acima.
+			//motivoNegacaoCondicoesDeEventos
+			//new Select(driver.findElement(By.name("accessDeniedReason"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getMotivoNegacaoCondicoesDeEventos());
+			
+			//região
+			new Select(driver.findElement(By.name("regionName"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getRegiaoLocalDeAcesso());
+			
+			//Localidade
+			new Select(driver.findElement(By.name("localityName"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getLocalidadeLocalDeAcesso());
+			
+			//Grupo de Ambientes
+			new Select(driver.findElement(By.name("environmentGroupName"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getGrupoDeAmbienteLocalDeAcesso());
+			
+			//Ambiente
+			new Select(driver.findElement(By.name("environmentName"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getAmbienteLocalDeAcesso());
+			
+			//Ponto de Acesso
+			new Select(driver.findElement(By.name("accessPointName"))).selectByVisibleText(grupoEnvioDeSmsAcessosDoUsuario.getPontoDeAcessoLocalDeAcesso());
+			
+			//como o último elemento está bem abaixo da tela, escondido, quando a aplicaçao procura esse elemento, a parte de cima fica escondida. Assim o elemento
+			//salvar não é encontrado pela aplicaçao gerando erro.
+			//Então dou um click no menu visivel até aparecer o botão salvar
+		   //	driver.findElement(By.name("name")).click();
+			
+						
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//Long end = System.currentTimeMillis() + 12000;
+			//while (System.currentTimeMillis() < end) {}    
+   
+									   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de envio de SMS [" + grupoEnvioDeSmsAcessosDoUsuario.getNome() + "] salvo com sucesso!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Cadastrar Grupo de Envio de SMS Acessos do Usuário executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoEnvioDeSMSAcessosDoUsuario){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Grupo Envio de SMS Acessos do Usuário!");
+    			
+				throw erroValidaMensagemCadastroGrupoEnvioDeSMSAcessosDoUsuario;
+    	
+    		}finally{
+    			
+    			//fechar a tela de cadastro do Grupo
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			
+    								
+				//fechando a janela da lista dos ambientes cadastrados
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			   			
+    			
+    			//Selecionando o botão Sair da Aplicação.
+    			//Não acha
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    			//Encerro a aplicação.
+    			driver.close();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Grupo Envio de SMS Acessos do Usuário: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

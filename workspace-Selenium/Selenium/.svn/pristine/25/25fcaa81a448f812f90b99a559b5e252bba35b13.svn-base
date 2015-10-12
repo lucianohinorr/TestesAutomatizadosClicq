@@ -1,0 +1,134 @@
+package TST_066_Cadastrar_Grupo_Envio_De_SMS;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoEnvioDeSmsTodosAcessos;
+
+
+public class CadastrarGrupoEnvioDeSmsTodosOsAcessosJaCadastrado {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoEnvioDeSmsTodosAcessos grupoEnvioDeSmsTodosAcessos;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoEnvioDeSmsTodosAcessos = new GrupoEnvioDeSmsTodosAcessos();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarGrupoEnvioDeSMSTodosOsAcessosJaCadVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Grupo de Envio de Sms Todos os Acessos já Cadastrado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Envio de SMS")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+					
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).sendKeys(grupoEnvioDeSmsTodosAcessos.getNome());
+			
+			//servidor Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupConfig"))).selectByVisibleText(grupoEnvioDeSmsTodosAcessos.getServidorEnvioDeSMS());
+			
+			//tipo Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupType"))).selectByVisibleText(grupoEnvioDeSmsTodosAcessos.getTipoEnvioDeSMS());
+			
+			//tipoCondicoesDeEventos
+			new Select(driver.findElement(By.name("eventType"))).selectByVisibleText(grupoEnvioDeSmsTodosAcessos.getTipoCondicoesDeEventos());
+			
+			//região
+			new Select(driver.findElement(By.name("regionName"))).selectByVisibleText(grupoEnvioDeSmsTodosAcessos.getRegiaoLocalDeAcesso());
+			
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//Long end = System.currentTimeMillis() + 12000;
+			//while (System.currentTimeMillis() < end) {}    
+   
+									   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Já existe um grupo de envio de SMS com o nome [" + grupoEnvioDeSmsTodosAcessos.getNome() + "]!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Cadastrar Grupo de Envio de SMS Todos os Acessos já Cadastrado executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoEnvioDeSMSTodosOsAcessosJaCad){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Grupo Envio de SMS Todos os Acessos já Cadastrado!");
+    			
+				throw erroValidaMensagemCadastroGrupoEnvioDeSMSTodosOsAcessosJaCad;
+    	
+    		}finally{
+    			
+    			//fechar a tela de cadastro do Grupo
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			
+    								
+				//fechando a janela da lista dos ambientes cadastrados
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			   			
+    			
+    			//Selecionando o botão Sair da Aplicação.
+    			//Não acha
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    			//Encerro a aplicação.
+    			driver.close();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Grupo Envio de SMS Todos os Acessos já Cadastrados: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

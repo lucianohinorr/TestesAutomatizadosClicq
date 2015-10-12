@@ -1,0 +1,156 @@
+package br.com.specto.suiteTest;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+import TST_016_Cadastrar_Regiao.ApagarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiaoJaCadastrada;
+import TST_016_Cadastrar_Regiao.EditarRegiao;
+import TST_018_Cadastrar_Grupo_de_Ambiente.ApagarGrupoDeAmbiente;
+import TST_018_Cadastrar_Grupo_de_Ambiente.CadastrarGrupoDeAmbiente;
+import TST_018_Cadastrar_Grupo_de_Ambiente.CadastrarGrupoDeAmbienteJaCadastrado;
+import TST_018_Cadastrar_Grupo_de_Ambiente.EditarGrupoDeAmbiente;
+import TST_019_Cadastrar_Ambiente.ApagarAmbiente;
+import TST_019_Cadastrar_Ambiente.CadastrarAmbiente;
+import TST_019_Cadastrar_Ambiente.EditarAmbiente;
+import TST_025_Cadastrar_Cartao.ApagarCartaoUsuarioRegular;
+import TST_025_Cadastrar_Cartao.ApagarCartaoVisitante;
+import TST_025_Cadastrar_Cartao.CadastrarCartaoUsuarioRegular;
+import TST_025_Cadastrar_Cartao.CadastrarCartaoVisitante;
+import TST_025_Cadastrar_Cartao.CadastrarCartaoVisitanteJaCadastrado;
+import TST_025_Cadastrar_Cartao.EditarCartaoUsuarioRegularParaVisitante;
+import TST_025_Cadastrar_Cartao.EditarCartaoVisitanteParaUsuarioRegular;
+import TST_027_Cadastrar_Grupo_de_Usuarios_Regulares.ApagarGrupoUsuariosRegulares;
+import TST_027_Cadastrar_Grupo_de_Usuarios_Regulares.CadastrarGrupoUsuariosRegulares;
+import TST_027_Cadastrar_Grupo_de_Usuarios_Regulares.CadastrarGrupoUsuariosRegularesJaCadastrado;
+import TST_027_Cadastrar_Grupo_de_Usuarios_Regulares.EditarGrupoUsuariosRegulares;
+import TST_028_Cadastrar_Empresa.ApagarEmpresa;
+import TST_028_Cadastrar_Empresa.CadastrarEmpresa;
+import TST_028_Cadastrar_Empresa.CadastrarEmpresaJaCadastrada;
+import TST_028_Cadastrar_Empresa.EditarEmpresa;
+import TST_032_Cadastrar_Grade_de_Horario.ApagarGradeHorario;
+import TST_032_Cadastrar_Grade_de_Horario.CadastrarGradeHorario;
+import TST_032_Cadastrar_Grade_de_Horario.CadastrarGradeHorarioJaCadastrada;
+import TST_032_Cadastrar_Grade_de_Horario.EditarGradeHorario;
+import TST_076_Cadastrar_Tipo_de_Cartao.ApagarTipodeCartao;
+import TST_076_Cadastrar_Tipo_de_Cartao.CadastrarTipodeCartao;
+import TST_076_Cadastrar_Tipo_de_Cartao.CadastrarTipodeCartaoJaCadastrada;
+import TST_076_Cadastrar_Tipo_de_Cartao.EditarTipodeCartao;
+import TST_077_Cadastrar_Grupo_de_Usuarios_Server.ApagarGrupoUsuariosServerAdmin;
+import TST_077_Cadastrar_Grupo_de_Usuarios_Server.CadastrarGrupoUsuariosServerAdmin;
+import TST_077_Cadastrar_Grupo_de_Usuarios_Server.CadastrarGrupoUsuariosServerAdminJaCadastrado;
+import TST_077_Cadastrar_Grupo_de_Usuarios_Server.EditarGrupoUsuariosServerAdmin;
+import TST_078_Cadastrar_Grupo_de_Usuarios_CheckIn.ApagarGrupoUsuariosCheckInAdmin;
+import TST_078_Cadastrar_Grupo_de_Usuarios_CheckIn.CadastrarGrupoUsuariosCheckInAdmin;
+import TST_078_Cadastrar_Grupo_de_Usuarios_CheckIn.CadastrarGrupoUsuariosCheckInAdminJaCadastrado;
+import TST_078_Cadastrar_Grupo_de_Usuarios_CheckIn.EditarGrupoUsuariosCheckInAdmin;
+import TST_085_Cadastrar_Grupo_de_Hierarquia.ApagarGrupoDeHierarquia;
+import TST_085_Cadastrar_Grupo_de_Hierarquia.CadastrarGrupoDeHierarquia;
+import TST_085_Cadastrar_Grupo_de_Hierarquia.CadastrarGrupoDeHierarquiaJaCadastrado;
+import TST_085_Cadastrar_Grupo_de_Hierarquia.EditarGrupoDeHierarquia;
+import TST_246_Cadastrar_Ponto_De_Acesso.ApagarDispositivoDoPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.ApagarPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.CadastrarPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.CadastrarPontoDeAcessoDispJaCadastrado;
+import TST_246_Cadastrar_Ponto_De_Acesso.EditarDispositivoDoPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.EditarPontoDeAcesso;
+
+
+
+@RunWith(Suite.class)
+
+@Suite.SuiteClasses({
+	
+	//CadastrarRegiao.class,
+	//CadastrarRegiaoJaCadastrada.class,
+	//EditarRegiao.class,
+	//ApagarRegiao.class,
+	
+	//CadastrarAmbiente.class,
+	//EditarAmbiente.class,
+	//ApagarAmbiente.class,
+	
+	//CadastrarTipodeCartao.class,
+	//CadastrarTipodeCartaoJaCadastrada.class,
+	//EditarTipodeCartao.class,
+	//ApagarTipodeCartao.class,
+	
+	//CadastrarGrupoDeAmbiente.class,
+	//CadastrarGrupoDeAmbienteJaCadastrado.class,
+	//EditarGrupoDeAmbiente.class,
+	//ApagarGrupoDeAmbiente.class,
+	
+	/*
+	CadastrarPontoDeAcesso.class,
+	CadastrarPontoDeAcessoDispJaCadastrado.class,
+	EditarDispositivoDoPontoDeAcesso.class,
+	ApagarDispositivoDoPontoDeAcesso.class,
+	EditarPontoDeAcesso.class,
+	ApagarPontoDeAcesso.class, 
+	*/
+	
+	
+	/*
+	CadastrarCartaoUsuarioRegular.class,
+	EditarCartaoUsuarioRegularParaVisitante.class,
+	ApagarCartaoVisitante.class,	
+	CadastrarCartaoVisitante.class,
+	CadastrarCartaoVisitanteJaCadastrado.class,
+	EditarCartaoVisitanteParaUsuarioRegular.class,
+	ApagarCartaoUsuarioRegular.class,
+	*/
+	
+	/*
+	CadastrarGradeHorarioJaCadastrada.class,
+	EditarGradeHorario.class,
+	ApagarGradeHorario.class,
+	*/
+	
+	/*
+	CadastrarEmpresa.class,
+	CadastrarEmpresaJaCadastrada.class,
+	EditarEmpresa.class,
+	ApagarEmpresa.class,
+	*/
+	
+	/*
+	CadastrarGrupoUsuariosRegulares.class,
+	//Problema neste caso, porem é erro do sistema, sistema exibemensagem errada.
+	//CadastrarGrupoUsuariosRegularesJaCadastrado.class,
+	EditarGrupoUsuariosRegulares.class,
+	ApagarGrupoUsuariosRegulares.class,
+	
+	*/	
+	
+	/*
+	CadastrarGrupoUsuariosServerAdmin.class,
+	CadastrarGrupoUsuariosServerAdminJaCadastrado.class,
+	EditarGrupoUsuariosServerAdmin.class,
+	ApagarGrupoUsuariosServerAdmin.class,
+	*/
+	
+	/*
+	CadastrarGrupoUsuariosCheckInAdmin.class,
+	CadastrarGrupoUsuariosCheckInAdminJaCadastrado.class,
+	EditarGrupoUsuariosCheckInAdmin.class,
+	ApagarGrupoUsuariosCheckInAdmin.class,
+	*/
+	
+	/*
+	CadastrarGrupoDeHierarquia.class,
+	CadastrarGrupoDeHierarquiaJaCadastrado.class,
+	EditarGrupoDeHierarquia.class,
+	ApagarGrupoDeHierarquia.class,
+	*/
+	
+	
+	
+})
+
+
+
+public class SuiteTeste {
+	
+
+} 

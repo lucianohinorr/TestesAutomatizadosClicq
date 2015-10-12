@@ -1,0 +1,477 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class PontoDeAcesso {
+	
+	private String nomePontoAcesso;
+	private String descricao;
+	private String localidade;
+	private String ambiente1;
+	private String ambiente2;
+
+	//Configurações para o Dispositivo1
+	private String nomeDispositivo1;
+	private String ipDispositivo1;
+	private String idDispositivo1;
+	private String tipoDispositivo1;
+	
+	private String sensorDevolucao1;
+	private String permitirCartaoVisitante1;
+	private String solicitaDuplaCustodia1;
+	private String autorizaDuplaCustodia1;	
+	
+	//Configurações para o Dispositivo2
+	private String nomeDispositivo2;
+	private String ipDispositivo2;
+	private String idDispositivo2;
+	private String tipoDispositivo2;
+	
+	private String sensorDevolucao2;
+	private String permitirCartaoVisitante2;
+	private String solicitaDuplaCustodia2;
+	private String autorizaDuplaCustodia2;
+	
+	
+	//Informações para Edição
+	
+	private String nomePontoAcessoParaEdicao;
+	private String ambiente2ParaEdicao;
+	private String descricaoParaEdicao;
+	private String ambiente1ParaEdicao;
+	
+	
+	//Configurações para Edição do Dispositivo1 
+	private String nomeDispositivo1ParaEdicao;
+	private String ipDispositivo1ParaEdicao;
+	private String idDispositivo1ParaEdicao;
+	private String tipoDisposito1ParaEdicao;
+
+	private Connection connection;//conexão com banco
+	
+	
+	public PontoDeAcesso() {
+		super();
+		this.nomePontoAcesso = "AcessoAutomatizado";
+		this.descricao = "Testes Automatizados";
+		this.localidade = "Banco Siamez";		
+		this.ambiente1 = "[1 Andar] Recepção";
+		this.ambiente2 = "[1 Andar] Elevador";
+		
+		
+		this.nomeDispositivo1 = "DMI Automatizado";
+		this.ipDispositivo1 = "10.10.12.25";
+		this.idDispositivo1 = "2";
+		this.tipoDispositivo1 = "DMI42 - Leitor de Cartões RFID 4x2 (58)";
+		
+		this.sensorDevolucao1 = "N";
+		this.permitirCartaoVisitante1 = "Y";
+		this.solicitaDuplaCustodia1 = "N";
+		this.autorizaDuplaCustodia1 = "N";		
+		
+		
+		
+		this.nomeDispositivo2 = "DBClassIP Automatizado";
+		this.ipDispositivo2 = "10.10.12.25";
+		this.idDispositivo2 = "1";
+		this.tipoDispositivo2 = "DBClass IP - Leitor com teclado, biometria, Mifare (40)";	
+		
+		this.sensorDevolucao2 = "N";
+		this.permitirCartaoVisitante2 = "Y";
+		this.solicitaDuplaCustodia2 = "N";
+		this.autorizaDuplaCustodia2 = "N";
+		
+		this.nomePontoAcessoParaEdicao = "SetorRestrito";
+		this.descricaoParaEdicao = "Somente Pessoas Autorizadas";
+		this.ambiente1ParaEdicao = "[1 Andar] Lanchonete";
+		this.ambiente2ParaEdicao = "[1 Andar] Restritos";
+		
+		this.nomeDispositivo1ParaEdicao = "DBClass Can Restritos";
+		this.ipDispositivo1ParaEdicao = "10.10.12.29";
+		this.idDispositivo1ParaEdicao = "9";
+		this.tipoDisposito1ParaEdicao = "DBClass CAN - leitor com teclado, biometria, Mifare (38)";
+
+					
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+	
+	public String getNomePontoAcesso() {
+		return nomePontoAcesso;
+	}
+
+
+	public void setNomePontoAcesso(String nomePontoAcesso) {
+		this.nomePontoAcesso = nomePontoAcesso;
+	}
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+	public String getLocalidade() {
+		return localidade;
+	}
+
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+
+	public String getAmbiente1() {
+		return ambiente1;
+	}
+
+
+	public void setAmbiente1(String ambiente1) {
+		this.ambiente1 = ambiente1;
+	}
+
+
+	public String getAmbiente2() {
+		return ambiente2;
+	}
+
+
+	public void setAmbiente2(String ambiente2) {
+		this.ambiente2 = ambiente2;
+	}
+
+
+	public String getNomeDispositivo1() {
+		return nomeDispositivo1;
+	}
+
+
+	public void setNomeDispositivo1(String nomeDispositivo1) {
+		this.nomeDispositivo1 = nomeDispositivo1;
+	}
+
+
+	public String getIpDispositivo1() {
+		return ipDispositivo1;
+	}
+
+
+	public void setIpDispositivo1(String ipDispositivo1) {
+		this.ipDispositivo1 = ipDispositivo1;
+	}
+
+
+	public String getIdDispositivo1() {
+		return idDispositivo1;
+	}
+
+
+	public void setIdDispositivo1(String idDispositivo1) {
+		this.idDispositivo1 = idDispositivo1;
+	}
+
+
+	public String getTipoDispositivo1() {
+		return tipoDispositivo1;
+	}
+
+
+	public void setTipoDispositivo1(String tipoDispositivo1) {
+		this.tipoDispositivo1 = tipoDispositivo1;
+	}
+
+
+	public String getSensorDevolucao1() {
+		return sensorDevolucao1;
+	}
+
+
+	public void setSensorDevolucao1(String sensorDevolucao1) {
+		this.sensorDevolucao1 = sensorDevolucao1;
+	}
+
+
+	public String getPermitirCartaoVisitante1() {
+		return permitirCartaoVisitante1;
+	}
+
+
+	public void setPermitirCartaoVisitante1(String permitirCartaoVisitante1) {
+		this.permitirCartaoVisitante1 = permitirCartaoVisitante1;
+	}
+
+
+	public String getSolicitaDuplaCustodia1() {
+		return solicitaDuplaCustodia1;
+	}
+
+
+	public void setSolicitaDuplaCustodia1(String solicitaDuplaCustodia1) {
+		this.solicitaDuplaCustodia1 = solicitaDuplaCustodia1;
+	}
+
+
+	public String getAutorizaDuplaCustodia1() {
+		return autorizaDuplaCustodia1;
+	}
+
+
+	public void setAutorizaDuplaCustodia1(String autorizaDuplaCustodia1) {
+		this.autorizaDuplaCustodia1 = autorizaDuplaCustodia1;
+	}
+
+
+	public String getNomeDispositivo2() {
+		return nomeDispositivo2;
+	}
+
+
+	public void setNomeDispositivo2(String nomeDispositivo2) {
+		this.nomeDispositivo2 = nomeDispositivo2;
+	}
+
+
+	public String getIpDispositivo2() {
+		return ipDispositivo2;
+	}
+
+
+	public void setIpDispositivo2(String ipDispositivo2) {
+		this.ipDispositivo2 = ipDispositivo2;
+	}
+
+
+	public String getIdDispositivo2() {
+		return idDispositivo2;
+	}
+
+
+	public void setIdDispositivo2(String idDispositivo2) {
+		this.idDispositivo2 = idDispositivo2;
+	}
+
+
+	public String getTipoDispositivo2() {
+		return tipoDispositivo2;
+	}
+
+
+	public void setTipoDispositivo2(String tipoDispositivo2) {
+		this.tipoDispositivo2 = tipoDispositivo2;
+	}
+
+
+	public String getSensorDevolucao2() {
+		return sensorDevolucao2;
+	}
+
+
+	public void setSensorDevolucao2(String sensorDevolucao2) {
+		this.sensorDevolucao2 = sensorDevolucao2;
+	}
+
+
+	public String getPermitirCartaoVisitante2() {
+		return permitirCartaoVisitante2;
+	}
+
+
+	public void setPermitirCartaoVisitante2(String permitirCartaoVisitante2) {
+		this.permitirCartaoVisitante2 = permitirCartaoVisitante2;
+	}
+
+
+	public String getSolicitaDuplaCustodia2() {
+		return solicitaDuplaCustodia2;
+	}
+
+
+	public void setSolicitaDuplaCustodia2(String solicitaDuplaCustodia2) {
+		this.solicitaDuplaCustodia2 = solicitaDuplaCustodia2;
+	}
+
+
+	public String getAutorizaDuplaCustodia2() {
+		return autorizaDuplaCustodia2;
+	}
+
+
+	public void setAutorizaDuplaCustodia2(String autorizaDuplaCustodia2) {
+		this.autorizaDuplaCustodia2 = autorizaDuplaCustodia2;
+	}
+
+
+	public String getNomePontoAcessoParaEdicao() {
+		return nomePontoAcessoParaEdicao;
+	}
+
+
+	public void setNomePontoAcessoParaEdicao(String nomePontoAcessoParaEdicao) {
+		this.nomePontoAcessoParaEdicao = nomePontoAcessoParaEdicao;
+	}
+
+
+	public String getAmbiente2ParaEdicao() {
+		return ambiente2ParaEdicao;
+	}
+
+
+	public void setAmbiente2ParaEdicao(String ambiente2ParaEdicao) {
+		this.ambiente2ParaEdicao = ambiente2ParaEdicao;
+	}
+
+
+	public String getDescricaoParaEdicao() {
+		return descricaoParaEdicao;
+	}
+
+
+	public void setDescricaoParaEdicao(String descricaoParaEdicao) {
+		this.descricaoParaEdicao = descricaoParaEdicao;
+	}
+
+
+	public String getAmbiente1ParaEdicao() {
+		return ambiente1ParaEdicao;
+	}
+
+
+	public void setAmbiente1ParaEdicao(String ambiente1ParaEdicao) {
+		this.ambiente1ParaEdicao = ambiente1ParaEdicao;
+	}
+
+
+	public String getNomeDispositivo1ParaEdicao() {
+		return nomeDispositivo1ParaEdicao;
+	}
+
+
+	public void setNomeDispositivo1ParaEdicao(String nomeDispositivo1ParaEdicao) {
+		this.nomeDispositivo1ParaEdicao = nomeDispositivo1ParaEdicao;
+	}
+
+
+	public String getIpDispositivo1ParaEdicao() {
+		return ipDispositivo1ParaEdicao;
+	}
+
+
+	public void setIpDispositivo1ParaEdicao(String ipDispositivo1ParaEdicao) {
+		this.ipDispositivo1ParaEdicao = ipDispositivo1ParaEdicao;
+	}
+
+
+	public String getIdDispositivo1ParaEdicao() {
+		return idDispositivo1ParaEdicao;
+	}
+
+
+	public void setIdDispositivo1ParaEdicao(String idDispositivo1ParaEdicao) {
+		this.idDispositivo1ParaEdicao = idDispositivo1ParaEdicao;
+	}
+
+
+	public String getTipoDisposito1ParaEdicao() {
+		return tipoDisposito1ParaEdicao;
+	}
+
+
+	public void setTipoDisposito1ParaEdicao(String tipoDisposito1ParaEdicao) {
+		this.tipoDisposito1ParaEdicao = tipoDisposito1ParaEdicao;
+	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+	//Recupera o Id do Ponto de Acesso.
+	//select no banco SELECT ACCP_PK_ID FROM VA_ACCP_ACCESS_POINT WHERE ACCP_NM_NAME = 'balcao';
+	public int encontraIdPontoDeAcesso(String nomePontoDeAcesso) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT ACCP_PK_ID ");
+		sql.append("FROM   VA_ACCP_ACCESS_POINT ");
+		sql.append("WHERE  ACCP_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomePontoDeAcesso);
+		ResultSet rs = ps.executeQuery();
+		int idPontoDeAcesso = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idPontoDeAcesso = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Ponto de Acesso " + nomePontoDeAcesso + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idPontoDeAcesso;
+	}	
+	
+	//Recupera o Id do Dispositivo Cadastrado no Ponto de Acesso.
+	//Verificar mais tarde a necessidade de ter uma classe Dispositivo. Neste caso este método entrará na classe Dispositivo
+	//select no banco SELECT 	DEVI_PK_ID FROM VA_DEVI_DEVICE WHERE DEVI_NM_NAME = 'DMI Automatizado';
+	public int encontraIdDispositiboDoPontoDeAcesso(String nomeDispositivoDoPontoDeAcesso) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT DEVI_PK_ID ");
+		sql.append("FROM   VA_DEVI_DEVICE ");
+		sql.append("WHERE  DEVI_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeDispositivoDoPontoDeAcesso);
+		ResultSet rs = ps.executeQuery();
+		int idDispositivoDoPontoDeAcesso = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idDispositivoDoPontoDeAcesso = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Dispositivo do Ponto de Acesso " + nomeDispositivoDoPontoDeAcesso + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idDispositivoDoPontoDeAcesso;
+	}
+
+	
+}

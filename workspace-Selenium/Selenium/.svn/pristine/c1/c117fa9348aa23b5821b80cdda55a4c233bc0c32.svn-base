@@ -1,0 +1,32 @@
+# Kanban Properties File
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Meta Properties
+version = 1.0
+propertiesCreationDate = 02/08/2013
+lastModificationDate = 02/078/2013
+owner =  Jean Carlo Rossa Hauck
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Configuracoes Gerais
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+appNames = TST
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Channel
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#ORACLE_TST_ServerName = SPE-SRV-DBA.grupospecto.intranet
+#ORACLE_TST_database = ORACLE
+#ORACLE_TST_port = 1521
+#ORACLE_TST_username = ea_qualprox
+#ORACLE_TST_password = ea_qualprox
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#+++++++++++++++++++++++++++ VISACT ++++++++++++++++++++++++
+ORACLE_TST_ServerName = SPE-SRV-DBA.grupospecto.intranet
+ORACLE_TST_database = ORACLE
+ORACLE_TST_port = 1521
+ORACLE_TST_username = ea_visact
+ORACLE_TST_password = ea_visact

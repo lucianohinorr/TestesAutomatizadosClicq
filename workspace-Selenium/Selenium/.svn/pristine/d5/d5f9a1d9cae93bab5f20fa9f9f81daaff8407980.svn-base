@@ -1,0 +1,158 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class GrupoDeAmbiente {
+	
+	private String nomeGrupoAmbiente;
+	private String descricao;
+	private String sigla;
+	private String localidade;
+		
+	
+	private String nomeGrupoAmbienteParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	public GrupoDeAmbiente() {
+		
+		this.nomeGrupoAmbiente = "Cobertura";
+		this.descricao = "Banco Siamez";
+		this.sigla = "CBT";
+		this.localidade = "Banco Siamez";
+		
+		this.nomeGrupoAmbienteParaEdicao = "Cobertura Social";
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+	
+	
+	
+	public String getNomeGrupoAmbiente() {
+		return nomeGrupoAmbiente;
+	}
+
+
+
+
+	public void setNomeGrupoAmbiente(String nomeGrupoAmbiente) {
+		this.nomeGrupoAmbiente = nomeGrupoAmbiente;
+	}
+
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+
+
+	public String getSigla() {
+		return sigla;
+	}
+
+
+
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
+	}
+
+
+
+
+	public String getLocalidade() {
+		return localidade;
+	}
+
+
+
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+
+
+
+	public String getNomeGrupoAmbienteParaEdicao() {
+		return nomeGrupoAmbienteParaEdicao;
+	}
+
+
+
+
+	public void setNomeGrupoAmbienteParaEdicao(String nomeGrupoAmbienteParaEdicao) {
+		this.nomeGrupoAmbienteParaEdicao = nomeGrupoAmbienteParaEdicao;
+	}
+
+
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+
+
+	/*
+	 * Recupera o Id do Grupo de Ambiente.
+	 * select no banco exemplo:  SELECT ENGR_PK_ID FROM VA_ENGR_ENVIRONMENT_GROUP WHERE ENGR_NM_NAME = 'Cobertura';
+	 */
+	public int encontraIdGrupoDeAmbiente(String nomeGrupoDeAmbiente) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT ENGR_PK_ID ");
+		sql.append("FROM  VA_ENGR_ENVIRONMENT_GROUP ");
+		sql.append("WHERE  ENGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupoDeAmbiente);
+		ResultSet rs = ps.executeQuery();
+		int idGrupoDeAmbiente = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupoDeAmbiente = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo de Ambiente " + nomeGrupoDeAmbiente + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupoDeAmbiente;
+	}	
+
+}

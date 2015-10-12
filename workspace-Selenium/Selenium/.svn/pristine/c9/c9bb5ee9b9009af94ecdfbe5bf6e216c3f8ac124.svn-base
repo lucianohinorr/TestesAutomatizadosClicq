@@ -1,0 +1,97 @@
+package br.com.specto.controladorPrincipal;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+
+
+
+
+import br.com.specto.daoEA.ORACLEConnection;
+
+public class ControladorPrincipal {
+
+	private ORACLEConnection db;
+	
+	public ControladorPrincipal(){
+		
+		db = new ORACLEConnection("TST");
+		
+	}
+	
+	public void run(String banco, String testCase, String operation, String runBy, String results){
+		
+		if (validate(banco, testCase, operation, runBy, results)){
+			
+			PreparedStatement pstmt;
+			db.setUsernamePassword("ea_"+banco, "ea_"+banco);
+			db.connect();
+			try {
+				String update = "update t_objecttests set status = ?, runby = " +
+						" (select firstname||' '||surname as username from t_secuser where userlogin like ? )" +
+						", results = ?, daterun = SYSDATE where test like ? ";
+				
+				
+				
+				db.beginTransaction();
+				pstmt = db.prepareStatementNoAutocount(update);
+				pstmt.setString(1, operation);
+				pstmt.setString(2, "%"+runBy+"%");
+				pstmt.setString(3, results);
+				pstmt.setString(4, "%"+testCase+"%");
+				
+				
+				db.executeUpdate(pstmt);
+				db.endTransaction();
+				pstmt.close();
+				
+				System.out.println("TestCase: "+testCase+" atualizado com sucesso!");
+				
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				pstmt = null;
+				
+			}
+		}
+
+	}
+
+	private boolean validate(String banco, String testCase, String operation, String runBy, String results) {
+		
+		boolean bancoOK = true, testCaseOK = true, operationOK = true, runByOK = true, resultsOK = true ;
+		
+		if ((banco == null) || (banco.equals(""))){
+			System.out.println("Banco nao definido");
+			bancoOK = false;
+		}
+		
+		if ((runBy == null) || (runBy.equals(""))){
+			System.out.println("Runby nao definido");
+			runByOK = false;
+		}
+
+		if ((results == null) || (results.equals(""))){
+			System.out.println("Runby nao definido");
+			resultsOK = false;
+		}
+		
+		if ((testCase == null) || (testCase.equals("")) || !testCase.contains("TST")){
+			System.out.println("TestCase nao definido");
+			testCaseOK = false;
+		}
+
+		if ((operation == null) || (operation.equals(""))){
+			System.out.println("Operacao nao definida");
+			operationOK = false;
+		}else if (!operation.equals("Pass") && !operation.equals("Pass - Improvement") && !operation.equals("Not Run") && !operation.equals("Fail") && !operation.equals("Deferred")){
+			System.out.println("Operacao definida incorreta. Uso: Pass, Pass - Improvemen, Not Runt, Fail, Deferred");
+			operationOK = false;
+		}
+
+		return bancoOK && testCaseOK && operationOK && runByOK && resultsOK;
+		
+	}
+	
+}

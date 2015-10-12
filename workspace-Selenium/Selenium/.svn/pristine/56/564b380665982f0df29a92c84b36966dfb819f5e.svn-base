@@ -1,0 +1,164 @@
+package TST_066_Cadastrar_Grupo_Envio_De_SMS;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoEnvioDeSmsTodosAcessos;
+
+
+public class EditarGrupoEnvioDeSmsTodosOsAcessos {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoEnvioDeSmsTodosAcessos grupoEnvioDeSmsTodosOsAcessos;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoEnvioDeSmsTodosOsAcessos = new GrupoEnvioDeSmsTodosAcessos();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void editarGrupoEnvioDeSMSTodosOsAcessosVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Edição de Grupo Envio de SMS Todos os Acessos");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Envio de SMS")).click();
+			
+			
+			//Recuperar o id do banco referente ao nome do Grupo
+			String s_idGrupo = "" + grupoEnvioDeSmsTodosOsAcessos.encontraIdGrupo(grupoEnvioDeSmsTodosOsAcessos.getNome());	
+						
+			//Marca o Grupo para Edição
+			driver.findElement(By.id(s_idGrupo)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+		
+					
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).clear();
+			driver.findElement(By.name("name")).sendKeys(grupoEnvioDeSmsTodosOsAcessos.getNomeParaEdicao());
+			
+			driver.findElement(By.name("description")).clear();
+			driver.findElement(By.name("description")).sendKeys(grupoEnvioDeSmsTodosOsAcessos.getDescricaoParaEdicao());
+			
+			//servidor Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupConfig"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getServidorEnvioDeSMS());
+			
+			//tipo Envio de SMS
+			new Select(driver.findElement(By.name("smsGroupType"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getTipoEnvioDeSMS());
+
+			//tipoCondicoesDeEventos - Alterando de Permissão de Acesso para Negação de Acesso
+			new Select(driver.findElement(By.name("eventType"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getTipoCondicoesDeEventosParaEdicao());
+						
+			//motivoNegacaoCondicoesDeEventos
+			new Select(driver.findElement(By.name("accessDeniedReason"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getMotivoNegacaoCondicoesDeEventos());
+			
+			
+			//região
+			new Select(driver.findElement(By.name("regionName"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getRegiaoLocalDeAcesso());
+			
+			//Localidade
+			new Select(driver.findElement(By.name("localityName"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getLocalidadeLocalDeAcesso());
+			
+			//Grupo de Ambientes
+			new Select(driver.findElement(By.name("environmentGroupName"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getGrupoDeAmbienteLocalDeAcessoParaEdicao());
+			
+			//Ambiente
+			new Select(driver.findElement(By.name("environmentName"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getAmbienteLocalDeAcessoParaEdicao());
+			
+			//Ponto de Acesso
+			new Select(driver.findElement(By.name("accessPointName"))).selectByVisibleText(grupoEnvioDeSmsTodosOsAcessos.getPontoDeAcessoLocalDeAcessoParaEdicao());
+			
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//Long end = System.currentTimeMillis() + 12000;
+			//while (System.currentTimeMillis() < end) {}    
+   
+									   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de envio de SMS [" + grupoEnvioDeSmsTodosOsAcessos.getNomeParaEdicao() + "] editado com sucesso!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Edição de Grupo de Envio de SMS Todos os Acessos executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoEnvioDeSMSAcessosDoUsuario){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Edição de Grupo Envio de SMS Todos os Acessos!");
+    			
+				throw erroValidaMensagemCadastroGrupoEnvioDeSMSAcessosDoUsuario;
+    	
+    		}finally{
+    			
+    			//fechar a tela de cadastro do Grupo
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			
+    								
+				//fechando a janela da lista dos ambientes cadastrados
+    			//Botão não fica visivel
+				//driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+    			//fechar tela pelo botão cancelar do cadastro de Grupo
+    			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/cancel.gif')]")).click();
+    			   			
+    			
+    			//Selecionando o botão Sair da Aplicação.
+    			//Não acha
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    			//Encerro a aplicação.
+    			driver.close();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Edição de Grupo Envio de SMS Todos os Acessos: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

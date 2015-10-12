@@ -1,0 +1,239 @@
+package TST_077_Cadastrar_Grupo_de_Usuarios_Server;
+
+
+import java.util.List;
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.auxiliar.Permissoes;
+import br.com.specto.entidades.GrupoUsuariosServer;
+
+
+public class TST_077_012_CadastrarGrupoUsuariosServer {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoUsuariosServer grupoUsuariosServer;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoUsuariosServer = new GrupoUsuariosServer();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void cadastrarGrupoUsuariosServerVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Usuários Server")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+			
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(grupoUsuariosServer.getNome());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(grupoUsuariosServer.getDescricao());
+			
+			//Nao e admin!
+			if (grupoUsuariosServer.isAdministrador()){				
+						
+				driver.findElement(By.xpath("//*[contains(@name,'administrator')]")).click();				
+				
+			}
+			
+			//No cadastro os valores são sempre EDICAO
+			Permissoes permissoes = Permissoes.EDICAO;
+			
+			/*
+			 * Como o elemento com o nome "objtAccessReport" possui 3 outros elementos (Edicao, Ver e Sem Acesso) nao tem como de cara selecionar o elemento desejado.
+			 * Ou seja selecionar com uma linha o elemento Edicao. Preciso guardar em uma lista os elementos (Edicao, Ver e Sem Acesso) e so depois selecionar com base no
+			 * seu valor.
+			 */
+			if(permissoes == grupoUsuariosServer.getRelatorioDeAcesso().EDICAO){
+				
+				List<WebElement> relatorioDeAcesso = driver.findElements(By.name("objtAccessReport"));
+			 	
+				for (int i = 0; i < relatorioDeAcesso.size(); i++) {
+					
+				    if ( relatorioDeAcesso.get(i).getAttribute("value").equals("0") ){		
+				    	
+				    	relatorioDeAcesso.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			
+			if(permissoes == grupoUsuariosServer.getRelatorioDeAuditoria().EDICAO){ 
+				
+				List<WebElement> relatorioDeAuditoria = driver.findElements(By.name("objtAuditReport"));
+			 	
+				for (int i = 0; i < relatorioDeAuditoria.size(); i++) {
+					
+				    if ( relatorioDeAuditoria.get(i).getAttribute("value").equals("0") ){			    			    	
+		
+				    	relatorioDeAuditoria.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			
+			if(permissoes == grupoUsuariosServer.getRelatorioDePermissoesDeAcesso().EDICAO){ 
+				
+				List<WebElement> relatorioDePermissaoDeAcesso = driver.findElements(By.name("objtAccessPermissionReport"));
+			 	
+				for (int i = 0; i < relatorioDePermissaoDeAcesso.size(); i++) {
+					
+				    if ( relatorioDePermissaoDeAcesso.get(i).getAttribute("value").equals("0") ){			    			    	
+				    	
+				    	relatorioDePermissaoDeAcesso.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			
+			if(permissoes == grupoUsuariosServer.getRelatorioDeVisita().EDICAO){
+				
+				List<WebElement> relatorioDeVisita = driver.findElements(By.name("objtVisitReport"));
+			 	
+				for (int i = 0; i < relatorioDeVisita.size(); i++) {
+					
+				    if ( relatorioDeVisita.get(i).getAttribute("value").equals("0") ){	
+				    	
+				    	relatorioDeVisita.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			
+			if(permissoes == grupoUsuariosServer.getRelatorioDePonto().EDICAO){ 
+				
+				List<WebElement> relatorioDePonto = driver.findElements(By.name("objtDeviceStatusMonitoringReport"));
+			 	
+				for (int i = 0; i < relatorioDePonto.size(); i++) {
+					
+				    if ( relatorioDePonto.get(i).getAttribute("value").equals("0") ){	
+				    	
+				    	relatorioDePonto.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			
+			if(permissoes == grupoUsuariosServer.getRelatorioDeEventos().EDICAO){
+				
+				List<WebElement> relatorioDeEventos = driver.findElements(By.name("objtEventReport"));
+			 	
+				for (int i = 0; i < relatorioDeEventos.size(); i++) {
+					
+				    if ( relatorioDeEventos.get(i).getAttribute("value").equals("0") ){		
+				    	
+				    	relatorioDeEventos.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+					
+			if(permissoes == grupoUsuariosServer.getRelatorioStatusDeDispotos().EDICAO){ 
+				
+				List<WebElement> relatorioStatusDeDispositivo = driver.findElements(By.name("objtPointReport"));
+			 	
+				for (int i = 0; i < relatorioStatusDeDispositivo.size(); i++) {
+					
+				    if ( relatorioStatusDeDispositivo.get(i).getAttribute("value").equals("0") ){			    			    	
+		
+				    	relatorioStatusDeDispositivo.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+		
+			//Botão Salvar do cadastro de Grupo de Usuários Regulares
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+				    
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de Usuários [" + grupoUsuariosServer.getNome() + "] salvo com sucesso!";
+		
+			try{
+				
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoUsuariosRegulares){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroGrupoUsuariosRegulares);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroGrupoUsuariosRegulares;
+    	
+    		}finally{
+    			
+    			driver.manage().window().maximize();
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();    			
+				
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Botão Sair está ficando escondido, desta forma utilizo o comando abaixo
+				driver.close();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o cado de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,8 @@
+echo off
+cls
+
+cd C:\Arquivos de programas\MySQL\MySQL Server 5.1\bin
+mysql --user=root --password=root visact_access_server_testes_automatizados < C:\Testes_Automatizados\automatizados.sql
+
+
+pause

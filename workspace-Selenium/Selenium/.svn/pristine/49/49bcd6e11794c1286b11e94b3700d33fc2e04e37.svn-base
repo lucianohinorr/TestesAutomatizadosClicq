@@ -1,0 +1,23 @@
+package br.com.specto.auxiliar;
+
+public enum Permissoes {
+	
+	EDICAO(1), VER(2), SEM_ACESSO(3);
+	
+	private final int valor;
+	
+	Permissoes(int valorOpcao) {
+		
+		valor = valorOpcao;
+	
+	}
+	
+	
+	public int getValor(){
+		
+		return valor;
+	}
+	
+	
+
+}

@@ -1,0 +1,498 @@
+/**
+ * 
+ */
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+/**
+ * @author luciano.silva
+ *
+ */
+public class UsuarioRegular {
+	
+	private String nome;
+	private String login;
+	private String senha;
+	private String confirmarSenha;
+	private String telefone;
+	private String telefoneSms;
+	private String ramal;
+	private String cpf;
+	private String rg;
+	private String email;
+	private String matricula;
+	private String status;
+	
+	private String cep;
+	private String rua;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cidade;
+	private String unidadeFederativa;
+	
+	private String cartãoPermanente;
+	private String cartãoTemporario;
+	
+	private String grupoUsuariosServer;
+	private String grupoUsuariosCheckIn;
+	private String grupoUsuariosRegular;
+	private String grupoConcessaoAcesso;
+	private String grupoAprovacaoVisita;
+	private String grupoSmsTodosAcessos;
+	private String grupoSmsAcessosUsuário;
+	
+	
+	private String hierarquia;
+	
+	private String imagem;
+	
+	private String biometria;
+	
+	private Connection connection;//conexão com banco
+	
+	
+	public UsuarioRegular() {
+		
+		this.nome = "Luciano_Teste";
+		this.login = "luciano_teste";
+		this.senha = "111111";
+		this.confirmarSenha = "111111";
+		this.telefone = "";
+		this.telefoneSms = "";
+		this.ramal = "5698";
+		this.cpf = "";
+		this.rg = "56456478";
+		this.email = "Luciano_teste@specto.com.br";
+		this.matricula = "65894";
+		this.status = "ativo";
+		
+		this.cep = "";
+		this.rua = "";
+		this.complemento = "";
+		this.bairro = "";
+		this.cidade = "";
+		this.unidadeFederativa = "";
+		
+		this.cartãoPermanente = "";
+		this.cartãoTemporario = "";
+		
+		this.grupoUsuariosServer = "";
+		this.grupoUsuariosCheckIn = "";
+		this.grupoUsuariosRegular = "";
+		this.grupoConcessaoAcesso = "";
+		this.grupoAprovacaoVisita = "";
+		this.grupoSmsTodosAcessos = "";
+		this.grupoSmsAcessosUsuário = "";	
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+		
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	public String getLogin() {
+		return login;
+	}
+
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+
+	public String getSenha() {
+		return senha;
+	}
+
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+
+	public String getConfirmarSenha() {
+		return confirmarSenha;
+	}
+
+
+	public void setConfirmarSenha(String confirmarSenha) {
+		this.confirmarSenha = confirmarSenha;
+	}
+
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+
+	public String getTelefoneSms() {
+		return telefoneSms;
+	}
+
+
+	public void setTelefoneSms(String telefoneSms) {
+		this.telefoneSms = telefoneSms;
+	}
+
+
+	public String getRamal() {
+		return ramal;
+	}
+
+
+	public void setRamal(String ramal) {
+		this.ramal = ramal;
+	}
+
+
+	public String getCpf() {
+		return cpf;
+	}
+
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+
+	public String getRg() {
+		return rg;
+	}
+
+
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public String getCep() {
+		return cep;
+	}
+
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+
+	public String getRua() {
+		return rua;
+	}
+
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+
+	public String getBairro() {
+		return bairro;
+	}
+
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+
+	public String getCidade() {
+		return cidade;
+	}
+
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+
+	public String getUnidadeFederativa() {
+		return unidadeFederativa;
+	}
+
+
+	public void setUnidadeFederativa(String unidadeFederativa) {
+		this.unidadeFederativa = unidadeFederativa;
+	}
+
+
+	public String getCartãoPermanente() {
+		return cartãoPermanente;
+	}
+
+
+	public void setCartãoPermanente(String cartãoPermanente) {
+		this.cartãoPermanente = cartãoPermanente;
+	}
+
+
+	public String getCartãoTemporario() {
+		return cartãoTemporario;
+	}
+
+
+	public void setCartãoTemporario(String cartãoTemporario) {
+		this.cartãoTemporario = cartãoTemporario;
+	}
+
+
+	public String getGrupoUsuariosServer() {
+		return grupoUsuariosServer;
+	}
+
+
+	public void setGrupoUsuariosServer(String grupoUsuariosServer) {
+		this.grupoUsuariosServer = grupoUsuariosServer;
+	}
+
+
+	public String getGrupoUsuariosCheckIn() {
+		return grupoUsuariosCheckIn;
+	}
+
+
+	public void setGrupoUsuariosCheckIn(String grupoUsuariosCheckIn) {
+		this.grupoUsuariosCheckIn = grupoUsuariosCheckIn;
+	}
+
+
+	public String getGrupoUsuariosRegular() {
+		return grupoUsuariosRegular;
+	}
+
+
+	public void setGrupoUsuariosRegular(String grupoUsuariosRegular) {
+		this.grupoUsuariosRegular = grupoUsuariosRegular;
+	}
+
+
+	public String getGrupoConcessaoAcesso() {
+		return grupoConcessaoAcesso;
+	}
+
+
+	public void setGrupoConcessaoAcesso(String grupoConcessaoAcesso) {
+		this.grupoConcessaoAcesso = grupoConcessaoAcesso;
+	}
+
+
+	public String getGrupoAprovacaoVisita() {
+		return grupoAprovacaoVisita;
+	}
+
+
+	public void setGrupoAprovacaoVisita(String grupoAprovacaoVisita) {
+		this.grupoAprovacaoVisita = grupoAprovacaoVisita;
+	}
+
+
+	public String getGrupoSmsTodosAcessos() {
+		return grupoSmsTodosAcessos;
+	}
+
+
+	public void setGrupoSmsTodosAcessos(String grupoSmsTodosAcessos) {
+		this.grupoSmsTodosAcessos = grupoSmsTodosAcessos;
+	}
+
+
+	public String getGrupoSmsAcessosUsuário() {
+		return grupoSmsAcessosUsuário;
+	}
+
+
+	public void setGrupoSmsAcessosUsuário(String grupoSmsAcessosUsuário) {
+		this.grupoSmsAcessosUsuário = grupoSmsAcessosUsuário;
+	}
+
+
+	public String getHierarquia() {
+		return hierarquia;
+	}
+
+
+	public void setHierarquia(String hierarquia) {
+		this.hierarquia = hierarquia;
+	}
+
+
+	public String getImagem() {
+		return imagem;
+	}
+
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
+
+
+	public String getBiometria() {
+		return biometria;
+	}
+
+
+	public void setBiometria(String biometria) {
+		this.biometria = biometria;
+	}
+	
+	
+	//Recupera o Id Do Usuário Regular.
+	//select no banco SELECT USVT_PK_ID FROM `VA_USVT_USER` WHERE USVT_VL_NAME = "luciano_Teste"
+	public int encontraIdUsuarioRegular(String nomeUsuarioRegular) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT USVT_PK_ID ");
+		sql.append("FROM   VA_USVT_USER ");
+		sql.append("WHERE  USVT_VL_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeUsuarioRegular);
+		ResultSet rs = ps.executeQuery();
+		int idUsuarioRegular = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idUsuarioRegular = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Usuário Regular  " + nomeUsuarioRegular + " nao esta cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idUsuarioRegular;
+	}
+	
+		
+	//Apaga o Usuário Regular completamente da base de dados. Tem que ser feito via script, pois o mesmo quando excluído seu registro ainda fica na 
+	//base de dados. Assim sendo, não dá para cadastrar um novo a não ser que este seja excluído fisicamente
+	
+	public void excluiUsuarioRegular(String idUsuarioRegular) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+	
+		sql.append("DELETE FROM va_acfv_audit_changedfieldval WHERE ACFV_FK_AUCF_ID IN (SELECT AUCF_PK_ID FROM va_aucf_audit_changedfield WHERE AUCF_FK_AUDT_ID IN (SELECT AUDT_PK_ID FROM va_audt_audit WHERE AUDT_FK_USER_ID = ?));");
+		sql.append("DELETE FROM va_aucf_audit_changedfield WHERE AUCF_FK_AUDT_ID IN (SELECT AUDT_PK_ID FROM va_audt_audit WHERE AUDT_FK_USER_ID = ?);");
+		sql.append("DELETE FROM va_audt_audit WHERE AUDT_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_ruhg_regular_user_hier_gr WHERE RUHG_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_ruhi_regular_user_hierarchy WHERE RUHI_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_reus_regular_user WHERE REUS_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_vilo_visitor_locality WHERE VILO_FK_VISITOR_ID = ?;");
+		sql.append("DELETE FROM va_visr_visitor WHERE VISR_FK_USERID = ?;");
+		sql.append("DELETE FROM va_vidi_interval WHERE VIDI_FK_VIDT IN (SELECT VIDT_PK_ID FROM va_vidt_visit_date WHERE VIDT_FK_VIST IN (SELECT VIST_PK_ID FROM va_vist_visit WHERE VIST_FK_VISR = ?));");
+		sql.append("DELETE FROM va_vidt_visit_date WHERE VIDT_FK_VIST IN (SELECT VIST_PK_ID FROM va_vist_visit WHERE VIST_FK_VISR = ?);");
+		sql.append("DELETE FROM va_vihi_hierarchy WHERE VIHI_FK_VIST IN (SELECT VIST_PK_ID FROM va_vist_visit WHERE VIST_FK_VISR = ?);");
+		sql.append("DELETE FROM va_vist_visit WHERE VIST_FK_VISR = ?;");
+		sql.append("DELETE FROM va_usbio_user_biometry WHERE BIO_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_usph_userphone WHERE USPH_FK_USER_ID = ?;");
+		sql.append("DELETE FROM va_usvt_user WHERE usvt_pk_id = ?;");
+	
+	
+		String[] comandos = sql.toString().split(";");
+		
+		for(int i=0; i < comandos.length; i++ ){
+	
+			PreparedStatement preparedStatement = null;
+			
+			try {
+				
+				preparedStatement = connection.prepareStatement(comandos[i]);
+				preparedStatement.setString(1, idUsuarioRegular);
+				preparedStatement.executeUpdate();
+				
+			} catch (Exception e) {
+				
+				System.out.println(e.getMessage());
+			}
+				
+					
+			finally{
+				
+				preparedStatement.close();
+				preparedStatement.close();
+				
+			}
+			
+		}
+		
+	}
+		
+}

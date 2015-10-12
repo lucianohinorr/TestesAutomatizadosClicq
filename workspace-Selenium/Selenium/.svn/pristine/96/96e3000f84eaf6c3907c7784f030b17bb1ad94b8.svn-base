@@ -1,0 +1,84 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoDeHierarquia extends Grupo {
+
+
+	public GrupoDeHierarquia() {
+		
+				
+		super(  "Banco Siamez",                     //nomeNovo_1                TST_085_01
+				"Permissão Total - Localidade",     //descricaoNovo_1           TST_085_01
+				
+				"Banco Siamez - 1 Andar",           //nomeNovo_2                
+				"Sem Descricao e Hierarquia",       //descricaoNovo_2           
+				
+				"Banco Siamez - Ático Editado",     //nomeEdicao_1              TST_085_3
+				"Banco Siamez - Ático Editado",     //descricaoEdicao_1         TST_085_3
+				
+				"Banco Siamez - Exceto 3 Andar",    //nomeEdicao_2              
+				"Banco Siamez - Exceto 3 Andar",    //descricaoEdicao_2         
+				
+				"Banco Siamez - 5 Andar",		    //nomeJaCadastrado_1        TST_085_2     
+				"Grupo Já Cadastrado 1",		 	//descricaoJaCadastrado_1        
+			
+				"Banco Siamez - 2 Andar",		    //nomeJaCadastrado_2        
+				"Grupo Já Cadastrado 2",		 	//descricaoJaCadastrado_2   
+				
+				"Banco Siamez - Ático",		        //nomeJaCadastrado_3        TST_085_3
+				"Grupo Já Cadastrado 3",		 	//descricaoJaCadastrado_3   TST_085_3
+			
+				"Banco Siamez - Total",             //nomeJaCadastrado_4        
+				"Grupo Já Cadastrado 4",		 	//descricaoJaCadastrado_4   
+			
+				"Banco Siamez - Terreo",			//nomeApagar                TST_085_4
+				
+				new MYSQLConnection().getConnection() 
+		);
+		
+		
+	}
+	
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT HIGR_PK_ID FROM VA_HIGR_HIERARCHY_GROUP WHERE HIGR_NM_NAME = 'Banco Martins';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT HIGR_PK_ID ");
+		sql.append("FROM   VA_HIGR_HIERARCHY_GROUP ");
+		sql.append("WHERE  HIGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+}

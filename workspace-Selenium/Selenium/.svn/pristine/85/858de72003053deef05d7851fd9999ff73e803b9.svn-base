@@ -1,0 +1,27 @@
+package br.com.specto.suiteTest;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+import TST_016_Cadastrar_Regiao.ApagarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiaoJaCadastrada;
+import TST_016_Cadastrar_Regiao.EditarRegiao;
+
+
+
+@RunWith(Suite.class)
+
+@Suite.SuiteClasses({
+	CadastrarRegiao.class,
+	CadastrarRegiaoJaCadastrada.class,
+	EditarRegiao.class,
+	ApagarRegiao.class
+})
+
+
+
+public class SuiteTeste {
+	
+
+} 

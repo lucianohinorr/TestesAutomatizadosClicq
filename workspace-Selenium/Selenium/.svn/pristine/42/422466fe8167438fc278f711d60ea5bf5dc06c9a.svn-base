@@ -1,0 +1,48 @@
+package br.com.specto.entidades;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class ExpurgoVisitantes extends Expurgo{
+	
+	protected String localidade;
+
+	protected String localidadeParaEdicao;
+	
+	
+	public ExpurgoVisitantes() {
+		
+		super(  true,       //habilitarExpurgo
+				false,      //desablitarExpurgo
+				"2",        //manterUltimos
+				"2300",     //horarioExecução
+				"8",        //manterUltimosParaEdicao
+				"2100",     //horarioExecucaoParaEdicao
+				new MYSQLConnection().getConnection());
+		
+		this.localidade = "Banco Martins";
+			
+	}
+
+
+	public String getLocalidade() {
+		return localidade;
+	}
+
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+
+	public String getLocalidadeParaEdicao() {
+		return localidadeParaEdicao;
+	}
+
+
+	public void setLocalidadeParaEdicao(String localidadeParaEdicao) {
+		this.localidadeParaEdicao = localidadeParaEdicao;
+	}
+	
+	
+
+}

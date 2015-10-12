@@ -1,0 +1,152 @@
+package TST_026_Cadastrar_Usuario_Regular;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.controladorPrincipal.ControladorPrincipal;
+import br.com.specto.entidades.UsuarioRegular;
+
+public class TST_026_07_CadastrarUsuarioRegularJaCadastrada {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private UsuarioRegular usuarioRegular;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+		
+		this.usuarioRegular = new UsuarioRegular();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+	
+	}
+	
+
+	@Test
+	public void cadastrarUsuarioRegularVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+	
+		try{
+			
+			driver = login.executaLoginManual();
+			
+			//seleciona opção Cadastro no menu
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			//esse tempo foi inserido pois tinha momentos que a opção aberta era grade de horário
+			Long end2 = System.currentTimeMillis() + 2000;
+			while (System.currentTimeMillis() < end2) {}
+			
+			//seleciona opção Usuários do menu
+			driver.findElement(By.id("menuUser_tmi0-img")).click();
+		
+			//seleciona a opção Usuário Regular
+			driver.findElement(By.linkText("Usuário Regular")).click();
+			
+			//abre a tela para cadastro de Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+		
+			//Inserindo os dados para o cadastro de Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(usuarioRegular.getNome());
+			driver.findElement(By.xpath("//*[ contains(@name, 'login')]")).sendKeys(usuarioRegular.getLogin());
+			driver.findElement(By.xpath("//*[ contains(@name, 'passwd')]")).sendKeys(usuarioRegular.getSenha());
+			driver.findElement(By.xpath("//*[ contains(@name, 'confirmPasswd')]")).sendKeys(usuarioRegular.getConfirmarSenha());
+			driver.findElement(By.xpath("//*[ contains(@name, 'extensionLine')]")).sendKeys(usuarioRegular.getRamal());
+			driver.findElement(By.xpath("//*[ contains(@name, 'rg')]")).sendKeys(usuarioRegular.getRg());
+			driver.findElement(By.xpath("//*[ contains(@name, 'email')]")).sendKeys(usuarioRegular.getEmail());
+			driver.findElement(By.xpath("//*[ contains(@name, 'registration')]")).sendKeys(usuarioRegular.getMatricula());
+						
+			//Botão Salvar do cadastro do Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+							
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Já existe um usuário com o login [luciano_teste]! Nenhum usuário foi salvo.";
+				
+			try{
+					
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				
+				//Altera no EA o status do caso de teste
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular", "Pass", "Luciano.silva", "Mensagem foi validade - Testes gerado de forma automática");
+				
+				loggerTestResult.testResult("Aprovado");
+					
+			}catch (AssertionError erroValidaMensagemCadastroUsuarioRegularJaCad){
+				
+				/*
+				 * run(String banco, String testCase, String operation, String runBy, String results)
+				 * Uso: Pass, Pass - Improvemen, Not Runt, Fail, Deferred"
+				 * No runBy teria que criar um usuário do tipo "Usuário Automatizado"
+				 */
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular ", "Fail", "GRUPOSPECTO\\luciano.silva", "Mensagem não foi validade - Testes gerado de forma automática");
+				
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroUsuarioRegularJaCad);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroUsuarioRegularJaCad;
+							
+			}finally {
+				
+				//fechar a tela de cadastro da região
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				loggerDebug.debug("Teste Finalizado");
+				
+			}
+		
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");	
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+			
+		}
+		
+	}
+		
+	
+	@After
+	public void tearDownTest() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+						
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+		
+	}
+	
+	
+	public void run(String banco, String testCase, String operation, String runBy, String results){
+			
+		(new ControladorPrincipal()).run(banco, testCase, operation, runBy, results);
+
+	}
+	
+
+}

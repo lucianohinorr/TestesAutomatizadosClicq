@@ -1,0 +1,188 @@
+package TST_026_Cadastrar_Usuario_Regular;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.controladorPrincipal.ControladorPrincipal;
+import br.com.specto.entidades.UsuarioRegular;
+
+public class TST_026_01_CadastrarUsuarioRegular {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private UsuarioRegular usuarioRegular;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+		
+		this.usuarioRegular = new UsuarioRegular();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+	
+	}
+	
+
+	@Test
+	public void cadastrarUsuarioRegularVisact() throws Exception {
+		
+		
+		loggerDebug.debug("antes do deleteo");
+		
+		//Deixando a base no seu estado inicial
+		//Garantindo que o Usuário Regular nao está no banco!	
+		
+		String s_idRegiao = "" + usuarioRegular.encontraIdUsuarioRegular(usuarioRegular.getNome());
+		usuarioRegular.apagaUsuarioRegular(s_idRegiao);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		loggerDebug.debug("antes do tempo");
+		
+		//espera de 5 segundo, assim dá tempo de debugar a mensagem
+		Long end = System.currentTimeMillis() + 9000;
+		while (System.currentTimeMillis() < end) {}    
+
+		
+		loggerDebug.debug("Teste Iniciado");
+		
+		driver = login.executaLoginManual();
+    
+		try{
+			
+			//seleciona opção Cadastro no menu
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			//esse tempo foi inserido pois tinha momentos que a opção aberta era grade de horário
+			Long end2 = System.currentTimeMillis() + 2000;
+			while (System.currentTimeMillis() < end2) {}
+			
+			//seleciona opção Usuários do menu
+			driver.findElement(By.id("menuUser_tmi0-img")).click();
+		
+			//seleciona a opção Usuário Regular
+			driver.findElement(By.linkText("Usuário Regular")).click();
+			
+			//abre a tela para cadastro de Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+		
+			//Inserindo os dados para o cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(usuarioRegular.getNome());
+			driver.findElement(By.xpath("//*[ contains(@name, 'login')]")).sendKeys(usuarioRegular.getLogin());
+			driver.findElement(By.xpath("//*[ contains(@name, 'passwd')]")).sendKeys(usuarioRegular.getSenha());
+			driver.findElement(By.xpath("//*[ contains(@name, 'confirmPasswd')]")).sendKeys(usuarioRegular.getConfirmarSenha());
+			driver.findElement(By.xpath("//*[ contains(@name, 'extensionLine')]")).sendKeys(usuarioRegular.getRamal());
+			driver.findElement(By.xpath("//*[ contains(@name, 'rg')]")).sendKeys(usuarioRegular.getRg());
+			driver.findElement(By.xpath("//*[ contains(@name, 'email')]")).sendKeys(usuarioRegular.getEmail());
+			driver.findElement(By.xpath("//*[ contains(@name, 'registration')]")).sendKeys(usuarioRegular.getMatricula());
+								
+			//direcionando para a aba Hierarquia de acesso			
+			driver.findElement(By.linkText("Hierarquia de Acesso")).click();
+			
+			/*
+			 * Seleciona a opção Mesanino no grupo de ambientes Diversão da Localidade Casa-Luciano
+			 * Obs: ao selecionar um ambiente, que necessite utilizar o scroll, a interface fica deslocada de tal maneira que a aba superior, onde ficam os botões fechar nao são exibidos.
+			 * Desta forma estou selecionando um ambiente que fique a visivel de cara ao chamar a aba Hierarquia de Acesso
+			 */
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div/form/div[8]/table/tbody/tr/td[3]/table/tbody/tr[2]/td/div/fieldset/table/tbody/tr/td/div/div/table/tbody/tr/td/span/span/span/span/span/span/span/span/span[2]/table/tbody/tr/td[2]/div/input")).click();
+						
+			/*
+			 * Testes executados para selecionar o Ambiente sem XPATH
+			 * driver.findElement(By.xpath("//*span")).getAttribute("[Comercial]"); não funciona
+			 *driver.findElement(By.xpath("//*[ contains(@value, 'E@45')]")).click();
+			 *driver.findElement(By.xpath(//input[@value = "E@45"])   .click();
+			 */
+			   
+			//Botão Salvar do cadastro do Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+							
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Usuário [Luciano_Teste] salvo com sucesso!";
+				
+			try{
+					
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				
+				//Altera no EA o status do caso de teste
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular", "Pass", "Luciano.silva", "Mensagem foi validade - Testes gerado de forma automática");
+				
+				loggerTestResult.testResult("Aprovado");
+					
+			}catch (AssertionError erroValidaMensagemCadastroUsuarioRegular){
+				
+				/*
+				 * run(String banco, String testCase, String operation, String runBy, String results)
+				 * Uso: Pass, Pass - Improvemen, Not Runt, Fail, Deferred"
+				 * No runBy teria que criar um usuário do tipo "Usuário Automatizado"
+				 */
+				//run("visact", "TST-026.01 - Cadastrar Usuario Regular ", "Fail", "GRUPOSPECTO\\luciano.silva", "Mensagem não foi validade - Testes gerado de forma automática");
+				
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroUsuarioRegular);
+    			loggerTestResult.testResult("Reprovado");
+							
+			}finally {
+				
+				//fechar a tela de cadastro da região
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				loggerDebug.debug("Teste Finalizado");
+				
+			}
+		
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");			
+			
+		}
+		
+	}
+		
+	
+	@After
+	public void tearDownTest() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+						
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+		
+	}
+	
+	
+	public void run(String banco, String testCase, String operation, String runBy, String results){
+			
+		(new ControladorPrincipal()).run(banco, testCase, operation, runBy, results);
+
+	}
+	
+
+}

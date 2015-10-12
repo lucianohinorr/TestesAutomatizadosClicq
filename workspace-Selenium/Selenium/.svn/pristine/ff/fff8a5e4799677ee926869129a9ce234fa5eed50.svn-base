@@ -1,0 +1,230 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class GrupoUsuariosRegulares {
+	
+	private String nome;
+	private String descricao;
+	private String gradeDeHorario;
+	private boolean permitirAcessoEmFeriado;		
+	
+	private String nomeParaEdicao;
+	private String descricaoParaEdicao;
+	private String gradeHorarioParaEdicao;
+	private boolean permitirAcessoEmFeriadoParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	
+	public GrupoUsuariosRegulares() {
+		
+		
+		this.nome = "Permanente Specto";
+		this.descricao = "Grupo Specto";
+		this.gradeDeHorario = "Comercial";		
+		this.permitirAcessoEmFeriado = true;
+		this.nomeParaEdicao = "Colaboradores";
+		this.descricaoParaEdicao = "Colaboradores Grupo Specto";
+		this.gradeHorarioParaEdicao = "All Day";
+		
+		this.permitirAcessoEmFeriadoParaEdicao = true;
+		
+		this.connection = new MYSQLConnection().getConnection();
+	}
+
+	
+
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+
+
+
+	public String getGradeDeHorario() {
+		return gradeDeHorario;
+	}
+
+
+
+
+
+	public void setGradeDeHorario(String gradeDeHorario) {
+		this.gradeDeHorario = gradeDeHorario;
+	}
+
+
+
+
+
+	public boolean isPermitirAcessoEmFeriado() {
+		return permitirAcessoEmFeriado;
+	}
+
+
+
+
+
+	public void setPermitirAcessoEmFeriado(boolean permitirAcessoEmFeriado) {
+		this.permitirAcessoEmFeriado = permitirAcessoEmFeriado;
+	}
+
+
+
+
+
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+
+
+
+	public String getDescricaoParaEdicao() {
+		return descricaoParaEdicao;
+	}
+
+
+
+
+
+	public void setDescricaoParaEdicao(String descricaoParaEdicao) {
+		this.descricaoParaEdicao = descricaoParaEdicao;
+	}
+
+
+
+
+
+	public String getGradeHorarioParaEdicao() {
+		return gradeHorarioParaEdicao;
+	}
+
+
+
+
+
+	public void setGradeHorarioParaEdicao(String gradeHorarioParaEdicao) {
+		this.gradeHorarioParaEdicao = gradeHorarioParaEdicao;
+	}
+
+
+
+
+
+	public boolean isPermitirAcessoEmFeriadoParaEdicao() {
+		return permitirAcessoEmFeriadoParaEdicao;
+	}
+
+
+
+
+
+	public void setPermitirAcessoEmFeriadoParaEdicao(
+			boolean permitirAcessoEmFeriadoParaEdicao) {
+		this.permitirAcessoEmFeriadoParaEdicao = permitirAcessoEmFeriadoParaEdicao;
+	}
+
+
+
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+	/*
+	 * Recupera o Id do Grupo de Usuários Regulares.
+	 * select no banco exemplo:  SELECT USGR_PK_ID FROM AT_USGR_USERGROUP WHERE USGR_NM_NAME = 'Permanente Specto' AND USGR_FL_USGR_TYPE = 'RegularUser';
+	 * Quando se precisa de 2 tabelas: sql.append("SELECT RUGR_FK_USER_GROUP_ID FROM VA_RUGR_REGULAR_USER_GROUP WHERE RUGR_FK_SCHEDULE_ID IN (SELECT SCHE_PK_ID FROM VA_SCHE_SCHEDULE WHERE SCHE_NM_NAME = ?);");
+	 */
+	public int encontraIdGrupoUsuariosRegulares(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+		
+		String tipoDeGrupo = "RegularUser";
+				
+		
+		sql.append("SELECT USGR_PK_ID ");
+		sql.append("FROM   AT_USGR_USERGROUP ");
+		sql.append("WHERE  USGR_NM_NAME = ? ");
+		sql.append("AND  USGR_FL_USGR_TYPE = ? ");
+		
+				
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+		ps.setString(1, nomeGrupo);
+		ps.setString(2,  tipoDeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupoDeAmbiente = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupoDeAmbiente = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo de Usuários Regulares " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupoDeAmbiente;
+	}	
+
+}

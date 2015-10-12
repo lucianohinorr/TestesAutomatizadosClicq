@@ -1,0 +1,84 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoDeDuplaCustodia extends Grupo {
+
+	public GrupoDeDuplaCustodia() {
+		
+		super(  "Banco Siamez",                     //nomeNovo_1                TST_007_01
+				"Permissão Total - Localidade",     //descricaoNovo_1           TST_007_01     TST_007_04
+				
+				"Banco Siamez - 1 Andar",           //nomeNovo_2                TST_007_05
+				"Sem Descricao e Hierarquia",       //descricaoNovo_2           TST_007_05
+				
+				"Banco Siamez - Ático Editado",     //nomeEdicao_1              TST_007_11
+				"Banco Siamez - Ático Editado",     //descricaoEdicao_1         TST_007_11
+				
+				"Banco Siamez - Exceto 3 Andar",    //nomeEdicao_2              TST_007_12
+				"Banco Siamez - Exceto 3 Andar",    //descricaoEdicao_2         TST_007_12
+				
+				"Banco Siamez - 5 Andar",		    //nomeJaCadastrado_1        TST_007_10      TST_007_09
+				"Grupo Já Cadastrado 1",		 	//descricaoJaCadastrado_1   TST_007_10      TST_007_09'
+			
+				"Banco Siamez - 2 Andar",		    //nomeJaCadastrado_2        TST_007_10
+				"Grupo Já Cadastrado 2",		 	//descricaoJaCadastrado_2   TST_007_10
+				
+				"Banco Siamez - Ático",		        //nomeJaCadastrado_3        TST_007_11
+				"Grupo Já Cadastrado 3",		 	//descricaoJaCadastrado_3   TST_007_11
+			
+				"Banco Siamez - Total",             //nomeJaCadastrado_4        TST_007_12
+				"Grupo Já Cadastrado 4",		 	//descricaoJaCadastrado_4   TST_007_12
+			
+				"Banco Siamez - Terreo",			//nomeApagar                TST_007_24
+				
+				new MYSQLConnection().getConnection() 
+		);
+		
+	}
+	
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT VAMC_PK_ID FROM VA_VAMC_MULTIPLE_CUSTODY_GROUP WHERE VAMC_NM_NAME = 'Banco Siamez - Total';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT VAMC_PK_ID ");
+		sql.append("FROM   VA_VAMC_MULTIPLE_CUSTODY_GROUP ");
+		sql.append("WHERE  VAMC_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+	
+	
+	
+}

@@ -1,0 +1,123 @@
+package TST_017_Cadastrar_Localidade;
+
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Localidade;
+
+
+public class TST_017_05_ApagarLocalidade{
+ 
+	private  WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Localidade localidade;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.localidade = new Localidade();
+		this.login = new MetodosAuxiliares();		
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void apagaLocalidadeVisact() throws Exception {
+				
+		loggerDebug.debug("Teste Iniciado");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Localidade")).click();
+						     
+			//Recuperar o id no banco referente ao nome da Localidade recem editada
+			String s_idLocalidade = "" + localidade.encontraIdLocalidade(localidade.getNomeParaEdicao());
+    
+			//Marca Localidade para deletar.
+			driver.findElement(By.id(s_idLocalidade)).click();
+      
+			//Excluir a Localidade
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+    
+			
+    		//**** Tratando o Alerta
+   
+    		//Obtem o alerta aberto.
+			Alert alert = driver.switchTo().alert();
+    
+			//Obtem o texto do alerta. 
+			alert.getText();
+    
+			//Posso validar a mensagem do alerta
+			//assertTrue(driver.switchTo().alert().getText().equals("Deseja realmente executar esta operação?"));
+    
+			//Equivalente ao click em OK no alerta.
+			alert.accept();
+    
+			//****
+    
+				
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Localidade [" + localidade.getNomeParaEdicao() + "] removida com sucesso!";
+		
+    		
+    		try{
+    			
+    			//validando a mensagem de validação
+    			assertEquals(msgEsperada, msgRetornadaInterface);
+    			loggerTestResult.testResult("Aprovado");
+        		
+    		}catch (AssertionError erroValidaMensagemExclusaoLocalidade){
+    			
+    			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemExclusaoLocalidade);
+    			loggerTestResult.testResult("Reprovado");
+    			    			
+    		}finally{
+    			
+    			//Fechar a tela com a lista das Localidades .
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    				
+    			//Selecionando o botão Sair da Aplicação.
+    			driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    			loggerDebug.debug("Teste Finalizado");
+    			
+    		}	
+		    
+		}catch (Exception erroConsultaIdLocalidade){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroConsultaIdLocalidade);
+			loggerTestResult.testResult("Reprovado");
+				
+		}
+ 	}
+  
+  
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

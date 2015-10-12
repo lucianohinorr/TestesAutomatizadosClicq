@@ -1,0 +1,119 @@
+package TST_007_Cadastrar_Grupo_de_Dupla_Custodia;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoDeDuplaCustodia;
+
+
+public class TST_007_01_CadastrarGrupoDeDuplaCustodia {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoDeDuplaCustodia grupoDeDuplaCustodia;
+	private MetodosAuxiliares metodosAuxiliares;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+		
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoDeDuplaCustodia = new GrupoDeDuplaCustodia();
+		this.metodosAuxiliares = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+    
+	}
+
+	
+	@Test
+	public void cadastrarGrupoDeDuplaCustodiaVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = metodosAuxiliares.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Dupla Custódia")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+					
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).sendKeys(grupoDeDuplaCustodia.getNome());
+			driver.findElement(By.name("description")).sendKeys(grupoDeDuplaCustodia.getDescricao());
+						
+				
+			//Seleciona a Localidade Banco Siamez
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[4]/table/tbody/tr/td[1]/div/div/table/tbody/tr/td/span/span/span[1]/span/span/table/tbody/tr/td[2]/div")).click();
+			
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+						   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de Dupla Custódia [" + grupoDeDuplaCustodia.getNome() + "] salvo com sucesso!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoDeDuplaCustodia){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroGrupoDeDuplaCustodia);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroGrupoDeDuplaCustodia;
+			
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o cado de Teste: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

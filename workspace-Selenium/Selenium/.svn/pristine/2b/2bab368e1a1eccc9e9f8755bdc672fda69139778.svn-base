@@ -1,0 +1,138 @@
+package TST_025_Cadastrar_Cartao;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.CartaoUsuarioRegular;
+
+
+public class TST_025_02_CadastrarCartaoUsuarioRegular {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private CartaoUsuarioRegular cartao; 
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.cartao = new CartaoUsuarioRegular();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void cadastrarCartaoUsuarioRegular() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCards_tmi0-title")).click();
+			driver.findElement(By.linkText("Cartão")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de Tipo de Cartão
+			driver.findElement(By.xpath("//*[ contains(@name, 'number')]")).   sendKeys(cartao.getNumero());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'technology')]"))).selectByVisibleText(cartao.getTecnologia());
+			
+			//para cartao do tipo Usuário Regular
+			driver.findElement(By.xpath("//*[ contains(@value, 'R')]")).click();
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'type')]"))).selectByVisibleText(cartao.getTipoEscolha());
+			
+			//Status
+			driver.findElement(By.xpath("//*[ contains(@value, 'E')]")).click();
+			
+			//Depois de escolhido a opção tipo de cartão, por algum motivo a tela é redimensionada escondendo alguns ícones 
+			//Desta forma maximizo a janela, fazendo com que os botões apareçam. Mas nem todos aparecem, como por exemplo o botão Sair da aplicação
+			//driver.manage().window().maximize();
+						
+			//Botão Salvar do cadastro de Cartão
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			long end = System.currentTimeMillis() + 1000;
+			while (System.currentTimeMillis() < end) {}    
+    
+			//Retorna o número do cartão com os devidos pontos inseridos, conforme msg de validação retornada pelo sistema
+			String numeroCartaoComPontos = cartao.retornaNumeroComVirgulas(cartao.getNumero());
+									   			
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Cartão [" + numeroCartaoComPontos + "] salvo com sucesso!";
+			
+			try{
+			
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+						
+			}catch (AssertionError erroValidaMensagemCadastroCartaoUsuarioRegular){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroCartaoUsuarioRegular);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroCartaoUsuarioRegular;
+		
+    		}finally{
+    
+				//fechar a tela de cadastro de Cartão    			
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechando a janela da lista de Cartões. 
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+								
+				//Selecionando o botão Sair da Aplicação.
+				//Botão Sair está ficando escondido
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				//Desta forma utilizo o comando abaixo
+				driver.close();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");			
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

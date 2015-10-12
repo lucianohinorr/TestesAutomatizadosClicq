@@ -1,0 +1,122 @@
+package TST_182_Cadastrar_Grupo_de_Concessao_de_Acesso;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.GrupoDeConcessaoDeAcesso;
+
+
+public class ApagarGrupoDeConcessaoDeAcesso {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoDeConcessaoDeAcesso grupoDeConcessaoDeAcesso;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoDeConcessaoDeAcesso = new GrupoDeConcessaoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void apagarGrupoUsuariosServerVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Exclusão de Grupo de Concessão de Acesso");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Concessão de Acesso")).click();
+				
+			//Recuperar o id do banco referente ao nome do Grupo
+			String s_idGrupo = "" + grupoDeConcessaoDeAcesso.encontraIdGrupo(grupoDeConcessaoDeAcesso.getNomeParaEdicao());
+
+			//Marca o Grupo para Exclusão
+			driver.findElement(By.id(s_idGrupo)).click();
+				
+		    //Executa a exclusão
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+			
+			
+			//**** Tratando o Alerta
+			   
+    		//Obtem o alerta aberto.
+			Alert alert = driver.switchTo().alert();
+			
+			//Obtem o texto do alerta. 
+			alert.getText();
+    
+			//Posso validar a mensagem do alerta
+			//assertTrue(driver.switchTo().alert().getText().equals("Deseja realmente executar esta operação?"));
+    
+			//Equivalente ao click em OK no alerta.
+			alert.accept();
+    
+			//****
+			
+						
+			//capturando a mensagem de validação após salvar o Grupo
+			//String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			String msgRetornadaInterface = driver.findElement(By.xpath("//td[2]")).getText();
+ 			String msgEsperada = "Grupo de Concessão de Acesso [" + grupoDeConcessaoDeAcesso.getNomeParaEdicao() + "] removido com sucesso!";
+		
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Exclusão de Grupo de Concessão de Acesso executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemExclusaoGrupoDeConcessaoDeAcesso){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Exclusão de Grupo de Concessão De Acesso!");
+    			
+				throw erroValidaMensagemExclusaoGrupoDeConcessaoDeAcesso;
+    	
+    		}finally{
+    
+									
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Exclusão de Grupo de Concessão de Acesso: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

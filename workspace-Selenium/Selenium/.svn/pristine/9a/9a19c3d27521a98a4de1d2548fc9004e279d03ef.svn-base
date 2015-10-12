@@ -1,0 +1,117 @@
+package TST_037_Configurar_Cartão_Temporário;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.ValidadeCartaoTemporario;
+
+public class TST_037_01_ConfigurarValidadeDoCartão_ValorValido {
+
+
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private ValidadeCartaoTemporario validadeCartaoTemporario;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+
+	@Before
+	public void setUp() throws Exception {
+
+		this.login = new MetodosAuxiliares();
+		this.validadeCartaoTemporario = new ValidadeCartaoTemporario();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+
+	}
+
+
+	@Test
+	public void cadastrarVeiculoVisact() throws Exception {
+
+		loggerDebug.debug("Teste Iniciado");
+
+		try{
+
+			driver = login.executaLoginManual();
+
+			//seleciona opção Configuração no menu
+			driver.findElement(By.id("mainMenu_ami1-header")).click();
+
+			//seleciona opção Cartão
+			driver.findElement(By.id("menuConfigCard_tmi0-title")).click();
+
+			//seleciona a opção Cartão Temporário
+			driver.findElement(By.linkText("Cartão Temporário")).click();
+
+			//Inserindo os dados para a configuração do Cartão Temporário
+			driver.findElement(By.xpath("//*[ contains(@name, 'cardValidity')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'cardValidity')]")).sendKeys(validadeCartaoTemporario.getValidadeDoCartao());
+
+			//Seleção do botão Salvar 
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/save.gif')]")).click();
+
+			//capturando a mensagem de validação
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			String msgEsperada = "As configurações de cartão temporário foram salvas com sucesso!";
+
+			try{
+
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);
+				loggerTestResult.testResult("Aprovado");
+
+			}catch (AssertionError erroValidaMensagemConfigurarCartaoTemporario){
+
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemConfigurarCartaoTemporario);
+				loggerTestResult.testResult("Reprovado");
+
+				//Avisa a api junit sobre o erro no caso de teste
+				throw erroValidaMensagemConfigurarCartaoTemporario;
+
+			} finally{
+
+				//fechar a tela de cadastro de Veículos
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+
+				loggerDebug.debug("Teste Finalizado");			
+			}
+
+		} catch(Exception erro){
+
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+
+		}
+	}
+
+
+	@After
+	public void tearDownTest() throws Exception {
+
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+
+		if (!"".equals(verificationErrorString)) {
+
+			fail(verificationErrorString);
+		}
+
+	}
+
+}

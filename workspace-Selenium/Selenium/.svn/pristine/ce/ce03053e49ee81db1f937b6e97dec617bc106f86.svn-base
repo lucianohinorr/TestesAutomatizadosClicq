@@ -1,0 +1,169 @@
+package br.com.specto.entidades;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class ExpurgoEventos extends Expurgo {
+	
+	
+	protected String localidade;
+	
+	protected String diaDaSemana;
+	protected String diaDaSemanaParaEdicao;
+	
+	protected String mes;
+	protected String mesParaEdicao;
+	
+	protected String localidadeParaEdicao;
+	protected String diaDoMes;
+	protected String diaDoMesParaEdicao;
+	
+	
+	protected String hora;
+	protected String minutos;
+	
+
+	protected String horaParaEdicao;
+	protected String minutosParaEdicao;
+	
+	
+	public ExpurgoEventos() {
+		
+		super(  true,       //habilitarExpurgo
+				false,      //desablitarExpurgo
+				"2",        //manterUltimos
+				"2400",     //horarioExecução
+				"8",        //manterUltimosParaEdicao
+				"2100",     //horarioExecucaoParaEdicao
+				new MYSQLConnection().getConnection());
+	
+		this.localidade = "Banco Martins";
+		this.diaDaSemana = "Domingo";
+		this.diaDaSemanaParaEdicao = "Sábado";
+		
+		this.mes= "Dezembro";
+		this.mesParaEdicao = "Novembro"; 
+	
+		
+		this.hora = "20";
+		this.minutos = "00";
+		
+
+		this.horaParaEdicao = "21";
+		this.minutosParaEdicao = "30";
+		
+		this.localidadeParaEdicao = "Banco Martins";
+		this.diaDoMes = "21";
+		this.diaDoMesParaEdicao ="22";
+	}
+
+	
+	public String getHora() {
+		return hora;
+	}
+
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
+
+
+	public String getMinutos() {
+		return minutos;
+	}
+
+
+	public void setMinutos(String minutos) {
+		this.minutos = minutos;
+	}
+
+
+	public String getHoraParaEdicao() {
+		return horaParaEdicao;
+	}
+
+
+	public void setHoraParaEdicao(String horaParaEdicao) {
+		this.horaParaEdicao = horaParaEdicao;
+	}
+
+
+	public String getMinutosParaEdicao() {
+		return minutosParaEdicao;
+	}
+
+
+	public void setMinutosParaEdicao(String minutosParaEdicao) {
+		this.minutosParaEdicao = minutosParaEdicao;
+	}
+
+
+	public String getLocalidade() {
+		return localidade;
+	}
+
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+
+	public String getLocalidadeParaEdicao() {
+		return localidadeParaEdicao;
+	}
+
+
+	public void setLocalidadeParaEdicao(String localidadeParaEdicao) {
+		this.localidadeParaEdicao = localidadeParaEdicao;
+	}
+
+
+	public String getDiaDaSemana() {
+		return diaDaSemana;
+	}
+
+	public void setDiaDaSemana(String diaDaSemana) {
+		this.diaDaSemana = diaDaSemana;
+	}
+
+	public String getDiaDaSemanaParaEdicao() {
+		return diaDaSemanaParaEdicao;
+	}
+
+	public void setDiaDaSemanaParaEdicao(String diaDaSemanaParaEdicao) {
+		this.diaDaSemanaParaEdicao = diaDaSemanaParaEdicao;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getMesParaEdicao() {
+		return mesParaEdicao;
+	}
+
+	public void setMesParaEdicao(String mesParaEdicao) {
+		this.mesParaEdicao = mesParaEdicao;
+	}
+
+	public String getDiaDoMes() {
+		return diaDoMes;
+	}
+
+	public void setDiaDoMes(String diaDoMes) {
+		this.diaDoMes = diaDoMes;
+	}
+
+	public String getDiaDoMesParaEdicao() {
+		return diaDoMesParaEdicao;
+	}
+
+	public void setDiaDoMesParaEdicao(String diaDoMesParaEdicao) {
+		this.diaDoMesParaEdicao = diaDoMesParaEdicao;
+	}
+
+	
+}

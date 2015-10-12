@@ -1,0 +1,33 @@
+package br.com.specto.entidades;
+
+
+public class ValidadeCartaoTemporario {
+
+	private String validadeDoCartao;
+	private String validadeDoCartaoLetra;
+
+	public ValidadeCartaoTemporario() {
+
+		this.validadeDoCartao = "2";
+		this.validadeDoCartaoLetra = "Abcd";
+	}
+
+	public String getValidadeDoCartao() {
+		return validadeDoCartao;
+	}
+
+	public void setValidadeDoCartao(String validadeDoCartao) {
+		this.validadeDoCartao = validadeDoCartao;
+	}
+
+	public String getValidadeDoCartaoLetra() {
+		return validadeDoCartaoLetra;
+	}
+
+	public void setValidadeDoCartaoLetra(String validadeDoCartaoLetra) {
+		this.validadeDoCartaoLetra = validadeDoCartaoLetra;
+	}
+
+
+	
+}

@@ -1,0 +1,243 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+public class Cartao {
+	
+	
+	protected String numero;
+	protected String numeroFinal;
+	protected String tecnologia;
+	
+	protected String tipo;
+	protected String tipoEscolha;
+	
+	protected String status;	
+		
+	protected String numeroParaEdicao;
+	protected String tipoParaEdicao;
+	protected String tipoEscolhaParaEdicao;
+	protected String statusParaEdicao;
+	
+	
+	protected Connection connection;//conexão com banco	
+	
+		
+	public Cartao(String numero, String numeroFinal, String tecnologia,
+			String tipo, String tipoEscolha, String status,
+			String numeroParaEdicao, String tipoParaEdicao,
+			String tipoEscolhaParaEdicao, String statusParaEdicao, Connection connection) {
+		
+		this.numero = numero;
+		this.numeroFinal = numeroFinal;
+		this.tecnologia = tecnologia;
+		this.tipo = tipo;
+		this.tipoEscolha = tipoEscolha;
+		this.status = status;
+		this.numeroParaEdicao = numeroParaEdicao;
+		this.tipoParaEdicao = tipoParaEdicao;
+		this.tipoEscolhaParaEdicao = tipoEscolhaParaEdicao;
+		this.statusParaEdicao = statusParaEdicao;
+		this.connection = connection;
+	}
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+	public String getNumeroFinal() {
+		return numeroFinal;
+	}
+
+
+	public void setNumeroFinal(String numeroFinal) {
+		this.numeroFinal = numeroFinal;
+	}
+
+
+	public String getTecnologia() {
+		return tecnologia;
+	}
+
+
+	public void setTecnologia(String tecnologia) {
+		this.tecnologia = tecnologia;
+	}
+
+
+	public String getTipo() {
+		return tipo;
+	}
+
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+
+	public String getTipoEscolha() {
+		return tipoEscolha;
+	}
+
+
+	public void setTipoEscolha(String tipoEscolha) {
+		this.tipoEscolha = tipoEscolha;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public String getNumeroParaEdicao() {
+		return numeroParaEdicao;
+	}
+
+
+	public void setNumeroParaEdicao(String numeroParaEdicao) {
+		this.numeroParaEdicao = numeroParaEdicao;
+	}
+
+
+	public String getTipoParaEdicao() {
+		return tipoParaEdicao;
+	}
+
+
+	public void setTipoParaEdicao(String tipoParaEdicao) {
+		this.tipoParaEdicao = tipoParaEdicao;
+	}
+
+
+	public String getTipoEscolhaParaEdicao() {
+		return tipoEscolhaParaEdicao;
+	}
+
+
+	public void setTipoEscolhaParaEdicao(String tipoEscolhaParaEdicao) {
+		this.tipoEscolhaParaEdicao = tipoEscolhaParaEdicao;
+	}
+
+
+	public String getStatusParaEdicao() {
+		return statusParaEdicao;
+	}
+
+
+	public void setStatusParaEdicao(String statusParaEdicao) {
+		this.statusParaEdicao = statusParaEdicao;
+	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	
+	
+
+	public String retornaNumeroComVirgulas(String numeroCartaoAlterar){
+		
+		
+		int tamanhoNumeroCartao = numeroCartaoAlterar.length();
+		
+		
+		String numeroInvertido = "";
+		
+		for(int i=tamanhoNumeroCartao; i>1; i--){
+			
+			if(i==8){
+				numeroInvertido = numeroInvertido + numeroCartaoAlterar.charAt(i) + ",";
+			}
+			
+			else{
+				if(i==5){
+					numeroInvertido = numeroInvertido + numeroCartaoAlterar.charAt(i) + ",";
+				}
+				else{
+					if(i==2){
+						numeroInvertido = numeroInvertido + numeroCartaoAlterar.charAt(i) + ",";
+					}							
+					numeroInvertido = numeroInvertido + numeroCartaoAlterar.charAt(i-1);
+				}
+			}
+					
+		}
+		
+		
+		int tamanhoNumeroCartaoInvertido = numeroInvertido.length();
+		                                                            
+		String numeroCorreto ="";
+		
+		
+		for(int i=tamanhoNumeroCartaoInvertido; i>0; i--){					
+			
+			numeroCorreto = numeroCorreto + numeroInvertido.charAt(i-1);	
+							
+		}
+		
+		return numeroCorreto;
+
+	}
+	
+	//Recupera o Id do Cartao.
+	//select no banco SELECT CARD_PK_ID FROM VA_CARD_CARD WHERE CARD_CD_NUMBER LIKE '1706690572';
+	public int encontraIdCartao(String numeroCartao) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT CARD_PK_ID ");
+		sql.append("FROM   VA_CARD_CARD ");
+		sql.append("WHERE  CARD_CD_NUMBER = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, numeroCartao);
+		ResultSet rs = ps.executeQuery();
+		int idRegiao = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idRegiao = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Cartão " + numeroCartao + " não está cadastrado no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idRegiao;
+	}
+	
+	
+	
+	
+
+}

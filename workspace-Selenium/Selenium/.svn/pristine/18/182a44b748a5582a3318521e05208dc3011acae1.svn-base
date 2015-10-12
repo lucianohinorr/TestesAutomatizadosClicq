@@ -1,0 +1,119 @@
+package TST_016_Cadastrar_Regiao;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Regiao;
+
+public class EditarRegiao {
+ 
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	//private final String NOVO_NOME_REGIAO = "Gabriel_Teste";
+	private Regiao regiao;
+	private MetodosAuxiliares login;
+
+	
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.regiao = new Regiao();
+		this.login = new MetodosAuxiliares();    
+    
+	}
+
+	@Test
+	public void editarRegiaoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para edição de Região");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+
+    		driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Região")).click();
+       
+			//Recuperar o id do banco referente ao nome da região cadastrada atualmente no banco
+			String s_idRegiao = "" + regiao.encontraIdRegiao(regiao.getNome());
+		    
+			//Marca Região para editar.
+			driver.findElement(By.id(s_idRegiao)).click();
+     		
+		    //Abrindo a tela para edição
+			//driver.findElement(By.xpath("//*[ contains(@title, 'Editar')]")).click();
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//limpando o campo Nome da Região para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).clear();
+			
+			//Inserindo os dados para o cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(regiao.getNomeParaEdicao());
+			
+			//Botão Salvar do cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+		
+			//capturando a mensagem de validação após salvar a região
+			String msgValidacaoCadRegiao = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+			
+			try{
+    			
+				//validando a mensagem de validação
+				assertEquals("Região [" + regiao.getNomeParaEdicao() + "] editada com sucesso!", msgValidacaoCadRegiao);
+				
+    			System.out.println("Caso de Teste Editar Região executado com sucesso!");
+        		
+    		}catch (AssertionError erroValidaMensagemExclusaoRegiao){
+    		
+    			System.out.println("Erro ao executar o Caso de Teste Apagar Região!");
+    			
+    			throw erroValidaMensagemExclusaoRegiao;
+    			
+    		}finally{
+			
+ 				//fechar a tela de cadastro da região
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				//espera de 5 segundo, assim dá tempo de debugar a mensagem
+				Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+		 
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+		
+    		}
+			
+		}catch (Exception erroConsultaIdRegiao){
+			
+			System.out.println(erroConsultaIdRegiao);
+			
+			throw  erroConsultaIdRegiao;
+		
+		}
+    
+	}
+  
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+
+ }

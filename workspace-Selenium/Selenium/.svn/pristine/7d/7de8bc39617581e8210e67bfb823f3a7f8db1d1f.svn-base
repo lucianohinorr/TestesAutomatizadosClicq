@@ -1,0 +1,109 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class TipoDeCartao {
+	
+	private String nomeTipoCartao;
+	private String cor;
+	private String utilizadoPor;
+	
+		
+	private String nomeParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	public TipoDeCartao() {
+		
+		this.nomeTipoCartao = "Auditores";
+		this.cor = "Verde";
+		this.utilizadoPor = "Usuário Regular";
+		
+		this.nomeParaEdicao = "Supervisores";
+		
+		this.connection = new MYSQLConnection().getConnection();//conexão com banco
+	}
+
+	public String getNomeTipoCartao() {
+		return nomeTipoCartao;
+	}
+
+	public void setNomeTipoCartao(String nomeTipoCartao) {
+		this.nomeTipoCartao = nomeTipoCartao;
+	}
+
+	public String getCor() {
+		return cor;
+	}
+
+	public void setCor(String cor) {
+		this.cor = cor;
+	}
+
+	public String getUtilizadoPor() {
+		return utilizadoPor;
+	}
+
+	public void setUtilizadoPor(String utilizadoPor) {
+		this.utilizadoPor = utilizadoPor;
+	}
+
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	
+	/*
+	 * Recupera o Id do Tipo de Cartão.
+	 * select no banco exemplo:  SELECT CATY_PK_ID FROM VA_CATY_CARDTYPE WHERE CATY_NM_NAME = 'Auditores';
+	 */
+	public int encontraIdTipoDeCartao(String nomeTipoCartao) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT CATY_PK_ID ");
+		sql.append("FROM  VA_CATY_CARDTYPE ");
+		sql.append("WHERE  CATY_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeTipoCartao);
+		ResultSet rs = ps.executeQuery();
+		int idTipodeCartao = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idTipodeCartao = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Tipo de Cartão " + nomeTipoCartao + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idTipodeCartao;
+	}
+}

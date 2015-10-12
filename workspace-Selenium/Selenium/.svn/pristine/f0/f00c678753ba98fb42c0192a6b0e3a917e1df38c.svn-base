@@ -1,0 +1,132 @@
+package TST_082_Configurar_Expurgo_De_Auditoria;
+
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.ExpurgoAuditoria;
+
+
+public class HabilitarExpurgoDeAuditoria {
+	
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private ExpurgoAuditoria expurgoAuditoria;
+	private MetodosAuxiliares login;	
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.expurgoAuditoria = new ExpurgoAuditoria();
+		this.login = new MetodosAuxiliares();		
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+		
+	}
+
+	
+	@Test
+	public void habilitarExpurgoDeAuditoriaVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami1-header")).click();			
+			driver.findElement(By.id("menuConfigSystem_tmi0-title")).click();
+			driver.findElement(By.id("menuDataPurge_tmi0-title")).click();
+			driver.findElement(By.linkText("Auditoria")).click();
+			   
+			if (driver.findElement(By.name("taskEnabled")).isSelected()){
+			
+				//considerando nesta primeira versão deste cenário que mesmo estando habilitado o expurgo
+				//ele preenche os demais campos e salva. Considerando esta execução como Aprovado!
+				loggerDebug.debug("O Expurgo ja esta habilitado");
+				
+			}
+			else{
+				
+				//Habilitando o expurgo
+				driver.findElement(By.name("taskEnabled")).click();
+			}
+			
+			
+			driver.findElement(By.id("value")).clear();
+			driver.findElement(By.id("value")).sendKeys(expurgoAuditoria.getManterUltimos());
+			
+			driver.findElement(By.id("hour")).clear();
+			driver.findElement(By.id("hour")).sendKeys(expurgoAuditoria.getHorarioExecucao());
+			
+			driver.findElement(By.id("auditExecutionTypeDAY")).click();
+			
+			driver.findElement(By.name("weekDay")).sendKeys(expurgoAuditoria.getDiaDaSemana());
+			
+			//Botão Salvar do cadastro de Grupo
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "As configurações de expurgo de Auditorias foram salvas com sucesso!";
+		
+			try{
+				
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemConfigExpurgoAuditoria){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemConfigExpurgoAuditoria);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemConfigExpurgoAuditoria;
+			
+    		}finally{
+    
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");				
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,128 @@
+package TST_017_Cadastrar_Localidade;
+
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Localidade;
+
+
+public class TST_017_04_EditarLocalidade {
+ 
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Localidade localidade;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+	
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.localidade = new Localidade();
+		this.login = new MetodosAuxiliares();  
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	@Test
+	public void editarLocalidadeVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Localidade")).click();
+       
+			//Recuperar o id no banco referente ao nome da Localidade recem editada
+			String s_idLocalidade = "" + localidade.encontraIdLocalidade(localidade.getNome());
+    
+			//Marca Região para editar.
+			driver.findElement(By.id(s_idLocalidade)).click();
+     		
+		    //Abrindo a tela para edição
+			//driver.findElement(By.xpath("//*[ contains(@title, 'Editar')]")).click();
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//limpando o campo Nome da Região para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).clear();
+			
+			//Inserindo os dados para o cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(localidade.getNomeParaEdicao());
+			
+			//limpando o campo Nome da Região para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'ipAddress')]")).clear();			
+		
+			//Inserindo os dados para o cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@name, 'ipAddress')]")).sendKeys(localidade.getEnderecoIParaEdicao());
+						
+			//Botão Salvar do cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+		
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Localidade [" + localidade.getNomeParaEdicao() + "] editada com sucesso!";
+			
+			try{
+    			
+				assertEquals(msgEsperada, msgRetornadaInterface);
+    			loggerTestResult.testResult("Aprovado");
+        		
+    		}catch (AssertionError erroValidaMensagemEdicaoLocalidade){
+    		
+    			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemEdicaoLocalidade);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemEdicaoLocalidade;
+    			    			
+    		}finally{
+			
+ 				//fechar a tela de cadastro da Localidade
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				//espera de 5 segundo, assim dá tempo de debugar a mensagem
+				Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista de Localidades pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+		 
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+		
+    		}
+			
+		}catch (Exception erroConsultaIdRegiao){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroConsultaIdRegiao);
+			loggerTestResult.testResult("Reprovado");
+		
+		}
+    
+	}
+  
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+
+ }

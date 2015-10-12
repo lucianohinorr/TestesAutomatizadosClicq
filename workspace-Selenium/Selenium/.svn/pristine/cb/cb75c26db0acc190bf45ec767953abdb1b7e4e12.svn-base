@@ -1,0 +1,107 @@
+package br.com.specto.entidades;
+
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class GrupoUsuariosRegulares extends Grupo{
+	
+	private String gradeDeHorario;
+	private boolean permitirAcessoEmFeriado;		
+	
+	
+	private String gradeHorarioParaEdicao;
+	private boolean permitirAcessoEmFeriadoParaEdicao;
+	
+		
+	
+public GrupoUsuariosRegulares() {
+	
+	super(  "Noturno",                           //nomeNovo_1                
+			"20:00 as 23:59",                    //descricaoNovo_1           
+			
+			"",                                  //nomeNovo_2                
+			"",                                  //descricaoNovo_2           
+			
+			"Colaboradores - Madrugadão",        //nomeEdicao_1              TST_027_02
+			"Colaboradores - Madrugadão",        //descricaoEdicao_1         TST_027_02
+			
+			"",                                  //nomeEdicao_2              
+			"",                                  //descricaoEdicao_2         
+			
+			"Madrugadão",		                 //nomeJaCadastrado_1        TST_027_02
+			"Grupo Já Cadastrado 1",		 	 //descricaoJaCadastrado_1   TST_027_02
+		
+			"Comercial",		                 //nomeJaCadastrado_2        TST_027_03
+			"Grupo Já Cadastrado 2",		 	 //descricaoJaCadastrado_2   TST_027_03
+			
+			"",		                             //nomeJaCadastrado_3        
+			"",		 	                         //descricaoJaCadastrado_3   
+		
+			"",                                  //nomeJaCadastrado_4        
+			"",		 	                         //descricaoJaCadastrado_4   
+		
+			"Matutino",			                 //nomeApagar                TST_027_04                
+			
+			new MYSQLConnection().getConnection() 
+	);
+
+			
+		this.gradeDeHorario = "Comercial";		
+		this.permitirAcessoEmFeriado = true;	
+		this.gradeHorarioParaEdicao = "All Day";		
+		this.permitirAcessoEmFeriadoParaEdicao = true;
+		
+	}
+
+
+
+public String getGradeDeHorario() {
+	return gradeDeHorario;
+}
+
+
+
+public void setGradeDeHorario(String gradeDeHorario) {
+	this.gradeDeHorario = gradeDeHorario;
+}
+
+
+
+public boolean isPermitirAcessoEmFeriado() {
+	return permitirAcessoEmFeriado;
+}
+
+
+
+public void setPermitirAcessoEmFeriado(boolean permitirAcessoEmFeriado) {
+	this.permitirAcessoEmFeriado = permitirAcessoEmFeriado;
+}
+
+
+
+public String getGradeHorarioParaEdicao() {
+	return gradeHorarioParaEdicao;
+}
+
+
+
+public void setGradeHorarioParaEdicao(String gradeHorarioParaEdicao) {
+	this.gradeHorarioParaEdicao = gradeHorarioParaEdicao;
+}
+
+
+
+public boolean isPermitirAcessoEmFeriadoParaEdicao() {
+	return permitirAcessoEmFeriadoParaEdicao;
+}
+
+
+
+public void setPermitirAcessoEmFeriadoParaEdicao(
+		boolean permitirAcessoEmFeriadoParaEdicao) {
+	this.permitirAcessoEmFeriadoParaEdicao = permitirAcessoEmFeriadoParaEdicao;
+}
+
+
+	
+}

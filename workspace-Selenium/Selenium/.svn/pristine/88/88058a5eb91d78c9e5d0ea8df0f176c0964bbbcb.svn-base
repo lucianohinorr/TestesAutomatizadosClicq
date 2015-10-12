@@ -1,0 +1,29 @@
+package br.com.specto.auxiliar;
+
+import java.io.IOException;
+
+import br.com.specto.arquivo.debug.LogDebug;
+
+public class ExecutaBat {
+	
+	 private final String bat = "C:\\Users\\luciano.silva\\Desktop\\Testes_Automatizados\\RestauraBaseTestesAutomatizados.bat";  
+	 private LogDebug loggerDebug;
+	  
+	    public void executar(){  
+	    	
+	    	this.loggerDebug = new LogDebug(this.getClass());
+	    	
+	        try {  
+	        	
+	            Runtime.getRuntime().exec(bat);
+	            
+	            loggerDebug.debug("Restauração do Banco de Dados executada com Sucesso!");
+	            
+	        } catch (IOException erro) {  
+	            
+	            loggerDebug.debug("Erro ao executar a Restauração do Banco de Dados: " +  erro);
+	        }  
+	          
+	    }  
+
+}

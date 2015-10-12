@@ -1,0 +1,59 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoDeDuplaCustodia extends Grupo {
+
+	public GrupoDeDuplaCustodia() {
+		
+		super(  "Dupla Cust Banco Siamez",
+				"Dupla Cust Banco Siamez Total",
+				"Dupla Cust Banco Siamez - Exceto Restritos",
+				"Dupla Cust Banco Siamez - Exceto Restritos",
+				new MYSQLConnection().getConnection()
+		);
+		
+	}
+	
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT VAMC_PK_ID FROM VA_VAMC_MULTIPLE_CUSTODY_GROUP WHERE VAMC_NM_NAME = 'Banco Siamez - Total';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT VAMC_PK_ID ");
+		sql.append("FROM   VA_VAMC_MULTIPLE_CUSTODY_GROUP ");
+		sql.append("WHERE  VAMC_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+}

@@ -1,0 +1,334 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Grupo {
+	
+	protected String nomeNovo_1;
+	protected String descricaoNovo_1;
+	
+	protected String nomeNovo_2;
+	protected String descricaoNovo_2;
+			
+	protected String nomeEdicao_1;
+	protected String descricaoEdicao_1;
+	
+	protected String nomeEdicao_2;
+	protected String descricaoEdicao_2;
+	
+	protected String nomeJaCadastrado_1;
+	protected String descricaoJaCadastrado_1;
+	
+	protected String nomeJaCadastrado_2;
+	protected String descricaoJaCadastrado_2;
+	
+	protected String nomeJaCadastrado_3;
+	protected String descricaoJaCadastrado_3;
+	
+	protected String nomeJaCadastrado_4; 
+	protected String descricaoJaCadastrado_4;
+	
+	protected String nomeApagar;
+		
+	protected Connection connection;//conexão com banco		
+	
+
+	public Grupo(
+			
+			String nomeNovo_1, String descricaoNovo_1,
+			String nomeNovo_2, String descricaoNovo_2,
+			
+			String nomeEdicao_1, String descricaoEdicao_1,
+			String nomeEdicao_2, String descricaoEdicao_2,
+			
+			String nomeJaCadastrado_1, String descricaoJaCadastrado_1,
+			String nomeJaCadastrado_2, String descricaoJaCadastrado_2,
+			String nomeJaCadastrado_3, String descricaoJaCadastrado_3,
+			String nomeJaCadastrado_4, String descricaoJaCadastrado_4,
+			
+			String nomeApagar, 
+			
+			Connection connection) {
+		
+		super();
+		this.nomeNovo_1 = nomeNovo_1;
+		this.descricaoNovo_1 = descricaoNovo_1;
+		this.nomeNovo_2 = nomeNovo_2;
+		this.descricaoNovo_2 = descricaoNovo_2;
+		
+		this.nomeEdicao_1 = nomeEdicao_1;
+		this.descricaoEdicao_1 = descricaoEdicao_1;
+		
+		this.nomeEdicao_2 = nomeEdicao_2;
+		this.descricaoEdicao_2 = descricaoEdicao_2;
+		
+		this.nomeJaCadastrado_1 = nomeJaCadastrado_1;
+		this.descricaoJaCadastrado_1 = descricaoJaCadastrado_1;
+		
+		this.nomeJaCadastrado_2 = nomeJaCadastrado_2;
+		this.descricaoJaCadastrado_2 = descricaoJaCadastrado_2;
+		
+		this.nomeJaCadastrado_3 = nomeJaCadastrado_3;
+		this.descricaoJaCadastrado_3 = descricaoJaCadastrado_3;
+		
+		this.nomeJaCadastrado_4 = nomeJaCadastrado_4;
+		this.descricaoJaCadastrado_4 = descricaoJaCadastrado_4;
+		
+		this.nomeApagar = nomeApagar;
+		this.connection = connection;
+	}
+	
+	
+	
+	
+	public String getNomeEdicao_1() {
+		return nomeEdicao_1;
+	}
+
+
+
+
+	public void setNomeEdicao_1(String nomeEdicao_1) {
+		this.nomeEdicao_1 = nomeEdicao_1;
+	}
+
+
+
+
+	public String getDescricaoEdicao_1() {
+		return descricaoEdicao_1;
+	}
+
+
+
+
+	public void setDescricaoEdicao_1(String descricaoEdicao_1) {
+		this.descricaoEdicao_1 = descricaoEdicao_1;
+	}
+
+
+
+
+	public String getNomeEdicao_2() {
+		return nomeEdicao_2;
+	}
+
+
+
+
+	public void setNomeEdicao_2(String nomeEdicao_2) {
+		this.nomeEdicao_2 = nomeEdicao_2;
+	}
+
+
+
+
+	public String getDescricaoEdicao_2() {
+		return descricaoEdicao_2;
+	}
+
+
+
+
+	public void setDescricaoEdicao_2(String descricaoEdicao_2) {
+		this.descricaoEdicao_2 = descricaoEdicao_2;
+	}
+
+
+
+
+	public String getNomeJaCadastrado_3() {
+		return nomeJaCadastrado_3;
+	}
+
+
+
+	public void setNomeJaCadastrado_3(String nomeJaCadastrado_3) {
+		this.nomeJaCadastrado_3 = nomeJaCadastrado_3;
+	}
+
+
+
+	public String getDescricaoJaCadastrado_3() {
+		return descricaoJaCadastrado_3;
+	}
+
+
+
+	public void setDescricaoJaCadastrado_3(String descricaoJaCadastrado_3) {
+		this.descricaoJaCadastrado_3 = descricaoJaCadastrado_3;
+	}
+
+
+
+	public String getNomeJaCadastrado_4() {
+		return nomeJaCadastrado_4;
+	}
+
+
+
+	public void setNomeJaCadastrado_4(String nomeJaCadastrado_4) {
+		this.nomeJaCadastrado_4 = nomeJaCadastrado_4;
+	}
+
+
+
+	public String getDescricaoJaCadastrado_4() {
+		return descricaoJaCadastrado_4;
+	}
+
+
+
+	public void setDescricaoJaCadastrado_4(String descricaoJaCadastrado_4) {
+		this.descricaoJaCadastrado_4 = descricaoJaCadastrado_4;
+	}
+
+
+
+	public String getNomeNovo_1() {
+		return nomeNovo_1;
+	}
+
+
+	public void setNomeNovo_1(String nomeNovo_1) {
+		this.nomeNovo_1 = nomeNovo_1;
+	}
+
+
+	public String getDescricaoNovo_1() {
+		return descricaoNovo_1;
+	}
+
+
+	public void setDescricaoNovo_1(String descricaoNovo_1) {
+		this.descricaoNovo_1 = descricaoNovo_1;
+	}
+
+
+	public String getNomeNovo_2() {
+		return nomeNovo_2;
+	}
+
+
+	public void setNomeNovo_2(String nomeNovo_2) {
+		this.nomeNovo_2 = nomeNovo_2;
+	}
+
+
+	public String getDescricaoNovo_2() {
+		return descricaoNovo_2;
+	}
+
+
+	public void setDescricaoNovo_2(String descricaoNovo_2) {
+		this.descricaoNovo_2 = descricaoNovo_2;
+	}
+
+	public String getNomeJaCadastrado_1() {
+		return nomeJaCadastrado_1;
+	}
+
+
+	public void setNomeJaCadastrado_1(String nomeJaCadastrado_1) {
+		this.nomeJaCadastrado_1 = nomeJaCadastrado_1;
+	}
+
+
+	public String getDescricaoJaCadastrado_1() {
+		return descricaoJaCadastrado_1;
+	}
+
+
+	public void setDescricaoJaCadastrado_1(String descricaoJaCadastrado_1) {
+		this.descricaoJaCadastrado_1 = descricaoJaCadastrado_1;
+	}
+
+
+	public String getNomeJaCadastrado_2() {
+		return nomeJaCadastrado_2;
+	}
+
+
+	public void setNomeJaCadastrado_2(String nomeJaCadastrado_2) {
+		this.nomeJaCadastrado_2 = nomeJaCadastrado_2;
+	}
+
+
+	public String getDescricaoJaCadastrado_2() {
+		return descricaoJaCadastrado_2;
+	}
+
+
+	public void setDescricaoJaCadastrado_2(String descricaoJaCadastrado_2) {
+		this.descricaoJaCadastrado_2 = descricaoJaCadastrado_2;
+	}
+
+
+	public String getNomeApagar() {
+		return nomeApagar;
+	}
+
+
+	public void setNomeApagar(String nomeApagar) {
+		this.nomeApagar = nomeApagar;
+	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+	/*
+	 * Recupera o Id do Grupo de Usuários Regulares/Usuarios Server
+	 * select no banco exemplo:  SELECT USGR_PK_ID FROM AT_USGR_USERGROUP WHERE USGR_NM_NAME = 'Permanente Specto' AND USGR_FL_USGR_TYPE = 'RegularUser';
+	 * Quando se precisa de 2 tabelas: sql.append("SELECT RUGR_FK_USER_GROUP_ID FROM VA_RUGR_REGULAR_USER_GROUP WHERE RUGR_FK_SCHEDULE_ID IN (SELECT SCHE_PK_ID FROM VA_SCHE_SCHEDULE WHERE SCHE_NM_NAME = ?);");
+	 */
+	public int encontraIdGrupo(String nomeGrupo, String tipo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+		
+		String tipoDeGrupo = tipo;
+				
+		
+		sql.append("SELECT USGR_PK_ID ");
+		sql.append("FROM   AT_USGR_USERGROUP ");
+		sql.append("WHERE  USGR_NM_NAME = ? ");
+		sql.append("AND  USGR_FL_USGR_TYPE = ? ");
+		
+				
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+		ps.setString(1, nomeGrupo);
+		ps.setString(2,  tipoDeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupoDeAmbiente = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupoDeAmbiente = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo de Usuários Server " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupoDeAmbiente;
+	}		
+	
+
+}

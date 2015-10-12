@@ -1,0 +1,150 @@
+package TST_077_Cadastrar_Grupo_de_Usuarios_Server;
+
+
+import java.util.List;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.auxiliar.Permissoes;
+import br.com.specto.entidades.GrupoUsuariosRegulares;
+import br.com.specto.entidades.GrupoUsuariosServer;
+
+
+public class TST_077_013_EditarGrupoUsuariosServer {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private GrupoUsuariosServer grupoUsuariosServer;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.grupoUsuariosServer = new GrupoUsuariosServer();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void editarGrupoUsuariosRegularesVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Edição de Grupo de Usuários Server");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuUserGroup_tmi0-title")).click();
+			driver.findElement(By.linkText("Usuários Server")).click();
+						
+			//Recuperar o id do banco referente ao nome do Grupo
+			String s_idGrupo = "" + grupoUsuariosServer.encontraIdGrupo(grupoUsuariosServer.getNome(), "Server");			
+			
+			//Marca o Grupo para Edição
+			driver.findElement(By.id(s_idGrupo)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//Inserindo os dados para o cadastro de Grupo de Ambiente
+			driver.findElement(By.name("name")).clear();
+			driver.findElement(By.name("name")).sendKeys(grupoUsuariosServer.getNomeParaEdicao());
+			
+			System.out.println("Depois do nome");
+			System.out.println(grupoUsuariosServer.getNomeParaEdicao());
+			
+			driver.findElement(By.name("description")).clear();
+			driver.findElement(By.name("description")).sendKeys(grupoUsuariosServer.getDescricaoParaEdicao());
+			
+			System.out.println("Depois da description");
+			System.out.println(grupoUsuariosServer.getDescricaoParaEdicao());
+			
+			
+			//Na Edição, retirar a permissão de um relatório,  seto o valor para Sem Acesso
+			Permissoes permissoes = Permissoes.SEM_ACESSO;
+			
+			/*
+			 * Como o elemento com o nome "objtAccessReport" possui 3 outros elementos (Edicao, Ver e Sem Acesso) nao tem como de cara selecionar o elemento desejado.
+			 * Ou seja selecionar com uma linha o elemento Edicao. Preciso guardar em uma lista os elementos (Edicao, Ver e Sem Acesso) e so depois selecionar com base no
+			 * seu valor.
+			 */
+			if(permissoes == grupoUsuariosServer.getRelatorioDeAcesso().SEM_ACESSO){
+				
+				List<WebElement> relatorioDeAcesso = driver.findElements(By.name("objtAccessReport"));
+			 	
+				for (int i = 0; i < relatorioDeAcesso.size(); i++) {
+					
+				    if ( relatorioDeAcesso.get(i).getAttribute("value").equals("2") ){		
+				    	
+				    	relatorioDeAcesso.get(i).click();	    	
+				    }
+					    
+				}
+				
+			}
+			    
+			//Botão Salvar do cadastro de Grupo de Usuários Regulares
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Grupo de Usuários [" + grupoUsuariosServer.getNomeParaEdicao() + "] editado com sucesso!";
+ 					
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals(msgEsperada, msgRetornadaInterface);	    
+				System.out.println("Caso de Teste Edição de Grupo de Usuários Regulares executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroGrupoUsuariosRegulares){
+    		
+				System.out.println("Mensagem esperada: " + msgEsperada);
+				System.out.println("Mensagem retornada: " + msgRetornadaInterface);
+    		
+				System.out.println("Erro ao executar o Caso de Teste Edição de Grupo de Usuários Regulares!");
+    			
+				throw erroValidaMensagemCadastroGrupoUsuariosRegulares;
+    	
+    		}finally{
+    
+    			driver.manage().window().maximize();
+    			
+				//fechar a tela de cadastro do Grupo
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+						
+				//fechando a janela da lista dos ambientes cadastrados 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Botão Sair está ficando escondido, desta forma utilizo o comando abaixo
+				driver.close();
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Editar Grupo de Usuários Regulares: " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

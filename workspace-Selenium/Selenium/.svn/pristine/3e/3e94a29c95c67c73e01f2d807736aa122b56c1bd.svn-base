@@ -1,0 +1,125 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Grupo {
+	
+	protected String nome;
+	protected String descricao;
+		
+	protected String nomeParaEdicao;
+	protected String descricaoParaEdicao;
+	
+	protected Connection connection;//conexão com banco		
+	
+
+	public Grupo(String nome, String descricao, String nomeParaEdicao,
+			String descricaoParaEdicao, Connection connection) {
+		
+		super();
+		this.nome = nome;
+		this.descricao = descricao;
+		this.nomeParaEdicao = nomeParaEdicao;
+		this.descricaoParaEdicao = descricaoParaEdicao;
+		this.connection = connection;
+	}
+		
+	
+	public String getNome() {
+		return nome;
+	}
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+	public String getDescricaoParaEdicao() {
+		return descricaoParaEdicao;
+	}
+
+
+	public void setDescricaoParaEdicao(String descricaoParaEdicao) {
+		this.descricaoParaEdicao = descricaoParaEdicao;
+	}
+
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	
+	/*
+	 * Recupera o Id do Grupo de Usuários Regulares/Usuarios Server
+	 * select no banco exemplo:  SELECT USGR_PK_ID FROM AT_USGR_USERGROUP WHERE USGR_NM_NAME = 'Permanente Specto' AND USGR_FL_USGR_TYPE = 'RegularUser';
+	 * Quando se precisa de 2 tabelas: sql.append("SELECT RUGR_FK_USER_GROUP_ID FROM VA_RUGR_REGULAR_USER_GROUP WHERE RUGR_FK_SCHEDULE_ID IN (SELECT SCHE_PK_ID FROM VA_SCHE_SCHEDULE WHERE SCHE_NM_NAME = ?);");
+	 */
+	public int encontraIdGrupoUsuariosRegulares(String nomeGrupo, String tipo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+		
+		String tipoDeGrupo = tipo;
+				
+		
+		sql.append("SELECT USGR_PK_ID ");
+		sql.append("FROM   AT_USGR_USERGROUP ");
+		sql.append("WHERE  USGR_NM_NAME = ? ");
+		sql.append("AND  USGR_FL_USGR_TYPE = ? ");
+		
+				
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+		ps.setString(1, nomeGrupo);
+		ps.setString(2,  tipoDeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupoDeAmbiente = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupoDeAmbiente = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo de Usuários Server " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupoDeAmbiente;
+	}		
+	
+
+}

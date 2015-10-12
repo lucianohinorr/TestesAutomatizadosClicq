@@ -1,0 +1,190 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+
+import java.util.List;
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+import br.com.specto.entidades.Regiao;
+
+public class CadastrarPontoDeAcesso {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarPontoDeAcessoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Ponto de Aceso");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(pontoDeAcesso.getNomePontoAcesso());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(pontoDeAcesso.getDescricao());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'locality')]"))).selectByVisibleText(pontoDeAcesso.getLocalidade());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentEntrance')]"))).selectByVisibleText(pontoDeAcesso.getAmbiente1());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'environmentExit')]"))).selectByVisibleText(pontoDeAcesso.getAmbiente2());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceName')]")).sendKeys(pontoDeAcesso.getNomeDispositivo1());
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceAddress')]")).sendKeys(pontoDeAcesso.getIpDispositivo1());
+			
+			
+			
+			//driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceId')]")).sendKeys(pontoDeAcesso.getIdDispositivo1());
+			
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[1]/td[5]/input")).sendKeys(pontoDeAcesso.getIdDispositivo1());
+			
+										
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceType')]"))).selectByVisibleText(pontoDeAcesso.getTipoDispositivo1());
+			
+			
+			
+			//seleciona o campo Acesso								
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[3]/td/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input[1]")).click();
+					
+						
+				
+			List<WebElement> radioInputDeviceDevolutionSensor = driver.findElements(By.name("inputDeviceDevolutionSensor"));
+			 	
+			for (int i = 0; i < radioInputDeviceDevolutionSensor.size(); i++) {
+				
+			    //System.out.println(radioinputDeviceDevolutionSensor.get(i).getAttribute("value"));		    
+			    
+			    if ( radioInputDeviceDevolutionSensor.get(i).getAttribute("value").equals(pontoDeAcesso.getSensorDevolucao1()) ){			    			    	
+			    	radioInputDeviceDevolutionSensor.get(i).click();	    	
+			    }
+				    
+			}
+			
+			List<WebElement> radioInputDeviceAllowVisitorCard = driver.findElements(By.name("inputDeviceDevolutionSensor"));
+		 	
+			for (int i = 0; i < radioInputDeviceAllowVisitorCard.size(); i++) {
+			    
+			    if ( radioInputDeviceAllowVisitorCard.get(i).getAttribute("value").equals(pontoDeAcesso.getPermitirCartaoVisitante1()) ){			    			    	
+			    	radioInputDeviceAllowVisitorCard.get(i).click();	    	
+			    }
+				    
+			}
+						
+			List<WebElement> radioInputDeviceMustRequestCustody = driver.findElements(By.name("inputDeviceDevolutionSensor"));
+		 	
+			for (int i = 0; i < radioInputDeviceMustRequestCustody.size(); i++) {
+				
+			    if ( radioInputDeviceMustRequestCustody.get(i).getAttribute("value").equals(pontoDeAcesso.getSolicitaDuplaCustodia1()) ){			    			    	
+			    	radioInputDeviceMustRequestCustody.get(i).click();	    	
+			    }
+				    
+			}
+			
+			List<WebElement> radioInputDeviceCanRespondCustody = driver.findElements(By.name("inputDeviceDevolutionSensor"));
+		 	
+			for (int i = 0; i < radioInputDeviceCanRespondCustody.size(); i++) {
+				
+			    if ( radioInputDeviceCanRespondCustody.get(i).getAttribute("value").equals(pontoDeAcesso.getAutorizaDuplaCustodia1()) ){			    			    	
+			    	radioInputDeviceCanRespondCustody.get(i).click();	    	
+			    }
+				    
+			}	
+			
+			//seleção do botão +
+			driver.findElement(By.xpath("//*[ contains(@name, 'btAddItem')]")).click();
+			
+			driver.manage().window().maximize();
+					
+			//Botão Salvar do cadastro de Pnto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar a região
+			String msgValidacaoCadPontoDeAcesso = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+  
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Ponto de acesso [" + pontoDeAcesso.getNomePontoAcesso() + "] salvo com sucesso!", msgValidacaoCadPontoDeAcesso);
+	    
+				System.out.println("Caso de Teste Cadastrar Ponto de Acesso executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroPontoDeAcesso){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Ponto de Acesso!");
+    			
+				throw erroValidaMensagemCadastroPontoDeAcesso;
+    	
+    		}finally{
+    			
+    			    
+				//fechar a tela de cadastro da Ponto de Acesso
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//espera de 3 segundo, assim dá tempo de debugar a mensagem
+				 Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista dos Pontos de Acessos. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Salvar Ponto de Acesso' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,42 @@
+package br.com.specto.entidades;
+
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+public class CartaoUsuarioRegular extends Cartao {
+	
+	protected String localidadeParaEdicao;
+	
+	
+	public CartaoUsuarioRegular() {	
+		
+	
+		super(  "1111112222",
+			    "1111112300",
+			  	"RFID",
+				"Usuário Regular",
+				"Residente",
+				"Ativo",
+				"1111113333",
+				"Visitante",
+				"Fornecedores",
+				"Ativo", 
+				new MYSQLConnection().getConnection());
+		
+		this.localidadeParaEdicao = "Banco Siamez";
+	}
+
+
+	public String getLocalidadeParaEdicao() {
+		return localidadeParaEdicao;
+	}
+
+
+	public void setLocalidadeParaEdicao(String localidadeParaEdicao) {
+		this.localidadeParaEdicao = localidadeParaEdicao;
+	}
+
+
+	
+	
+}

@@ -1,0 +1,191 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+public class GrupoEnvioDeSms extends Grupo {
+
+	private String servidorEnvioDeSMS;
+	private String tipoEnvioDeSMS;
+	
+	private String tipoCondicoesDeEventos;
+	private String motivoNegacaoCondicoesDeEventos;
+	
+	private String regiaoLocalDeAcesso;
+	private String localidadeLocalDeAcesso;
+	private String grupoDeAmbienteLocalDeAcesso;
+	private String ambienteLocalDeAcesso;
+	private String pontoDeAcessoLocalDeAcesso;
+	
+	
+	
+	public GrupoEnvioDeSms(	String nome,
+							String descricao, 
+							String nomeParaEdicao, 
+							String descricaoParaEdicado, 
+							Connection connection, 
+							String servidorEnvioDeSMS, 
+							String tipoEnvioDeSMS,
+							String tipoCondicoesDeEventos,
+							String motivoNegacaoCondicoesDeEventos,
+							String regiaoLocalDeAcesso,
+							String localidadeLocalDeAcesso,
+							String grupoDeAmbienteLocalDeAcesso,
+							String ambienteLocalDeAcesso,
+							String pontoDeAcessoLocalDeAcesso) {
+		
+		super(  nome,
+				descricao,
+				nomeParaEdicao,
+				descricaoParaEdicado,
+				connection
+		);
+		
+		this.servidorEnvioDeSMS = servidorEnvioDeSMS;
+		this.tipoEnvioDeSMS = tipoEnvioDeSMS;
+		
+		this.tipoCondicoesDeEventos = tipoCondicoesDeEventos;
+		this.motivoNegacaoCondicoesDeEventos = motivoNegacaoCondicoesDeEventos;
+		
+		this.regiaoLocalDeAcesso = regiaoLocalDeAcesso;
+		this.localidadeLocalDeAcesso = localidadeLocalDeAcesso;
+		this.grupoDeAmbienteLocalDeAcesso = grupoDeAmbienteLocalDeAcesso;
+		this.ambienteLocalDeAcesso = ambienteLocalDeAcesso;
+		this.pontoDeAcessoLocalDeAcesso = pontoDeAcessoLocalDeAcesso;
+		
+		
+	}
+	
+	
+	public String getServidorEnvioDeSMS() {
+		return servidorEnvioDeSMS;
+	}
+
+
+	public void setServidorEnvioDeSMS(String servidorEnvioDeSMS) {
+		this.servidorEnvioDeSMS = servidorEnvioDeSMS;
+	}
+
+
+	public String getTipoEnvioDeSMS() {
+		return tipoEnvioDeSMS;
+	}
+
+
+	public void setTipoEnvioDeSMS(String tipoEnvioDeSMS) {
+		this.tipoEnvioDeSMS = tipoEnvioDeSMS;
+	}
+
+
+	public String getTipoCondicoesDeEventos() {
+		return tipoCondicoesDeEventos;
+	}
+
+
+	public void setTipoCondicoesDeEventos(String tipoCondicoesDeEventos) {
+		this.tipoCondicoesDeEventos = tipoCondicoesDeEventos;
+	}
+
+
+	public String getMotivoNegacaoCondicoesDeEventos() {
+		return motivoNegacaoCondicoesDeEventos;
+	}
+
+
+	public void setMotivoNegacaoCondicoesDeEventos(
+			String motivoNegacaoCondicoesDeEventos) {
+		this.motivoNegacaoCondicoesDeEventos = motivoNegacaoCondicoesDeEventos;
+	}
+
+
+	public String getRegiaoLocalDeAcesso() {
+		return regiaoLocalDeAcesso;
+	}
+
+
+	public void setRegiaoLocalDeAcesso(String regiaoLocalDeAcesso) {
+		this.regiaoLocalDeAcesso = regiaoLocalDeAcesso;
+	}
+
+
+	public String getLocalidadeLocalDeAcesso() {
+		return localidadeLocalDeAcesso;
+	}
+
+
+	public void setLocalidadeLocalDeAcesso(String localidadeLocalDeAcesso) {
+		this.localidadeLocalDeAcesso = localidadeLocalDeAcesso;
+	}
+
+
+	public String getGrupoDeAmbienteLocalDeAcesso() {
+		return grupoDeAmbienteLocalDeAcesso;
+	}
+
+
+	public void setGrupoDeAmbienteLocalDeAcesso(String grupoDeAmbienteLocalDeAcesso) {
+		this.grupoDeAmbienteLocalDeAcesso = grupoDeAmbienteLocalDeAcesso;
+	}
+
+
+	public String getAmbienteLocalDeAcesso() {
+		return ambienteLocalDeAcesso;
+	}
+
+
+	public void setAmbienteLocalDeAcesso(String ambienteLocalDeAcesso) {
+		this.ambienteLocalDeAcesso = ambienteLocalDeAcesso;
+	}
+
+
+	public String getPontoDeAcessoLocalDeAcesso() {
+		return pontoDeAcessoLocalDeAcesso;
+	}
+
+
+	public void setPontoDeAcessoLocalDeAcesso(String pontoDeAcessoLocalDeAcesso) {
+		this.pontoDeAcessoLocalDeAcesso = pontoDeAcessoLocalDeAcesso;
+	}
+
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT VIGR_PK_ID FROM VA_VIGR_VISITOR_USER_GROUP WHERE VIGR_NM_NAME = 'Aprovação Banco Siamez';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT VIGR_PK_ID ");
+		sql.append("FROM   VA_VIGR_VISITOR_USER_GROUP ");
+		sql.append("WHERE  VIGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+
+
+	
+}

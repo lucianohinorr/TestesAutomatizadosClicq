@@ -1,0 +1,165 @@
+package TST_017_Cadastrar_Localidade;
+
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Localidade;
+
+
+public class CadastrarLocalidade {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Localidade localidade;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.localidade = new Localidade();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarLocalidadeVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para o cadastro de Localidade");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+							
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Localidade")).click();
+			   
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de localidade
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(localidade.getNome());			
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(localidade.getDescricao());
+			driver.findElement(By.xpath("//*[ contains(@name, 'areaCode')]")).sendKeys(localidade.getCodigoArea());			
+			driver.findElement(By.xpath("//*[ contains(@name, 'phone')]")).sendKeys(localidade.getTelefone());
+			driver.findElement(By.xpath("//*[ contains(@name, 'CEP')]")).sendKeys(localidade.getCep());
+			driver.findElement(By.xpath("//*[ contains(@name, 'street')]")).sendKeys(localidade.getRua());
+			driver.findElement(By.xpath("//*[ contains(@name, 'number')]")).sendKeys(localidade.getNumero());
+			driver.findElement(By.xpath("//*[ contains(@name, 'complement')]")).sendKeys(localidade.getComplemento());
+			driver.findElement(By.xpath("//*[ contains(@name, 'district')]")).sendKeys(localidade.getBairro());
+			driver.findElement(By.xpath("//*[ contains(@name, 'city')]")).sendKeys(localidade.getCidade());
+				
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'state')]"))).selectByVisibleText(localidade.getUnidadeFederativa());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'region')]"))).selectByVisibleText(localidade.getRegiao());
+		
+			driver.findElement(By.xpath("//*[ contains(@name, 'ipAddress')]")).sendKeys(localidade.getEnderecoIP());
+			
+			/*
+			 * Seleciona o RadioButton Horario, na real o comando abaixo selecionao o primeiro radio, que neste caso é o Horario
+			 * driver.findElement(By.xpath("//*[ contains(@name, 'eventsTransmissionByPeriod')]")).click();
+			 */
+			
+			//Seleciona o RadioButton Periodo
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[17]/fieldset[1]/table/tbody/tr[2]/td[1]/input")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'eventsTransmissionPeriod')]")).sendKeys(localidade.getModoTransmissaoEventosPeriodo());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'logLevel')]"))).selectByVisibleText(localidade.getNivelGeracaoLog());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'networkType')]"))).selectByVisibleText(localidade.getTipoRede());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'TCPLocalPort')]")).sendKeys(localidade.getPortaTCP());
+				
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'cachePeriodOffLineMode')]"))).selectByVisibleText(localidade.getHabilitarEnvioOffline());
+			
+			if (localidade.isCartaoTemporarioBloqueiaPermanente()){
+			
+				driver.findElement(By.xpath("//*[ contains(@name, 'provisoryCardBlockDefinitiveCard')]")).click();
+			}
+			
+			
+			if (localidade.isCartaoVisitanteBloqueiaTodosCartoes()){
+			
+				driver.findElement(By.xpath("//*[ contains(@name, 'visitorCardBlockAllCards')]")).click();
+			}
+			
+			//Botão Salvar do cadastro de localidade
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+						   
+			//capturando a mensagem de validação após salvar a localidade
+			String msgValidacaoCadLocalidade = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+  
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Localidade [" + localidade.getNome() + "] salva com sucesso!", msgValidacaoCadLocalidade);
+	    
+				System.out.println("Caso de Teste Cadastrar Localidade executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemCadastroLocalidade){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Cadastro de Localidade!");
+    			
+				throw erroValidaMensagemCadastroLocalidade;
+    	
+    		}finally{
+    			
+    
+    			 /*
+    			  * fechar a tela de cadastro da localidade
+    			  * por algum motivo, a parte superior da tela esta ficando "oculta", desta forma este botão não fica visivel, não sendo possível localizá-lo para seleção
+    			  * em outras telas o funcionamento ocorre de forma normal, pelos testes feitos a parte superior se esconte quando vou povoar o campo Endereço IP
+    			  *	driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			  *Ao invés de selecionar o botão de cima, selecionar o botão cancelar (abaixo) depois de ter validado a mensagem
+    			  */
+    			 driver.findElement(By.xpath("//*[contains(@title, 'Cancelar')]")).click();
+    			 
+    			 /*
+    			  * fechar a tela com a lista de Localidades cadastradas
+    			  * por algum motivo, a parte superior da tela esta ficando "oculta", desta forma este botão não fica visivel, não sendo possível localizá-lo para seleção
+    			  * em outras telas o funcionamento ocorre de forma normal, pelos testes feitos a parte superior se esconte quando vou povoar o campo Endereço IP
+    			  *	driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+    			  * Ao invés de selecionar o botão de cima, selecionar o botão cancelar (abaixo) depois de ter validado a mensagem
+    			  */
+    			
+    			 driver.findElement(By.xpath("//*[contains(@title, 'Cancelar')]")).click();
+   				 
+    			 /*
+    			  * Selecionando o botão Sair da aplicação
+    			  * por algum motivo, a parte superior da tela esta ficando "oculta", desta forma este botão não fica visivel, não sendo possível localizá-lo para seleção
+    			  * em outras telas o funcionamento ocorre de forma normal, pelos testes feitos a parte superior se esconte quando vou povoar o campo Endereço IP
+    			  *	driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			  * Ao invés de selecionar o botão Sair eu simplesmente finalizado o browser no método tearDow(), procedimento que já está incluso nas outras classes
+    			  */
+    	    					
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Cadastro de Localidade' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

@@ -1,0 +1,84 @@
+package br.com.specto.suiteTest;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+import TST_016_Cadastrar_Regiao.ApagarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiao;
+import TST_016_Cadastrar_Regiao.CadastrarRegiaoJaCadastrada;
+import TST_016_Cadastrar_Regiao.EditarRegiao;
+import TST_018_Cadastrar_Grupo_de_Ambiente.ApagarGrupoDeAmbiente;
+import TST_018_Cadastrar_Grupo_de_Ambiente.CadastrarGrupoDeAmbiente;
+import TST_018_Cadastrar_Grupo_de_Ambiente.CadastrarGrupoDeAmbienteJaCadastrado;
+import TST_018_Cadastrar_Grupo_de_Ambiente.EditarGrupoDeAmbiente;
+import TST_019_Cadastrar_Ambiente.ApagarAmbiente;
+import TST_019_Cadastrar_Ambiente.CadastrarAmbiente;
+import TST_019_Cadastrar_Ambiente.EditarAmbiente;
+import TST_025_Cadastrar_Cartao.ApagarCartaoUsuarioRegular;
+import TST_025_Cadastrar_Cartao.ApagarCartaoVisitante;
+import TST_025_Cadastrar_Cartao.CadastrarCartaoUsuarioRegular;
+import TST_025_Cadastrar_Cartao.CadastrarCartaoVisitante;
+import TST_025_Cadastrar_Cartao.EditarCartaoUsuarioRegularParaVisitante;
+import TST_025_Cadastrar_Cartao.EditarCartaoVisitanteParaUsuarioRegular;
+import TST_076_Cadastrar_Tipo_de_Cartao.ApagarTipodeCartao;
+import TST_076_Cadastrar_Tipo_de_Cartao.CadastrarTipodeCartao;
+import TST_076_Cadastrar_Tipo_de_Cartao.CadastrarTipodeCartaoJaCadastrada;
+import TST_076_Cadastrar_Tipo_de_Cartao.EditarTipodeCartao;
+import TST_246_Cadastrar_Ponto_De_Acesso.ApagarDispositivoDoPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.ApagarPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.CadastrarPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.CadastrarPontoDeAcessoDispJaCadastrado;
+import TST_246_Cadastrar_Ponto_De_Acesso.EditarDispositivoDoPontoDeAcesso;
+import TST_246_Cadastrar_Ponto_De_Acesso.EditarPontoDeAcesso;
+
+
+
+@RunWith(Suite.class)
+
+@Suite.SuiteClasses({
+	//CadastrarRegiao.class,
+	//CadastrarRegiaoJaCadastrada.class,
+	//EditarRegiao.class,
+	//ApagarRegiao.class,
+	
+	//CadastrarAmbiente.class,
+	//EditarAmbiente.class,
+	//ApagarAmbiente.class,
+	
+	//CadastrarTipodeCartao.class,
+	//CadastrarTipodeCartaoJaCadastrada.class,
+	//EditarTipodeCartao.class,
+	//ApagarTipodeCartao.class,
+	
+	//CadastrarGrupoDeAmbiente.class,
+	//CadastrarGrupoDeAmbienteJaCadastrado.class,
+	//EditarGrupoDeAmbiente.class,
+	//ApagarGrupoDeAmbiente.class,
+	
+	/*CadastrarPontoDeAcesso.class,
+	CadastrarPontoDeAcessoDispJaCadastrado.class,
+	EditarDispositivoDoPontoDeAcesso.class,
+	ApagarDispositivoDoPontoDeAcesso.class,
+	EditarPontoDeAcesso.class,
+	ApagarPontoDeAcesso.class, */
+	
+	
+	CadastrarCartaoUsuarioRegular.class,
+	EditarCartaoUsuarioRegularParaVisitante.class,
+	ApagarCartaoVisitante.class,
+	
+	CadastrarCartaoVisitante.class,
+	EditarCartaoVisitanteParaUsuarioRegular.class,
+	ApagarCartaoUsuarioRegular.class,
+	
+	
+	
+	
+})
+
+
+
+public class SuiteTeste {
+	
+
+} 

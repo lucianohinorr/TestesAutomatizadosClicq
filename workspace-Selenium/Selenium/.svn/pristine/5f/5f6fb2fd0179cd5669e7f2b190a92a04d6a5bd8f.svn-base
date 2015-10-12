@@ -1,0 +1,154 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+
+
+public class EditarDispositivoDoPontoDeAcesso{
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+    
+	}
+
+	
+	@Test
+	public void cadastrarPontoDeAcessoVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para a Edição de Dispositivo do Ponto de Aceso");
+		
+		    
+		try{
+			
+			//Login Automático
+			//driver.findElement(By.id("VA_server")).click();
+				
+			
+			driver = login.executaLoginManual();
+        
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+			
+			driver.manage().window().maximize();
+			
+					
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idPontoDeAcesso = "" + pontoDeAcesso.encontraIdPontoDeAcesso(pontoDeAcesso.getNomePontoAcesso());
+			
+			//Marca o Ponto de Acesso para editar.
+			driver.findElement(By.id(s_idPontoDeAcesso)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//Recuperar o id do banco referente ao nome do Dispositivo do Ponto de Acesso cadastrada atualmente no banco
+			String s_idDispositivo1DoPontoDeAcesso = "" + pontoDeAcesso.encontraIdDispositiboDoPontoDeAcesso(pontoDeAcesso.getNomeDispositivo1());
+			
+			//Maximizar a tela de edição do Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/max.gif')]")).click();
+			
+			//Marca o Ponto de Acesso para editar.
+			driver.findElement(By.id(s_idDispositivo1DoPontoDeAcesso)).click();
+				
+		    //seleção do botão editar (Lápis) 
+			driver.findElement(By.xpath("//*[ contains(@name, 'btEditItem')]")).click();
+			
+			
+			//limpando e inserindo o novos valoes para a Edição do Dispositivo 1 do Ponto de Acesso  
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceName')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceName')]")).sendKeys(pontoDeAcesso.getNomeDispositivo1ParaEdicao());
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceAddress')]")).clear();
+			driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceAddress')]")).sendKeys(pontoDeAcesso.getIpDispositivo1ParaEdicao());
+			
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[1]/td[5]/input")).clear();
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[2]/form/div[7]/fieldset/table/tbody/tr[1]/td[5]/input")).sendKeys(pontoDeAcesso.getIdDispositivo1ParaEdicao());
+										
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'inputDeviceType')]"))).selectByVisibleText(pontoDeAcesso.getTipoDisposito1ParaEdicao());
+		
+			
+			//seleção do botão +
+			driver.findElement(By.xpath("//*[ contains(@name, 'btAddItem')]")).click();
+			
+			//Botão Salvar do cadastro de Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//capturando a mensagem de validação após Editar o Ponto de Acesso
+			String msgValidacaoEdicaoDispositivoPontoDeAcesso = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+  
+			
+			try{
+				
+				//validando a mensagem de validação
+				assertEquals("Ponto de acesso [" + pontoDeAcesso.getNomePontoAcesso() + "] editado com sucesso!", msgValidacaoEdicaoDispositivoPontoDeAcesso);
+	    
+				System.out.println("Caso de Teste Editar Dispositivo do Ponto de Acesso executado com sucesso!");
+				
+			}catch (AssertionError erroValidaMensagemEditarDispositivoPontoDeAcesso){
+    		
+				System.out.println("Erro ao executar o Caso de Teste Edição de Dispositivo do Ponto de Acesso!");
+    			
+				throw erroValidaMensagemEditarDispositivoPontoDeAcesso;
+    	
+    		}finally{
+    			
+    			    
+				//fechar a tela de Edição da Ponto de Acesso
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+			
+				//espera de 3 segundo, assim dá tempo de debugar a mensagem
+				long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}    
+	    
+				//fechando a janela da lista dos Pontos de Acessos. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+				
+				//Selecionando o botão Sair da Aplicação.
+				//Botão Sair está ficando escondido
+				//driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				//Desta forma utilizo o comando abaixo
+				driver.close();
+			
+			}
+			
+		}catch(Exception erro){
+			
+			System.out.println("Erro no caso de Teste 'Editar Dispositivo do Ponto de Acesso' : " + erro);
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

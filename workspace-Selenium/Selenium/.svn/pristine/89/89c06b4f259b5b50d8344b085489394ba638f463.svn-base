@@ -1,0 +1,113 @@
+package TST_019_Cadastrar_Ambiente;
+
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.openqa.selenium.*;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Ambiente;
+
+
+public class EditarAmbiente {
+ 
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Ambiente ambiente;
+	private MetodosAuxiliares login;
+
+	
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.ambiente = new Ambiente();
+		this.login = new MetodosAuxiliares();    
+    
+	}
+
+	
+	@Test
+	public void editarAmbienteVisact() throws Exception {
+		
+		System.out.println("Iniciando o teste para edição de Ambiente");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ambiente")).click();
+       
+			//Recuperar o id do banco referente ao nome do ambiente cadastrada atualmente no banco
+			String s_idAmbiente = "" + ambiente.encontraIdAmbiente(ambiente.getNome());
+		    
+			//Muda de página para que o ambiente Serviços seja exibido
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/jmesa/nextPage.gif')]")).click();
+			
+			//Marca ambiente para editar.
+			driver.findElement(By.id(s_idAmbiente)).click();
+				
+		    //Abrindo a tela para edição
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/edit.gif')]")).click();
+			
+			//limpando o campo Nome do Ambiente para inserção de novo valor
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).clear();
+			
+			//Inserindo os dados para o cadastro de ambiente
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(ambiente.getNomeParaEdicao());
+			
+			//Botão Salvar do cadastro de ambiente
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+		
+			//capturando a mensagem de validação após salvar a ambiente
+			String msgValidacaoCadAmbiente = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+			
+			try{
+    			
+				//validando a mensagem de validação
+				assertEquals("Ambiente [" + ambiente.getNomeParaEdicao() + "] editado com sucesso!", msgValidacaoCadAmbiente);
+				
+    			System.out.println("Caso de Teste Editar Ambiente executado com sucesso!");
+        		
+    		}catch (AssertionError erroValidaMensagemEdicaoAmbiente){
+    		
+    			System.out.println("Erro ao executar o Caso de Teste Editar Ambiente!");
+    			
+    			throw erroValidaMensagemEdicaoAmbiente;
+    			
+    		}finally{
+			
+ 				//fechar a tela de cadastro do ambiente
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+				
+				//fechando a janela da lista de ambientes cadastrados pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+		 
+				//se não me engano botão sair da aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+		
+    		}
+			
+		}catch (Exception erroConsultaIdAmbiente){
+			
+			System.out.println(erroConsultaIdAmbiente);
+			
+			throw  erroConsultaIdAmbiente;
+		
+		}
+    
+	}
+  
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+
+ }

@@ -1,0 +1,72 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+
+
+public class GrupoDeConcessaoDeAcesso extends Grupo {
+
+	private final char GRUPODEHIERARQUIA;
+	
+	public GrupoDeConcessaoDeAcesso() {
+		
+		super(  "Banco Siamez - Acesso a Restritos",
+				"Banco Siamez - Somente Restritos",
+				"Banco Siamez - Restritos e Mecânica",
+				"Acesso Restrito",
+				new MYSQLConnection().getConnection()
+		);
+		
+		GRUPODEHIERARQUIA = '1'; //corresponde ao Grupo de Hierarquia "Banco Siamez - Restritos";
+		
+	}
+	
+	
+
+	public char getGRUPODEHIERARQUIA() {
+		return GRUPODEHIERARQUIA;
+	}
+
+
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT ACGR_PK_ID FROM VA_ACGR_ACCESS_CONCESS_GROUP WHERE ACGR_NM_NAME = 'Banco Siamez';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT ACGR_PK_ID ");
+		sql.append("FROM   VA_ACGR_ACCESS_CONCESS_GROUP ");
+		sql.append("WHERE  ACGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+}

@@ -1,0 +1,75 @@
+package br.com.specto.entidades;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GrupoDeUsuariosVisitantes extends Grupo {
+
+	private String gradeDeHorario;
+	
+	public GrupoDeUsuariosVisitantes() {
+		
+		super(  "Aprovação Banco Siamez",
+				"Aprovação Banco Siamez Total",
+				"Aprovação Banco Siamez - Exceto Restritos",
+				"Aprovação Banco Siamez - Exceto Restritos",
+				new MYSQLConnection().getConnection()
+		);
+		
+		gradeDeHorario = "Comercial";
+	}
+	
+	
+	
+	public String getGradeDeHorario() {
+		return gradeDeHorario;
+	}
+
+
+
+	public void setGradeDeHorario(String gradeDeHorario) {
+		this.gradeDeHorario = gradeDeHorario;
+	}
+
+
+
+	//Recupera o Id do Grupo.
+	//select no banco SELECT VIGR_PK_ID FROM VA_VIGR_VISITOR_USER_GROUP WHERE VIGR_NM_NAME = 'Aprovação Banco Siamez';
+	public int encontraIdGrupo(String nomeGrupo) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT VIGR_PK_ID ");
+		sql.append("FROM   VA_VIGR_VISITOR_USER_GROUP ");
+		sql.append("WHERE  VIGR_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGrupo);
+		ResultSet rs = ps.executeQuery();
+		int idGrupo = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGrupo = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("O Grupo " + nomeGrupo + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGrupo;
+	}
+	
+}

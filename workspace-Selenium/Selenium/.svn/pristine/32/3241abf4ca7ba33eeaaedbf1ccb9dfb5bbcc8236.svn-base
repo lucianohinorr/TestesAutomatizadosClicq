@@ -1,0 +1,143 @@
+package TST_028_Cadastrar_Empresa;
+
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Empresa;
+
+public class TST_028_02_CadastrarEmpresa {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private Empresa empresa;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.empresa = new Empresa();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+    
+	}
+
+	
+	@Test
+	public void cadastrarEmpresa() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+		    
+		try{
+			
+			driver = login.executaLoginManual();
+
+    		driver.findElement(By.id("mainMenu_ami0-header")).click();			
+			driver.findElement(By.id("menuCompany_tmi0-title")).click();
+			driver.findElement(By.linkText("Empresas")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+			
+			driver.manage().window().maximize();
+			
+			//Inserindo os dados para o cadastro de Tipo de Cartão
+			driver.findElement(By.xpath("//*[ contains(@name, 'tradeName')]")).sendKeys(empresa.getNomeFantasia());
+			driver.findElement(By.xpath("//*[ contains(@name, 'companyName')]")).sendKeys(empresa.getRazaoSocial());
+			driver.findElement(By.xpath("//*[ contains(@name, 'stateRegistration')]")).sendKeys(empresa.getInscricaoEstadual());
+			driver.findElement(By.xpath("//*[ contains(@name, 'cityRegistration')]")).sendKeys(empresa.getInscricaoMunicipal());
+			
+			//Selecionando o campo CNPJ
+			driver.findElement(By.xpath("//*[ contains(@name, 'companyRegistrationIsRequired')]")).click();
+		
+			//depois de selecionar o check box vou inserir o valo, por algum motivo não se achou o componente, linha abaixo comentada. uitlizado o caminho xpath
+			//driver.findElement(By.xpath("//*[ contains(@name, 'companyRegistration')]")).sendKeys(empresa.getCnpj());
+			driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[3]/table/tbody/tr/td/div[3]/form/div[2]/div[5]/fieldset/table/tbody/tr/td[2]/input")).sendKeys(empresa.getCnpj());
+			
+			//muda para a aba Endereco
+			driver.findElement(By.linkText("Endereço")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.CEP')]")).sendKeys(empresa.getCep());
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.street')]")).sendKeys(empresa.getRua());
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.number')]")).sendKeys(empresa.getNumero());
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.complement')]")).sendKeys(empresa.getComplemento());
+
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.district')]")).sendKeys(empresa.getBairro());
+			driver.findElement(By.xpath("//*[ contains(@name, 'address.location.city')]")).sendKeys(empresa.getCidade());
+			
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'address.location.state')]"))).selectByVisibleText(empresa.getUnidadeFederativa());
+    
+			//Botão Salvar do cadastro de Empresa
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+			
+			//espera de 3 segundo, assim dá tempo de debugar a mensagem
+			Long end = System.currentTimeMillis() + 3000;
+			while (System.currentTimeMillis() < end) {}    
+    
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Empresa [" + empresa.getNomeFantasia() + "] salva com sucesso!";
+		
+			try{
+				
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+				
+			}catch (AssertionError erroValidaMensagemCadastroEmpresa){
+				
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroEmpresa);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroEmpresa;
+    	
+    		}finally{
+    
+				//fechar a tela de cadastro de Tipo de Cartão    			
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    			
+    			//fechando a janela da lista de Tipo de Cartões. 
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+										
+				//Selecionando o botão Sair da Aplicação.
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+			
+			}
+			
+		}catch(Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");
+			
+		}
+	}
+	
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			
+			fail(verificationErrorString);
+		}
+	}
+	
+}

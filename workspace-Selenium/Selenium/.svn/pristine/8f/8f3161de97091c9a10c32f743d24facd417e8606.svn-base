@@ -1,0 +1,119 @@
+package TST_246_Cadastrar_Ponto_De_Acesso;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.PontoDeAcesso;
+
+
+public class TST_246_03_ApagarPontoDeAcesso{
+ 
+	private  WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
+	private PontoDeAcesso pontoDeAcesso;
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+	  
+		this.pontoDeAcesso = new PontoDeAcesso();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+		
+	}
+
+	
+	@Test
+	public void apagaTipodeCartaoVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+    
+		try{
+		
+			driver = login.executaLoginManual();
+	
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Ponto de Acesso")).click();
+       	   
+			//Recuperar o id do banco referente ao nome do Ponto de Acesso cadastrada atualmente no banco
+			String s_idPontoDeAcesso = "" + pontoDeAcesso.encontraIdPontoDeAcesso(pontoDeAcesso.getNomePontoAcessoParaEdicao());
+			
+			//Marca o Ponto de Acesso para apagar.
+			driver.findElement(By.id(s_idPontoDeAcesso)).click();
+      
+			//Excluir o Ponto de Acesso
+			driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/delete.gif')]")).click();
+    		
+    		//Tratando o Alerta
+			Alert alert = driver.switchTo().alert();//Obtem o alerta aberto.
+			alert.getText();//Obtem o texto do alerta.
+    		alert.accept();//Equivalente ao click em OK no alerta.
+    
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[2]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Ponto de acesso [" + pontoDeAcesso.getNomePontoAcessoParaEdicao() + "] removido com sucesso!";
+			
+    		try{
+    			    			
+				//validando a mensagem
+				assertEquals(msgEsperada, msgRetornadaInterface);	
+				loggerTestResult.testResult("Aprovado");
+        		
+    		}catch (AssertionError erroValidaMensagemExclusaoPontoDeAcesso){
+    		
+    			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemExclusaoPontoDeAcesso);
+    			loggerTestResult.testResult("Reprovado");
+    			
+    			//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemExclusaoPontoDeAcesso;
+    			
+    		}finally{
+    			
+    			//Fechar a tela com a lista de Tipo de Cartões.
+    			driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+    					
+    			//Selecionando o botão Sair da Aplicação.
+    			driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+    			
+    			loggerDebug.debug("Teste Finalizado");
+    			
+    		}	
+		    
+		}catch (Exception erro){
+			
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erro);
+			loggerTestResult.testResult("Reprovado");
+			loggerDebug.debug("Teste Finalizado");
+			
+			//Avisa a api junit sobre o erro no caso de teste
+			throw erro;
+		
+		}
+ 	}
+  
+  
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

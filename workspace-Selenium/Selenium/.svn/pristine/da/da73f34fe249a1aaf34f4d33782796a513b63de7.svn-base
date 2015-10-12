@@ -1,0 +1,118 @@
+package TST_016_Cadastrar_Regiao;
+
+
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import br.com.specto.arquivo.debug.LogDebug;
+import br.com.specto.arquivo.test.result.LogTestResult;
+import br.com.specto.auxiliar.MetodosAuxiliares;
+import br.com.specto.entidades.Regiao;
+
+public class TST_016_07_CadastrarRegiaoJaCadastrada {
+  
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();		
+	private Regiao regiao;	
+	private MetodosAuxiliares login;
+	private LogDebug loggerDebug;
+	private LogTestResult loggerTestResult;
+
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.regiao = new Regiao();
+		this.login = new MetodosAuxiliares();
+		this.loggerDebug = new LogDebug(this.getClass());
+		this.loggerTestResult = new LogTestResult(this.getClass());
+   		
+	}
+
+	
+	@Test
+	public void cadastrarRegiaoJaCadastradaVisact() throws Exception {
+		
+		loggerDebug.debug("Teste Iniciado");
+    		    
+		try{
+    
+			driver = login.executaLoginManual();
+	   		
+			driver.findElement(By.id("mainMenu_ami0-header")).click();
+			driver.findElement(By.id("menuLocalities_tmi0-title")).click();
+			driver.findElement(By.linkText("Região")).click();
+			
+			driver.findElement(By.xpath("//*[ contains(@title, 'Incluir')]")).click();
+
+			//Inserindo os dados para o cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@name, 'name')]")).sendKeys(regiao.getNome());
+			driver.findElement(By.xpath("//*[ contains(@name, 'description')]")).sendKeys(regiao.getDescricao());
+			new Select(driver.findElement(By.xpath("//*[ contains(@name, 'owner')]"))).selectByVisibleText(regiao.getSubitemDe());
+    
+			//Botão Salvar do cadastro de região
+			driver.findElement(By.xpath("//*[ contains(@title, 'Salvar')]")).click();
+	    
+			//capturando a mensagem de validação após salvar o Grupo
+			String msgRetornadaInterface = driver.findElement(By.xpath("/html/body/div[3]/div[6]/div[3]/div[2]/div/table/tbody/tr/td[2]")).getText();
+ 			String msgEsperada = "Já existe uma região com o nome ["+ regiao.getNome() +"]!";
+		
+			try{
+				
+				//validando a mensagem de validação
+    			assertEquals(msgEsperada, msgRetornadaInterface);
+    			loggerTestResult.testResult("Aprovado");
+        		
+			}catch (AssertionError erroValidaMensagemCadastroRegiaoJaCadastrada){
+    		
+				loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroValidaMensagemCadastroRegiaoJaCadastrada);
+				loggerTestResult.testResult("Reprovado");
+					
+				//Avisa a api junit sobre o erro no caso de teste
+    			throw erroValidaMensagemCadastroRegiaoJaCadastrada;
+    	
+    		}finally{	
+			
+								
+				//fechar a tela de cadastro da região
+				driver.findElement(By.xpath("//*[contains(@title, 'Fechar')]")).click();
+	    		
+				//espera de 5 segundo, assim dá tempo de debugar a mensagem
+				Long end = System.currentTimeMillis() + 3000;
+				while (System.currentTimeMillis() < end) {}
+	    
+				//fechando a janela da lista de regiões pelo imagem. 
+				driver.findElement(By.xpath("//*[ contains(@src, '/VisActAccessServer/themes/athena/img/close.gif')]")).click();
+						
+				//Botão Sair da Aplicação
+				driver.findElement(By.cssSelector("input[type=\"button\"]")).click();
+				
+				loggerDebug.debug("Teste Finalizado");
+								
+    		}
+			
+		}catch(Exception erroCadastrarRegiaoJaCadastrada){
+		  
+			loggerDebug.debug("Erro ao Executar o caso de Teste: " + erroCadastrarRegiaoJaCadastrada);
+			loggerTestResult.testResult("Reprovado");
+		
+		}
+		    
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		
+		driver.quit();
+		String verificationErrorString = verificationErrors.toString();
+		
+		if (!"".equals(verificationErrorString)) {
+			fail(verificationErrorString);
+		}
+	}
+	
+}

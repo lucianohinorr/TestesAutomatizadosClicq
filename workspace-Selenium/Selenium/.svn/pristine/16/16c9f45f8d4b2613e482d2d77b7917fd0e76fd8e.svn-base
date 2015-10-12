@@ -1,0 +1,139 @@
+package br.com.specto.entidades;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import br.com.specto.daoMysql.MYSQLConnection;
+
+
+public class GradeHorario {
+	
+	private String nome;
+	private String horaInicial;
+	private String horaFinal;
+	
+	private String nomeParaEdicao;
+	private String horaInicialParaEdicao;	
+	private String horaFinalParaEdicao;
+	
+	private Connection connection;//conexão com banco
+	
+	
+	public GradeHorario() {
+		
+		
+		this.nome = "Comercial Specto";
+		this.horaInicial = "0800";
+		this.horaFinal = "1800";
+		this.nomeParaEdicao = "Vespertino Specto";
+		this.horaInicialParaEdicao = "1300";
+		this.horaFinalParaEdicao = "1800";
+		
+		connection = new MYSQLConnection().getConnection();
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	public String getHoraInicial() {
+		return horaInicial;
+	}
+
+
+	public void setHoraInicial(String horaInicial) {
+		this.horaInicial = horaInicial;
+	}
+
+
+	public String getHoraFinal() {
+		return horaFinal;
+	}
+
+
+	public void setHoraFinal(String horaFinal) {
+		this.horaFinal = horaFinal;
+	}
+
+
+	public String getNomeParaEdicao() {
+		return nomeParaEdicao;
+	}
+
+
+	public void setNomeParaEdicao(String nomeParaEdicao) {
+		this.nomeParaEdicao = nomeParaEdicao;
+	}
+
+
+	public String getHoraInicialParaEdicao() {
+		return horaInicialParaEdicao;
+	}
+
+
+	public void setHoraInicialParaEdicao(String horaInicialParaEdicao) {
+		this.horaInicialParaEdicao = horaInicialParaEdicao;
+	}
+
+
+	public String getHoraFinalParaEdicao() {
+		return horaFinalParaEdicao;
+	}
+
+
+	public void setHoraFinalParaEdicao(String horaFinalParaEdicao) {
+		this.horaFinalParaEdicao = horaFinalParaEdicao;
+	}
+	
+	
+	
+	/*
+	 * Recupera o Id da Grade de Horário.
+	 * select no banco exemplo: SELECT SCHE_PK_ID FROM VA_SCHE_SCHEDULE WHERE SCHE_NM_NAME = 'Matutino';
+	 */
+	public int encontraIdGradeHorario(String nomeGradeHorario) throws SQLException{
+		  
+		StringBuilder sql = new StringBuilder();
+			
+		sql.append("SELECT SCHE_PK_ID ");
+		sql.append("FROM  VA_SCHE_SCHEDULE ");
+		sql.append("WHERE  SCHE_NM_NAME = ? ");
+					
+		PreparedStatement ps = connection.prepareStatement(sql.toString());
+			
+		ps.setString(1, nomeGradeHorario);
+		ResultSet rs = ps.executeQuery();
+		int idGradeHorario = 0;
+			
+		try{
+			if(rs.next()){
+					
+				idGradeHorario = rs.getInt(1);
+					
+			}
+			else{
+					
+				throw new SQLException("A Grade de Horário " + nomeGradeHorario + " não está cadastrada no banco");
+			}
+				
+		}finally{
+			rs.close();
+			ps.close();
+		}
+		
+		return idGradeHorario;
+	}
+	
+	
+	
+
+}
