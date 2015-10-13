@@ -22,19 +22,16 @@ public class Questionario {
 		this.nomeQuestaoDois = "Por que você trabalha na área de qualidade de software?";
 		this.nomeQuestaoTres = "Como você lida com problemas?";
 		
-		this.respostaQuestaoUm = "Verificando o perfil da empresa PariPassu, dois itens me chamam a atenção no foco de desenvolvimento dos seus produtos, Rastreabilidade e"
-									+ " Qualidade. Características estas, que estão presentes no meu dia a dia. Me faz bem, acreditar que posso estar colaborando com a"
-									+ " qualidade na produção da cadeia alimentar, assunto tão importante e discutido atualmente nas mídias.";
-									
+		this.respostaQuestaoUm = "Verificando o perfil da empresa PariPassu, dois itens me chamam a atenção no foco de desenvolvimento dos seus produtos, Rastreabilidade e "
+									+ "Qualidade. Características estas, que estão presentes no meu dia a dia. Me faz bem, acreditar que posso estar colaborando com a "
+									+ "qualidade na produção da cadeia alimentar, assunto tão importante e discutido atualmente.";									
 				
-		this.respostaQuestaoDois = "Eu trago a seguinte filosofia comigo: não basta executar, tem que fazer com qualidade. As características das quais possuo, me fazem"
-									+ " atuar na área de forma natural, não me sentindo forçado. Me sinto satisfeito ao ver um produto ser entregue com o mínimo de "
-									+ "problemas possíveis.";
-				
+		this.respostaQuestaoDois = "Eu trago a seguinte filosofia comigo: não basta só executar, tem que fazer com qualidade. Atualmente as características nas quais possuo, "
+									+ "adquiridas e aperfeiçoadas ao longo da minha experiência, me fazem trabalhar na área de forma natural, não fazendo da minha atuação "
+									+ "algo forçado. Me sinto satisfeito ao colaborar e ver um produto sendo entregue com o mínimo de problemas possíveis.";				
 			
-		this.respostaQuesatoTres = "Problemas sempre vão existir. Uma coisa que aprendi é que não se pode fugir deles, sendo assim, eu procuro contorná-los"
-				+ " sempre da melhor forma, ou seja, resolvendo no estágio inicial e de maneira que não traga prejuízos para os envolvidos. Ceder e conversar para"
-				+ " mim são formas práticas para resolvê-los.";
+		this.respostaQuesatoTres = "Os problemas sempre existirão, vivemos resolvendo problemas. No decorrer da minha experiência, seja profissional ou pessoal, aprendi "
+									+ "que a melhor forma é tentar resolvê-los sempre no estágio inicial, de maneira racional e de modo a procurar sempre a melhor solução.";
 				
 		
 	}
