@@ -1,11 +1,8 @@
 package br.com.paripassu.auxiliar;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 
@@ -33,20 +30,13 @@ public class Login {
 			driver.findElement(By.id("inputUsuario")).sendKeys("hinorr@ibest.com.br");
 			driver.findElement(By.id("inputPassword")).sendKeys("paripassu");
 			
-			//Problema em pegar diretamente o elemento "className", por isso o trecho abaixo
-			List<WebElement> button = driver.findElements(By.tagName("button"));
-		 	for (int i = 0; i < button.size(); i++) {
-				
-		 		 if (button.get(i).getAttribute("class").equalsIgnoreCase("btn btn-primary ng-binding")){			    			    		
-
-		 			button.get(i).click();
-				 }
-		 	}
-		
+			//Seleção do botão Entrar
+			driver.findElement(By.cssSelector("button[class='btn btn-primary ng-binding']")).click();
+					
 		}
 		catch (Exception erro){
 			
-			System.out.println("Erro no Login Manual' : " + erro);
+			System.out.println("Erro ao executar o Login: " + erro);
 		
 		}
 		return driver;
