@@ -1,0 +1,24 @@
+
+Execução da aplicação de Teste Automatizado referente a aplicação Clicq.
+
+	1 - Pré-Requisitos de Softwares.
+	
+			1.1 - Ter instalado o navegador firefox versão 41.0.1.
+			1.2 - Ter instalado o java 6.
+			1.3 - Ter instalado o eclipse Version: Kepler Service Release 2 / Build id: 20140224-0627. 
+
+		
+	2 - Estado Inicial da Aplicação Clicq.
+	
+			2.1 - Não ter nenhum Avaliado cadastrado no sistema.
+			2.2 - Não ter nenhum Questionário cadastrado no sistema.
+			2.3 - Não ter nenhuma Aplicação de Questionário cadastrada no sistema.
+			
+	
+	3 - Executar o projeto.
+	
+			3.1 - Importar o projeto do repositório Git para o Eclipse.
+			3.2 - Executar a Suite de testes a partir da classe SuiteTeste.java com a api JUnit Test.			
+			3.3 - Os relatórios gerados são disposnibilizados nos seguintes diretórios: ${user.home}/Selenium/log/ArquivoTestResult.log e ${user.home}/Selenium/log/ArquivoDebug.log. 
+					Respectivamente o relatório referente ao resultado de cada teste (Aprovado ou Reprovado) e o relatório para debug (informações para debug).
+			3.4 - A aplicação do Eclipse também permite a visualização dos resultados dos testes executados pela Perspectiva do JUnit.
