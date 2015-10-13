@@ -24,7 +24,7 @@ Execução da aplicação de Teste Automatizado referente a aplicação Clicq.
 			3.4 - A aplicação do Eclipse também permite a visualização dos resultados dos testes executados pela Perspectiva do JUnit.
 			
 			
-	4 - Gerar arquivo execut�vel .jar.
+	4 - Gerar o arquivo execut�vel .jar.
 	
 			4.1 - Selecionar o projeto.
 			4.2 - Selecionar a op��o File/Export/Java/Runnable JAR file.
