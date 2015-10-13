@@ -41,7 +41,7 @@ public class TST_003_01_CadastrarQuestionario {
 
 	
 	@Test
-	public void cadastrarGrupoDeDuplaCustodiaVisact() throws Exception {
+	public void cadastrarQuestionario() throws Exception {
 		
 		loggerDebug.debug("Teste Iniciado");
 		    

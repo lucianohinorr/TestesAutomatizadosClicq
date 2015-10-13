@@ -35,7 +35,7 @@ public class TST_002_01_CadastrarAvaliado {
 
 	
 	@Test
-	public void cadastrarGrupoDeDuplaCustodiaVisact() throws Exception {
+	public void cadastrarAvaliado() throws Exception {
 		
 		loggerDebug.debug("Teste Iniciado");
 		    

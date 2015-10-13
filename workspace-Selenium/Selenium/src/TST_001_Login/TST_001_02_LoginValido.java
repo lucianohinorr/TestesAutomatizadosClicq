@@ -32,7 +32,7 @@ public class TST_001_02_LoginValido{
 
 	
 	@Test
-	public void cadastrarRegiaoVisact() throws Exception {
+	public void LoginValido() throws Exception {
 		
 		loggerDebug.debug("Teste Iniciado");
 		    

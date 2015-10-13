@@ -35,7 +35,7 @@ public class TST_004_01_AplicarQuestionario {
 
 	
 	@Test
-	public void cadastrarGrupoDeDuplaCustodiaVisact() throws Exception {
+	public void aplicarQuestionario() throws Exception {
 		
 		loggerDebug.debug("Teste Iniciado");
 		    
