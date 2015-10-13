@@ -24,12 +24,12 @@ public class Questionario {
 		
 		this.respostaQuestaoUm = "Verificando o perfil da empresa PariPassu, dois itens me chamam a atenção no foco de desenvolvimento dos seus produtos, Rastreabilidade e"
 									+ " Qualidade. Características estas, que estão presentes no meu dia a dia. Me faz bem, acreditar que posso estar colaborando com a"
-									+ " qualidade na produção da cadeia alimentar, assunto tão importante e discutido atualmente nas mídias. Ficarei orgulho em fazer parte"
-									+ " da equipe PariPassul.";
+									+ " qualidade na produção da cadeia alimentar, assunto tão importante e discutido atualmente nas mídias.";
 									
 				
 		this.respostaQuestaoDois = "Eu trago a seguinte filosofia comigo: não basta executar, tem que fazer com qualidade. As características das quais possuo, me fazem"
-									+ " atuar na área de forma natural, não me sentindo forçado." ;
+									+ " atuar na área de forma natural, não me sentindo forçado. Me sinto satisfeito ao ver um produto ser entregue com o mínimo de "
+									+ "problemas possíveis.";
 				
 			
 		this.respostaQuesatoTres = "Problemas sempre vão existir. Uma coisa que aprendi é que não se pode fugir deles, sendo assim, eu procuro contorná-los"
