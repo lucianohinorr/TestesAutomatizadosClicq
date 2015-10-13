@@ -1,5 +1,6 @@
 
 Execução da aplicação de Teste Automatizado referente a aplicação Clicq.
+Aplica��o desenvolvida com Selenium WebDriver.
 
 	1 - Pré-Requisitos de Softwares.
 	
