@@ -15,10 +15,21 @@ Execução da aplicação de Teste Automatizado referente a aplicação Clicq.
 			2.3 - Não ter nenhuma Aplicação de Questionário cadastrada no sistema.
 			
 	
-	3 - Executar o projeto.
+	3 - Executar o projeto pelo Eclipse.
 	
 			3.1 - Importar o projeto do repositório Git para o Eclipse.
 			3.2 - Executar a Suite de testes a partir da classe SuiteTeste.java com a api JUnit Test.			
 			3.3 - Os relatórios gerados são disposnibilizados nos seguintes diretórios: ${user.home}/Selenium/log/ArquivoTestResult.log e ${user.home}/Selenium/log/ArquivoDebug.log. 
 					Respectivamente o relatório referente ao resultado de cada teste (Aprovado ou Reprovado) e o relatório para debug (informações para debug).
 			3.4 - A aplicação do Eclipse também permite a visualização dos resultados dos testes executados pela Perspectiva do JUnit.
+			
+			
+	4 - Gerar arquivo execut�vel .jar.
+	
+			4.1 - Selecionar o projeto.
+			4.2 - Selecionar a op��o File/Export/Java/Runnable JAR file.
+			4.3 - Selecionar Next.
+			4.4 - Em "Lauch configuration", selecionar a classe "TestRun - Selenium".
+			4.5 - Selecionar o caminho para a gera��o do arquivo execut�vel .jar.
+			4.6 - Selecionar a op��o Finish.
+			
